@@ -1,0 +1,71 @@
+ody {
+	background-color: DarkOrange; 
+}
+
+.skin-blue .main-sidebar, .skin-blue .left-side {
+    background-color: DarkOrange;
+}
+.content-wrapper, .right-side {
+    min-height: 100%;
+    background-color: orange;
+    z-index: 800;
+}
+
+.skin-blue .main-header .navbar {
+    background-color: black;
+}
+.skin-blue .main-header .logo {
+    background-color: black;
+    color: black;
+    border-bottom: 0 solid transparent;
+}
+
+.skin-blue .main-header .logo {
+    background-color: #black;
+    color: #fff;
+    border-bottom: 0 solid transparent;
+}
+
+body{
+    font-family: 'Open Sans', sans-serif;
+}
+
+.logo i {
+	font-size: 31px;
+	margin-right: 4px;
+	word-spacing: 14px;
+}
+.logo{
+	color: white;
+	margin: 0;
+	font-size: 20px;
+	padding: 4px 0;
+	padding-bottom: 15px;
+
+}
+.login-bottom-text{
+	margin-top: 0px;
+	margin-bottom: 0px;
+	font-size: 12px;
+	color: white;
+	line-height: 19px;
+}
+
+
+header .form-group{
+	margin-bottom: 0px;
+}
+header .btn-header-login{
+	margin-bottom: 15px;	
+}
+.login-main{
+	margin-top: 130px;
+}
+.multibox{
+	padding-left: 0px;
+	padding-bottom: 10px;
+}
+.login-main span{
+	font-size: 12px;
+} 
+

@@ -1,0 +1,118 @@
+body {
+	background-color: DarkOrange; 
+}
+
+.skin-blue .main-sidebar, .skin-blue .left-side {
+    background-color: DarkOrange;
+}
+.content-wrapper, .right-side {
+    min-height: 100%;
+    background-color: orange;
+    z-index: 800;
+}
+
+.skin-blue .main-header .navbar {
+    background-color: black;
+}
+
+body{
+    font-family: 'Open Sans', sans-serif;
+}
+
+.logo i {
+	font-size: 31px;
+	margin-right: 4px;
+	word-spacing: 14px;
+}
+.logo{
+	color: white;
+	margin: 0;
+	font-size: 20px;
+	padding: 4px 0;
+	padding-bottom: 15px;
+
+}
+.login-bottom-text{
+	margin-top: 0px;
+	margin-bottom: 0px;
+	font-size: 12px;
+	color: white;
+	line-height: 19px;
+}
+
+
+header .form-group{
+	margin-bottom: 0px;
+}
+header .btn-header-login{
+	margin-bottom: 15px;	
+}
+.login-main{
+	margin-top: 130px;
+}
+.multibox{
+	padding-left: 0px;
+	padding-bottom: 10px;
+}
+.login-main span{
+	font-size: 12px;
+} 
+
+
+
+footer hr{
+	margin-top: 0px;
+	padding-top: 0px;
+}
+.footer-options ul{
+	clear: both;
+	padding: 0px;
+	margin: 0px;
+}
+.footer-options ul li{
+	float:left;
+	list-style: none;
+	padding: 5px;
+	font-size: 12px;
+}
+.footer-options ul li a{
+	text-decoration: none;
+	color: #000;
+}
+.copyrights{
+	margin-top: 25px;
+}
+
+#user_login {
+    text-align: center;
+}
+
+#user_mail, #pass_inicio{
+	float: left;
+    width: 135px;
+    border: 3px solid black;
+    border-radius: 5px;
+    height: 30px;
+    outline: none;
+    padding-left: 5px;
+    margin-top: 10px;
+}
+#btn_inicio{
+	float: left;
+    width: 130px;
+    border: 1px solid white;
+    border-radius: 5px;
+    height: 26px;
+    outline: none;
+    padding-left: 5px;
+    margin-top: 12px;
+    margin-right: 30px;
+    background-color: black;
+}
+
+.skin-blue .main-header .logo {
+    background-color: black;
+    color: black;
+    border-bottom: 0 solid transparent;
+}
+
