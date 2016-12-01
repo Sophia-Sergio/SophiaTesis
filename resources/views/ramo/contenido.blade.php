@@ -56,7 +56,7 @@
                     <tbody id="tablePrivate">
                     @foreach($usuario_ramo_docenteFiles as $file)
                         <tr>
-                            <td>{{$file->name}}</td>
+                            <td><a href="/download/{{$file->id}}">{{$file->name}}</a></td>
                             <td>{{$file->created_at}}</td>
                             <td>{{$file->size}}</td>
                             <td>{{$file->extension}}</td>
@@ -85,7 +85,7 @@
                     <tbody id="tablePublic">
                     @foreach($ramo_docenteFiles as $file)
                         <tr>
-                            <td>{{$file->name}}</td>
+                            <td><a href="/download/{{$file->id}}">{{$file->name}}</a></td>
                             <td>{{$file->created_at}}</td>
                             <td>{{$file->size}}</td>
                             <td>{{$file->extension}}</td>
@@ -138,7 +138,8 @@
 
                     var cadPub = '';
                     data.result.publicos.forEach(function (item, index) {
-                        var cadena = '<td>'+item.name+'</td>';
+
+                        var cadena = '<td><a href="/download/'+item.id+'">'+item.name+'</a></td>';
                         cadena += '<td>'+item.created_at+'</td>';
                         cadena += '<td>'+item.size+'</td>';
                         cadena += '<td>'+item.extension+'</td>';
@@ -152,7 +153,7 @@
 
                     var cadPriv = '';
                     data.result.privados.forEach(function (item, index) {
-                        var cadena = '<td>'+item.name+'</td>';
+                        var cadena = '<td><a href="/download/'+item.id+'">'+item.name+'</a></td>';
                         cadena += '<td>'+item.created_at+'</td>';
                         cadena += '<td>'+item.size+'</td>';
                         cadena += '<td>'+item.extension+'</td>';
