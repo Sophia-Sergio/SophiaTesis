@@ -134,7 +134,7 @@ birth_year
         </div>
 
         <small>
-            Estimado usuario, al registrarse usted acepta los <a href="terminos"><b>términos de uso</b></a>  de Sophia.
+            Estimado usuario, al registrarse usted acepta los <a href="terminos"><b>tï¿½rminos de uso</b></a>  de Sophia.
         </small>
         <div style="height:10px;"></div>
         <div class="form-group">
@@ -142,7 +142,7 @@ birth_year
             <a href="muro" class="btn btn-block btn-social" style="height:40px; font-size:9px; text-align:center" >
                 <input   class="btn btn-block btn-primary btn-social"  type="submit" style="text-align:center; background-color:black" value="Registrarse con Sophia">
             </a>
-            <a class="btn btn-block btn-social btn-facebook" href="muro" style="text-align:center">
+            <a class="btn btn-block btn-social btn-facebook" href="{{ route('social_redirect', ['provider' => 'facebook']) }}" style="text-align:center">
                 <span class="fa fa-facebook"></span> Iniciar con Facebook
             </a>
             <a class="btn btn-block btn-social btn-google" href="muro" style="text-align:center">

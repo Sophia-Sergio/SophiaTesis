@@ -127,5 +127,5 @@ Route::group(['middleware' => ['web']], function(){
         Return Response::json($carrera);
     });
 
-
+    require 'Routes/Social.php';
 });
