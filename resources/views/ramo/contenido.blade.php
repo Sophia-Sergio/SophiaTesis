@@ -24,7 +24,7 @@
                     <i class="glyphicon glyphicon-plus"></i>
                     <span>Seleccionar Archivos</span>
                     <!-- The file input field used as target for the file upload widget -->
-                    <input id="fileupload" type="file" name="document" data-token="{{ Session::token() }}" data-user-id="{{$usuario->id  }}"> <!-- Para seleccionar múltiples archivos !! <input id="fileupload" type="file" name="files[]" multiple> -->
+                    <input id="fileupload" type="file" name="document" data-token="{{ Session::token() }}" data-user-id="{{$usuario->id  }}"> <!-- Para seleccionar mï¿½ltiples archivos !! <input id="fileupload" type="file" name="files[]" multiple> -->
 
                 </span>
                 <br>
@@ -34,17 +34,26 @@
                     <div class="progress-bar progress-bar-success"></div>
                 </div>
 
+                <div class="form-group col-md-6" style="padding-left: 0px;">
+                    <label for="selSeguridad">Seguridad:</label>
+                    <select class="form-control" id="selSeguridad">
+                        <option value="1" selected>Publico</option>
+                        <option value="2">Privado</option>
+                    </select>
+                </div>
+
+
                 <table class="table table-bordered table-striped table-hover">.
                     <caption>Documentos Privados</caption>
                     <thead>
                     <tr>
                         <th>Nombre</th>
                         <th>Creado</th>
-                        <th>Tamaño</th>
+                        <th>Tamaï¿½o</th>
                         <th>Tipo</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tablePrivate">
                     @foreach($usuario_ramo_docenteFiles as $file)
                         <tr>
                             <td>{{$file->name}}</td>
@@ -68,12 +77,12 @@
                     <tr>
                         <th>Nombre</th>
                         <th>Creado</th>
-                        <th>Tamaño</th>
+                        <th>Tamaï¿½o</th>
                         <th>Tipo</th>
                         <th>Usuario</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tablePublic">
                     @foreach($ramo_docenteFiles as $file)
                         <tr>
                             <td>{{$file->name}}</td>
@@ -91,39 +100,63 @@
     </div>
 @endsection
 @section('scripts')
-@parent
-<script>
-   ;(function($)
-    {
-        'use strict';
-        $(document).ready(function()
+    @parent
+    <script>
+        ;(function($)
         {
-            var $fileupload = $('#fileupload'),
-            $upload_success = $('#upload-success');
-
-            $fileupload.fileupload({
-                url: '/upload',
-                dataType: 'json',
-                formData: {_token: $fileupload.data('token'), user_id: $fileupload.data('userId')},
-
-                progressall: function (e, data) {
-                    var progress = parseInt(data.loaded / data.total * 100, 10);
-                    $('#progress .progress-bar').css(
-                            'width',
-                            progress + '%'
-                    );
-                },
-                done: function (e, data) {
-                    $upload_success.removeClass('hide').hide().slideDown('fast');
-                    setTimeout(function(){
-                        location.reload();
-                    }, 2000);
-                }
-            })
-        });
-
-
-
-    })(window.jQuery);
-</script>
+            'use strict';
+            $(document).ready(function()
+            {
+                var $fileupload = $('#fileupload'),
+                        $upload_success = $('#upload-success');
+                $fileupload.bind('fileuploadsubmit', function (e, data) {
+                    // The example input, doesn't have to be part of the upload form:
+                    data.formData = {_token: $fileupload.data('token'), user_id: $fileupload.data('userId'), seguridad_id: $('#selSeguridad').val()};
+                });
+                $fileupload.fileupload({
+                    url: '/upload',
+                    dataType: 'json',
+                    formData: {_token: $fileupload.data('token'), user_id: $fileupload.data('userId'), seguridad_id: $('#selSeguridad').val()},
+                    progressall: function (e, data) {
+                        var progress = parseInt(data.loaded / data.total * 100, 10);
+                        $('#progress .progress-bar').css(
+                                'width',
+                                progress + '%'
+                        );
+                    },
+                    fail: function(e, data) {
+                        alert('Fail!');
+                    },
+                    done: function (e, data) {
+                        $upload_success.removeClass('hide').hide().slideDown('fast');
+                        $('#progress .progress-bar').css('width',0);
+                        var cadPub = '';
+                        data.result.publicos.forEach(function (item, index) {
+                            var cadena = '<td>'+item.name+'</td>';
+                            cadena += '<td>'+item.created_at+'</td>';
+                            cadena += '<td>'+item.size+'</td>';
+                            cadena += '<td>'+item.extension+'</td>';
+                            cadena += '<td>'+item.nombre+'</td>';
+                            cadena = '<tr>'+cadena+'</tr>';
+                            cadPub = cadPub+cadena;
+                        });
+                        $('#tablePublic').html(cadPub);
+                        var cadPriv = '';
+                        data.result.privados.forEach(function (item, index) {
+                            var cadena = '<td>'+item.name+'</td>';
+                            cadena += '<td>'+item.created_at+'</td>';
+                            cadena += '<td>'+item.size+'</td>';
+                            cadena += '<td>'+item.extension+'</td>';
+                            cadena = '<tr>'+cadena+'</tr>';
+                            cadPriv = cadPriv+cadena;
+                        });
+                        $('#tablePrivate').html(cadPriv);
+//                    setTimeout(function(){
+//                        location.reload();
+//                    }, 2000);
+                    }
+                });
+            });
+        })(window.jQuery);
+    </script>
 @stop
