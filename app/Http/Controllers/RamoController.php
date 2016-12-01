@@ -93,6 +93,7 @@ class RamoController extends Controller
             ->select('ramo_docentes.id_docente', 'ramo_docentes.id_ramo', 'files.*', 'users.*')
             ->where('id_ramo', $id_ramo)
             ->where('id_docente', $_id_docente)
+            ->where('seguridad', 1)
             ->distinct()
             ->get();
 
@@ -108,7 +109,9 @@ class RamoController extends Controller
         Session::put('ramo_docenteFiles', $ramo_docente);
 
         $id_usuario_ramo_docente = Session::get('id_usuario_ramo_docente')->id;
-        $usuario_ramo_docenteFiles = File::where('id_usuario_ramo_docente',$id_usuario_ramo_docente)->get();
+        $usuario_ramo_docenteFiles = File::where('id_usuario_ramo_docente',$id_usuario_ramo_docente)
+            ->where('seguridad', 2)
+            ->get();
 
 
         Session::put('usuario_ramo_docenteFiles', $usuario_ramo_docenteFiles);
