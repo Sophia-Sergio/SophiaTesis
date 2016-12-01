@@ -42,9 +42,9 @@ return [
     ],
 
     'google' => [
-        'client_id'     => env('FB_CLIENT_ID'),
-        'client_secret' => env('FB_SECRET_ID'),
-        'redirect'      => env('FB_REDIRECT'),
+        'client_id'     => env('G+_CLIENT_ID'),
+        'client_secret' => env('G+_SECRET_ID'),
+        'redirect'      => env('G+_REDIRECT'),
     ]
 
 ];

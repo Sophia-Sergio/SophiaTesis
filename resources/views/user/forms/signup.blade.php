@@ -145,7 +145,7 @@ birth_year
             <a class="btn btn-block btn-social btn-facebook" href="{{ route('social_redirect', ['provider' => 'facebook']) }}" style="text-align:center">
                 <span class="fa fa-facebook"></span> Iniciar con Facebook
             </a>
-            <a class="btn btn-block btn-social btn-google" href="muro" style="text-align:center">
+            <a class="btn btn-block btn-social btn-google" href="{{ route('social_redirect', ['provider' => 'google']) }}" style="text-align:center">
                 <span class="fa fa-google"></span> Iniciar con Google
             </a>
         </div>

@@ -60,12 +60,22 @@ class SocialAuthController extends Controller
             'provider_user_id' => $userProvider->id
         ])->first();
 
-        if (!$oauthIdentity) { echo 'dentro';
+        if (!$oauthIdentity) {
             OauthIdentity::create([
                 'provider' => $provider,
                 'provider_user_id' => $userProvider->id,
-                'access_token' => isset($userProvider->access_token) ? $userProvider->access_token : null,
-                'user_id' => $user->id
+                'access_token' => isset($userProvider->token) ? $userProvider->token : null,
+                'user_id' => $user->id,
+                'access_token' => $userProvider->token,
+                'avatar' => $userProvider->avatar_original
+            ]);
+        } else {
+            $oauthIdentity = OauthIdentity::where([
+                'provider' => $provider,
+                'provider_user_id' => $userProvider->id
+            ])->update([
+                'access_token' => $userProvider->token,
+                'avatar' => $userProvider->avatar_original
             ]);
         }
 
