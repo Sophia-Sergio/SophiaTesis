@@ -56,7 +56,7 @@
                     <tbody id="tablePrivate">
                     @foreach($usuario_ramo_docenteFiles as $file)
                         <tr>
-                            <td>{{$file->name}}</td>
+                            <td><a href="/download/{{$file->id}}">{{$file->name}}</a></td>
                             <td>{{$file->created_at}}</td>
                             <td>{{$file->size}}</td>
                             <td>{{$file->extension}}</td>
@@ -85,7 +85,7 @@
                     <tbody id="tablePublic">
                     @foreach($ramo_docenteFiles as $file)
                         <tr>
-                            <td>{{$file->name}}</td>
+                            <td><a href="/download/{{$file->id}}">{{$file->name}}</a></td>
                             <td>{{$file->created_at}}</td>
                             <td>{{$file->size}}</td>
                             <td>{{$file->extension}}</td>
@@ -109,14 +109,19 @@
             {
                 var $fileupload = $('#fileupload'),
                         $upload_success = $('#upload-success');
+
+
                 $fileupload.bind('fileuploadsubmit', function (e, data) {
                     // The example input, doesn't have to be part of the upload form:
                     data.formData = {_token: $fileupload.data('token'), user_id: $fileupload.data('userId'), seguridad_id: $('#selSeguridad').val()};
                 });
+
+
                 $fileupload.fileupload({
                     url: '/upload',
                     dataType: 'json',
                     formData: {_token: $fileupload.data('token'), user_id: $fileupload.data('userId'), seguridad_id: $('#selSeguridad').val()},
+
                     progressall: function (e, data) {
                         var progress = parseInt(data.loaded / data.total * 100, 10);
                         $('#progress .progress-bar').css(
@@ -130,9 +135,11 @@
                     done: function (e, data) {
                         $upload_success.removeClass('hide').hide().slideDown('fast');
                         $('#progress .progress-bar').css('width',0);
+
                         var cadPub = '';
                         data.result.publicos.forEach(function (item, index) {
-                            var cadena = '<td>'+item.name+'</td>';
+
+                            var cadena = '<td><a href="/download/'+item.id+'">'+item.name+'</a></td>';
                             cadena += '<td>'+item.created_at+'</td>';
                             cadena += '<td>'+item.size+'</td>';
                             cadena += '<td>'+item.extension+'</td>';
@@ -140,23 +147,32 @@
                             cadena = '<tr>'+cadena+'</tr>';
                             cadPub = cadPub+cadena;
                         });
+
                         $('#tablePublic').html(cadPub);
+
+
                         var cadPriv = '';
                         data.result.privados.forEach(function (item, index) {
-                            var cadena = '<td>'+item.name+'</td>';
+                            var cadena = '<td><a href="/download/'+item.id+'">'+item.name+'</a></td>';
                             cadena += '<td>'+item.created_at+'</td>';
                             cadena += '<td>'+item.size+'</td>';
                             cadena += '<td>'+item.extension+'</td>';
                             cadena = '<tr>'+cadena+'</tr>';
                             cadPriv = cadPriv+cadena;
                         });
+
                         $('#tablePrivate').html(cadPriv);
+
 //                    setTimeout(function(){
 //                        location.reload();
 //                    }, 2000);
                     }
                 });
+
             });
+
+
+
         })(window.jQuery);
     </script>
 @stop

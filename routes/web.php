@@ -88,6 +88,7 @@ Route::group(['middleware' => ['web']], function(){
         'as' => 'files.upload',
         'middleware' => 'auth'
     ]);
+    Route::get('/download/{archivo}', 'FileController@download');
 
     Route::get('/logout', [
         'uses' => 'UserController@getLogout',

@@ -21,7 +21,9 @@ class FileController extends Controller
         $nombre_ramo = Session::get('ramo')->nombre_ramo_no_tilde;
         $id_ramo = Session::get('ramo')->id;
         $nombre_docente = Session::get('docente')->apellido_paterno_no_tilde.'_'.Session::get('docente')->apellido_materno_no_tilde.'_'.Session::get('docente')->nombre_no_tilde; //Session::get('docente')->nombre_docente;
+
         $storagePath = storage_path().'/documentos/privados/'.$nombre_carrera.'/'.$nombre_ramo.'/'.$nombre_docente;
+
         $fileName = $file->getClientOriginalName();
         $fileType = $file->getClientMimeType();
         $fileSize = $file->getClientSize();
@@ -60,20 +62,20 @@ class FileController extends Controller
             ->distinct()
             ->get();
 
-        $privados = DB::table('files')
-            ->join('usuario_ramo_docentes', 'id_usuario_ramo_docente', '=', 'usuario_ramo_docentes.id')
-            ->join('ramo_docentes', 'id_ramo_docente', '=', 'ramo_docentes.id')
-            ->join('users', 'id_usuario', '=', 'users.id')
-            ->select('ramo_docentes.id_docente', 'ramo_docentes.id_ramo', 'files.*', 'users.*')
-            ->where('id_ramo', $id_ramo)
-            ->where('id_docente', $_id_docente)
+
+        $privados = File::where('id_usuario_ramo_docente',$id_usuario_ramo_docente)
             ->where('seguridad', 2)
-            ->distinct()
             ->get();
 
         return response()->json([
             'publicos' => $publicos,
             'privados' => $privados
         ]);
+    }
+
+    public function download($id_archivo) {
+        $file = File::find($id_archivo);
+        $url = trim($file->dir).'/'.$file->name;
+        return response()->download($url);
     }
 }
