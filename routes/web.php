@@ -89,6 +89,7 @@ Route::group(['middleware' => ['web']], function(){
         'middleware' => 'auth'
     ]);
     Route::get('/download/{archivo}', 'FileController@download');
+    Route::get('/likeFile/{archivo}', 'FileController@toggleLike');
 
     Route::get('/logout', [
         'uses' => 'UserController@getLogout',

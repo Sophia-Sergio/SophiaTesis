@@ -24,7 +24,7 @@
                     <i class="glyphicon glyphicon-plus"></i>
                     <span>Seleccionar Archivos</span>
                     <!-- The file input field used as target for the file upload widget -->
-                    <input id="fileupload" type="file" name="document" data-token="{{ Session::token() }}" data-user-id="{{$usuario->id  }}"> <!-- Para seleccionar m�ltiples archivos !! <input id="fileupload" type="file" name="files[]" multiple> -->
+                    <input id="fileupload" type="file" name="document" data-token="{{ Session::token() }}" data-user-id="{{$usuario->id  }}"> <!-- Para seleccionar m?ltiples archivos !! <input id="fileupload" type="file" name="files[]" multiple> -->
 
                 </span>
                 <br>
@@ -92,8 +92,14 @@
                             <td>{{$file->extension}}</td>
                             <td>{{$file->nombre}} {{$file->apellido}}</td>
                             <td>
-                                <span class="badge badge_like">{{ $file->n_like }}</span>
-                                <span id="{{$file->id}}" class="like glyphicon glyphicon-thumbs-up"></span>
+
+                                <span id="{{$file->id}}_cont" class="badge badge_like">{{ $file->n_like }}</span>
+
+                                @if ($file->is_like == true)
+                                    <span id="{{$file->id}}" class="like like_active glyphicon glyphicon-thumbs-up"></span>
+                                @else
+                                    <span id="{{$file->id}}" class="like glyphicon glyphicon-thumbs-up"></span>
+                                @endif
                             </td>
                         </tr>
                     @endforeach
@@ -103,4 +109,5 @@
             </div>
         </div>
     </div>
+
 @endsection

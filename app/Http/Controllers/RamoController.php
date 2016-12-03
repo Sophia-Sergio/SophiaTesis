@@ -64,7 +64,8 @@ class RamoController extends Controller
         return view("ramo.muro", ['ramo'=>$ramo]);
     }
 
-    public function contenido($id_ramo){
+    public function contenido($id_ramo)
+    {
         $id_usuario = Session::get('user')->id;
         $id_usuario_ramo_docente = DB::table('usuario_ramo_docentes')
             ->join('ramo_docentes', 'id_ramo_docente', '=', 'ramo_docentes.id')
@@ -85,9 +86,11 @@ class RamoController extends Controller
         Session::put('id_docente', $id_docente);
         $_id_docente = Session::get('id_docente')->id_docente;
 
+
         /**
          * Publicos
          */
+
         Session::put('id_usuario_ramo_docente', $id_usuario_ramo_docente);
         $docente = Docente::find($_id_docente);
         Session::put('docente', $docente);
@@ -95,7 +98,6 @@ class RamoController extends Controller
         $ramo = Ramo::find($id_ramo);
         Session::put('ramo', $ramo);
         $id_usuario_ramo_docente = Session::get('id_usuario_ramo_docente')->id;
-
 
 
         $archivosPublicos = $ramo->getArchivosPublicos($_id_docente);
@@ -106,7 +108,6 @@ class RamoController extends Controller
             'archivos_publicos' => $archivosPublicos,
             'archivos_privados' => $archivosPrivados,
         ]);
-
 
     }
 

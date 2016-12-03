@@ -14,4 +14,19 @@ class File extends Model
     public function likes() {
         return $this->hasMany('Sophia\LikeFiles');
     }
+
+
+    public function isLikeUer ($idUser) {
+
+        $actuales = LikeFiles::where('file_id', $this->id)
+            ->where('user_id', $idUser)
+            ->get()
+        ;
+
+        if(count($actuales) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

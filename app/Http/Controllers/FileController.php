@@ -8,6 +8,7 @@ use Sophia\Http\Requests;
 use Session;
 use Sophia\UsuarioRamoDocente;
 use Sophia\Ramo;
+use Sophia\LikeFiles;
 use Illuminate\Support\Facades\DB;
 class FileController extends Controller
 {
@@ -52,7 +53,6 @@ class FileController extends Controller
 
         $_id_docente = Session::get('id_docente')->id_docente;
 
-
         $ramo = Ramo::find($id_ramo);
         $archivosPublicos = $ramo->getArchivosPublicos($_id_docente);
         $archivosPrivados = $ramo->getArchivosPrivados($id_usuario_ramo_docente);
@@ -67,5 +67,37 @@ class FileController extends Controller
         $file = File::find($id_archivo);
         $url = trim($file->dir).'/'.$file->name;
         return response()->download($url);
+    }
+
+
+    public function toggleLike($id_archivo) {
+
+        $id_user = Session::get('user')->id;
+        $file = File::find($id_archivo);
+
+        $actuales = LikeFiles::where('file_id', $id_archivo)
+            ->where('user_id', $id_user)
+            ->get()
+        ;
+
+        if(count($actuales) > 0) {
+            foreach($actuales as $actual) {
+                $actual->delete();
+            }
+        } else {
+            $nuevoLike = new LikeFiles();
+            $nuevoLike->file_id = $id_archivo;
+            $nuevoLike->user_id = $id_user;
+            $nuevoLike->save();
+        }
+
+        $totalLikes = $file->likes()->count();
+
+        return response()->json([
+            'totalLikes' => $totalLikes
+        ]);
+
+
+
     }
 }
