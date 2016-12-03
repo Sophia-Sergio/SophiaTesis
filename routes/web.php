@@ -24,6 +24,11 @@ Route::group(['middleware' => ['web']], function(){
         return view('welcome');
     })->name('home');
 
+    Route::get('/userEdit', 'UserController@edit');
+
+    Route::get('verUsuarios', 'UserController@verUsuarios');
+
+    Route::get('crearUsuarios', 'UserController@crearUsuarios');
 
     Route::post('/signup', [
         'uses' => 'UserController@postSignUp',

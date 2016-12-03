@@ -122,7 +122,9 @@
                 <p>
                   {{$usuario->nombre}} {{$usuario->apellido}} - Estudiante
                   <small>
+                  @if($perfil!=1) 
                     {{ $carrera->nombre_carrera }}
+                  @endif
                   </small>
                 </p>
               </li>

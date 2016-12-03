@@ -282,6 +282,11 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
     private $groups = [];
 
     /**
+     * @var bool
+     */
+    private $doesNotPerformAssertions = false;
+
+    /**
      * Constructs a test case with the given name.
      *
      * @param string $name
@@ -463,6 +468,16 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
     }
 
     /**
+     * @return bool
+     *
+     * @since Method available since Release 5.6.0
+     */
+    public function doesNotPerformAssertions()
+    {
+        return $this->doesNotPerformAssertions;
+    }
+
+    /**
      * @param string $expectedRegex
      *
      * @since Method available since Release 3.6.0
@@ -558,6 +573,8 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
      * @throws PHPUnit_Framework_Exception
      *
      * @since Method available since Release 4.3.0
+     *
+     * @deprecated Method deprecated since Release 5.6.0
      */
     public function setExpectedExceptionRegExp($exception, $messageRegExp = '', $code = null)
     {
@@ -927,6 +944,7 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
             }
 
             $this->setExpectedExceptionFromAnnotation();
+            $this->setDoesNotPerformAssertionsFromAnnotation();
 
             foreach ($hookMethods['before'] as $method) {
                 $this->$method();
@@ -1533,6 +1551,29 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
     }
 
     /**
+     * Returns a configured test double for the specified class.
+     *
+     * @param string $originalClassName
+     * @param array  $configuration
+     *
+     * @return PHPUnit_Framework_MockObject_MockObject
+     *
+     * @throws PHPUnit_Framework_Exception
+     *
+     * @since Method available since Release 5.6.0
+     */
+    protected function createConfiguredMock($originalClassName, array $configuration)
+    {
+        $o = $this->createMock($originalClassName);
+
+        foreach ($configuration as $method => $return) {
+            $o->method($method)->willReturn($return);
+        }
+
+        return $o;
+    }
+
+    /**
      * Returns a partial test double for the specified class.
      *
      * @param string $originalClassName
@@ -2102,6 +2143,16 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
     }
 
     /**
+     * Gets the data set of a TestCase.
+     *
+     * @return array
+     */
+    protected function getProvidedData()
+    {
+        return $this->data;
+    }
+
+    /**
      * Creates a default TestResult object.
      *
      * @return PHPUnit_Framework_TestResult
@@ -2555,11 +2606,48 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
         } else {
             foreach ($testArguments as $testArgument) {
                 if ($testArgument instanceof PHPUnit_Framework_MockObject_MockObject) {
+                    if ($this->isCloneable($testArgument)) {
+                        $testArgument = clone $testArgument;
+                    }
+
                     $this->registerMockObject($testArgument);
                 } elseif (is_array($testArgument)) {
                     $this->registerMockObjectsFromTestArguments($testArgument);
                 }
             }
         }
+    }
+
+    /**
+     * @since Method available since Release 5.6.0
+     */
+    private function setDoesNotPerformAssertionsFromAnnotation()
+    {
+        $annotations = $this->getAnnotations();
+
+        if (isset($annotations['method']['doesNotPerformAssertions'])) {
+            $this->doesNotPerformAssertions = true;
+        }
+    }
+
+    /**
+     * @param PHPUnit_Framework_MockObject_MockObject $testArgument
+     *
+     * @return bool
+     */
+    private function isCloneable(PHPUnit_Framework_MockObject_MockObject $testArgument)
+    {
+        $reflector = new ReflectionObject($testArgument);
+
+        if (!$reflector->isCloneable()) {
+            return false;
+        }
+
+        if ($reflector->hasMethod('__clone') &&
+            $reflector->getMethod('__clone')->isPublic()) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -21,6 +21,69 @@ use Illuminate\Support\Collection;
 
 class UserController extends Controller
 {
+    //ADMINISTADROR
+    public function create()
+    {
+        return view('admin.crearUsuarios');
+    }
+
+    public function agregarUsuarioAdmin(){
+        $data = Request::all();
+        $dia = $data['dia_nacimiento'];
+        $mes = $data['mes_nacimiento'];
+        $ano = $data['ano_nacimiento'];
+
+        $usuario = new User;
+        $usuario->nombre=$data["nombre"];
+        $usuario->apellido=$data["apellido"];
+        $usuario->email=$data["email"];
+        $usuario->fecha_nacimiento= $ano."-".$mes."-".$dia;
+        $usuario->password=$data["password"];
+        $usuario->estado=$data["estado"]; //input de formulario
+        $resul = $usuario->save();
+
+        if($resul){
+            return view("mensajes.msj_correcto")->with("msj", "Usuario Registrado Correctamente");
+        }else
+        {
+            return view("mensajes.msj_rechazado")->with("msj", "Hubo un Erorr, vuelva a intentarlo");
+        }  
+    }
+
+    public function edit($id)
+    {
+        $usuario = \Sophia\User::find($id);
+        return view('admin.edit',['usuario'=>$usuario]);
+    }
+
+    public function update(UsuarioUpdateRequest $request, $id)
+    {
+        $usuario = \Sophia\User::find($id);
+        $usuario->fill($request->all());
+        $usuario->save();
+        Session::flash('message','Usuario Actualizado Correctamente');
+        return Redirect::to('/admin');
+    }
+
+    public function verUsuarios()
+    {
+        $usuario = Session::get('user');
+        $usuarios = \Sophia\User::All();
+        return view('admin.verUsuarios',['user'=>$usuario], compact('usuarios'));
+    }
+
+    public function crearUsuarios()
+    {
+        /*
+        if($request->ajax()){
+            Genre::create($request->all());
+            return response()->json([
+                "mensaje" => "creado"
+            ]);
+        }
+        */
+        return view('admin.crearUsuarios');
+    }
 
     public function getProfile()
     {
@@ -131,9 +194,28 @@ class UserController extends Controller
     }
     public function getDashboard()
     {
-        // se retorna una vista, seg�n haya ingresado alg�n ramo o no
+   
+     // se retorna una vista, seg�n tipo de usuario
         $id = Session::get('user')->id;
-        
+        $usuario = Session::get('user');
+
+        $perfil = DB::table('users')
+                ->join('usuario_perfils', 'usuario_perfils.id_usuario', '=', 'users.id')
+                ->select('id_perfil')
+                ->where('usuario_perfils.id_usuario', '=', $id)
+                ->distinct()
+                ->first();
+
+        if ($perfil->id_perfil==1)
+        {
+            return view('admin.index', [
+                'user'=>$usuario,
+                'perfil'=>$perfil->id_perfil]);
+        }
+
+     // se retorna una vista, seg�n haya ingresado alg�n ramo o no
+
+
         //consultamos si existe registro en tabla usuario ramo docente
         if (UsuarioRamoDocente::where('id_usuario', $id )->count()==0) {
             // si no existe redireccionamos nuevamente a la pagina de registro academico
@@ -205,7 +287,8 @@ class UserController extends Controller
             //Session::put('posteosRamo', $posteosRamo);
 
             // retornamos la vista index
-            return view('user.index');
+            return view('user.index',
+             ['perfil'=>$perfil]);
         }
     }
     public function getLogout(){
