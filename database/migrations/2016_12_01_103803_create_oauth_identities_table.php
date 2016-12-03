@@ -26,7 +26,7 @@ class CreateOauthIdentitiesTable extends Migration
 
             $table->timestamps();
 
-            $table->unique([ 'provider_user_id','provider' ]);
+            $table->unique([ 'provider_user_id' ]);
         });
     }
 

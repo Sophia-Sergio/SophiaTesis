@@ -10,8 +10,11 @@ class ComposerStaticInit0490374c037ac39fc2d6ba4ba5aa02b5
         '1d1b89d124cc9cb8219922c9d5569199' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
+        'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
+        'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
+        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
         'e7223560d890eab89cda23685e711e2c' => __DIR__ . '/..' . '/psy/psysh/src/Psy/functions.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
@@ -60,6 +63,7 @@ class ComposerStaticInit0490374c037ac39fc2d6ba4ba5aa02b5
         array (
             'Psy\\' => 4,
             'Psr\\Log\\' => 8,
+            'Psr\\Http\\Message\\' => 17,
             'PhpParser\\' => 10,
         ),
         'M' => 
@@ -68,11 +72,19 @@ class ComposerStaticInit0490374c037ac39fc2d6ba4ba5aa02b5
         ),
         'L' => 
         array (
+            'League\\OAuth1\\' => 14,
             'League\\Flysystem\\' => 17,
+            'Laravel\\Socialite\\' => 18,
         ),
         'I' => 
         array (
             'Illuminate\\' => 11,
+        ),
+        'G' => 
+        array (
+            'GuzzleHttp\\Psr7\\' => 16,
+            'GuzzleHttp\\Promise\\' => 19,
+            'GuzzleHttp\\' => 11,
         ),
         'F' => 
         array (
@@ -190,6 +202,10 @@ class ComposerStaticInit0490374c037ac39fc2d6ba4ba5aa02b5
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
+        'Psr\\Http\\Message\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
         'PhpParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
@@ -198,13 +214,33 @@ class ComposerStaticInit0490374c037ac39fc2d6ba4ba5aa02b5
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
         ),
+        'League\\OAuth1\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/league/oauth1-client/src',
+        ),
         'League\\Flysystem\\' => 
         array (
             0 => __DIR__ . '/..' . '/league/flysystem/src',
         ),
+        'Laravel\\Socialite\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laravel/socialite/src',
+        ),
         'Illuminate\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravel/framework/src/Illuminate',
+        ),
+        'GuzzleHttp\\Psr7\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
+        ),
+        'GuzzleHttp\\Promise\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/promises/src',
+        ),
+        'GuzzleHttp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
         ),
         'Faker\\' => 
         array (
@@ -285,10 +321,12 @@ class ComposerStaticInit0490374c037ac39fc2d6ba4ba5aa02b5
         'CreateInstitucionCarrerasTable' => __DIR__ . '/../..' . '/database/migrations/2016_09_24_000630_create_institucion_carreras_table.php',
         'CreateInstitucionsTable' => __DIR__ . '/../..' . '/database/migrations/2016_09_24_000625_create_institucions_table.php',
         'CreateLikeCarrerasTable' => __DIR__ . '/../..' . '/database/migrations/2016_10_23_020641_create_like_carreras_table.php',
+        'CreateLikeFile' => __DIR__ . '/../..' . '/database/migrations/2016_12_03_133650_create_like_file.php',
         'CreateLikeRamosTable' => __DIR__ . '/../..' . '/database/migrations/2016_10_23_020657_create_like_ramos_table.php',
         'CreateLogAccesosTable' => __DIR__ . '/../..' . '/database/migrations/2016_08_28_033011_create_log_accesos_table.php',
         'CreateMenusTable' => __DIR__ . '/../..' . '/database/migrations/2016_08_28_031514_create_menus_table.php',
         'CreateModulosTable' => __DIR__ . '/../..' . '/database/migrations/2016_08_28_031406_create_modulos_table.php',
+        'CreateOauthIdentitiesTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_01_103803_create_oauth_identities_table.php',
         'CreatePerfilModulosTable' => __DIR__ . '/../..' . '/database/migrations/2016_08_28_031601_create_perfil_modulos_table.php',
         'CreatePerfilsTable' => __DIR__ . '/../..' . '/database/migrations/2016_08_28_031344_create_perfils_table.php',
         'CreatePostCarrerasTable' => __DIR__ . '/../..' . '/database/migrations/2016_10_10_205115_create_post_carreras_table.php',
@@ -403,6 +441,7 @@ class ComposerStaticInit0490374c037ac39fc2d6ba4ba5aa02b5
         'PHPUnit_Framework_Constraint_ClassHasStaticAttribute' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/ClassHasStaticAttribute.php',
         'PHPUnit_Framework_Constraint_Composite' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/Composite.php',
         'PHPUnit_Framework_Constraint_Count' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/Count.php',
+        'PHPUnit_Framework_Constraint_DirectoryExists' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/DirectoryExists.php',
         'PHPUnit_Framework_Constraint_Exception' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/Exception.php',
         'PHPUnit_Framework_Constraint_ExceptionCode' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/ExceptionCode.php',
         'PHPUnit_Framework_Constraint_ExceptionMessage' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/ExceptionMessage.php',
@@ -420,8 +459,10 @@ class ComposerStaticInit0490374c037ac39fc2d6ba4ba5aa02b5
         'PHPUnit_Framework_Constraint_IsJson' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/IsJson.php',
         'PHPUnit_Framework_Constraint_IsNan' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/IsNan.php',
         'PHPUnit_Framework_Constraint_IsNull' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/IsNull.php',
+        'PHPUnit_Framework_Constraint_IsReadable' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/IsReadable.php',
         'PHPUnit_Framework_Constraint_IsTrue' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/IsTrue.php',
         'PHPUnit_Framework_Constraint_IsType' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/IsType.php',
+        'PHPUnit_Framework_Constraint_IsWritable' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/IsWritable.php',
         'PHPUnit_Framework_Constraint_JsonMatches' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/JsonMatches.php',
         'PHPUnit_Framework_Constraint_JsonMatches_ErrorMessageProvider' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/JsonMatches/ErrorMessageProvider.php',
         'PHPUnit_Framework_Constraint_LessThan' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Constraint/LessThan.php',

@@ -36,3 +36,18 @@
 	background-color: #d1f9da;
 	color: green;
 }
+
+.badge_like {
+	background-color: #337ab7 !important;
+}
+
+.like {
+	margin-left: 10px;
+	font-size: 20px;
+	color: #a5a5a5;
+	vertical-align: text-bottom;
+}
+
+.like_active {
+	color: #337ab7;
+}

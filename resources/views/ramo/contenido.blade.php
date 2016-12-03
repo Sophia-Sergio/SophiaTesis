@@ -7,9 +7,9 @@
     $ramo = Session::get('ramo');
     $usuario = Session::get('user');
     $posteosRamos= Session::get('posteosRamo');
-    $usuario_ramo_docenteFiles = Session::get('usuario_ramo_docenteFiles');
-    $ramo_docenteFiles = Session::get('ramo_docenteFiles');
     ?>
+
+    <script type="text/javascript" src="{{ URL::asset('js/ramo/contenido/controller.js') }}"></script>
 
     <link rel="stylesheet" href="{{asset('css/index_UsuarioMuro.css')}}">
     @include('alerts.request')
@@ -49,12 +49,12 @@
                     <tr>
                         <th>Nombre</th>
                         <th>Creado</th>
-                        <th>Tama�o</th>
+                        <th>Tamaño</th>
                         <th>Tipo</th>
                     </tr>
                     </thead>
                     <tbody id="tablePrivate">
-                    @foreach($usuario_ramo_docenteFiles as $file)
+                    @foreach($archivos_privados as $file)
                         <tr>
                             <td><a href="/download/{{$file->id}}">{{$file->name}}</a></td>
                             <td>{{$file->created_at}}</td>
@@ -77,19 +77,24 @@
                     <tr>
                         <th>Nombre</th>
                         <th>Creado</th>
-                        <th>Tama�o</th>
+                        <th>Tamaño</th>
                         <th>Tipo</th>
                         <th>Usuario</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody id="tablePublic">
-                    @foreach($ramo_docenteFiles as $file)
+                    @foreach($archivos_publicos as $file)
                         <tr>
                             <td><a href="/download/{{$file->id}}">{{$file->name}}</a></td>
                             <td>{{$file->created_at}}</td>
                             <td>{{$file->size}}</td>
                             <td>{{$file->extension}}</td>
                             <td>{{$file->nombre}} {{$file->apellido}}</td>
+                            <td>
+                                <span class="badge badge_like">{{ $file->n_like }}</span>
+                                <span id="{{$file->id}}" class="like glyphicon glyphicon-thumbs-up"></span>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -99,80 +104,3 @@
         </div>
     </div>
 @endsection
-@section('scripts')
-    @parent
-    <script>
-        ;(function($)
-        {
-            'use strict';
-            $(document).ready(function()
-            {
-                var $fileupload = $('#fileupload'),
-                        $upload_success = $('#upload-success');
-
-
-                $fileupload.bind('fileuploadsubmit', function (e, data) {
-                    // The example input, doesn't have to be part of the upload form:
-                    data.formData = {_token: $fileupload.data('token'), user_id: $fileupload.data('userId'), seguridad_id: $('#selSeguridad').val()};
-                });
-
-
-                $fileupload.fileupload({
-                    url: '/upload',
-                    dataType: 'json',
-                    formData: {_token: $fileupload.data('token'), user_id: $fileupload.data('userId'), seguridad_id: $('#selSeguridad').val()},
-
-                    progressall: function (e, data) {
-                        var progress = parseInt(data.loaded / data.total * 100, 10);
-                        $('#progress .progress-bar').css(
-                                'width',
-                                progress + '%'
-                        );
-                    },
-                    fail: function(e, data) {
-                        alert('Fail!');
-                    },
-                    done: function (e, data) {
-                        $upload_success.removeClass('hide').hide().slideDown('fast');
-                        $('#progress .progress-bar').css('width',0);
-
-                        var cadPub = '';
-                        data.result.publicos.forEach(function (item, index) {
-
-                            var cadena = '<td><a href="/download/'+item.id+'">'+item.name+'</a></td>';
-                            cadena += '<td>'+item.created_at+'</td>';
-                            cadena += '<td>'+item.size+'</td>';
-                            cadena += '<td>'+item.extension+'</td>';
-                            cadena += '<td>'+item.nombre+'</td>';
-                            cadena = '<tr>'+cadena+'</tr>';
-                            cadPub = cadPub+cadena;
-                        });
-
-                        $('#tablePublic').html(cadPub);
-
-
-                        var cadPriv = '';
-                        data.result.privados.forEach(function (item, index) {
-                            var cadena = '<td><a href="/download/'+item.id+'">'+item.name+'</a></td>';
-                            cadena += '<td>'+item.created_at+'</td>';
-                            cadena += '<td>'+item.size+'</td>';
-                            cadena += '<td>'+item.extension+'</td>';
-                            cadena = '<tr>'+cadena+'</tr>';
-                            cadPriv = cadPriv+cadena;
-                        });
-
-                        $('#tablePrivate').html(cadPriv);
-
-//                    setTimeout(function(){
-//                        location.reload();
-//                    }, 2000);
-                    }
-                });
-
-            });
-
-
-
-        })(window.jQuery);
-    </script>
-@stop

@@ -7,6 +7,7 @@ use Sophia\File;
 use Sophia\Http\Requests;
 use Session;
 use Sophia\UsuarioRamoDocente;
+use Sophia\Ramo;
 use Illuminate\Support\Facades\DB;
 class FileController extends Controller
 {
@@ -25,7 +26,7 @@ class FileController extends Controller
         $storagePath = storage_path().'/documentos/privados/'.$nombre_carrera.'/'.$nombre_ramo.'/'.$nombre_docente;
 
         $fileName = $file->getClientOriginalName();
-        $fileType = $file->getClientMimeType();
+        $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
         $fileSize = $file->getClientSize();
 
         $file->move($storagePath, $fileName);
@@ -51,25 +52,14 @@ class FileController extends Controller
 
         $_id_docente = Session::get('id_docente')->id_docente;
 
-        $publicos = DB::table('files')
-            ->join('usuario_ramo_docentes', 'id_usuario_ramo_docente', '=', 'usuario_ramo_docentes.id')
-            ->join('ramo_docentes', 'id_ramo_docente', '=', 'ramo_docentes.id')
-            ->join('users', 'id_usuario', '=', 'users.id')
-            ->select('ramo_docentes.id_docente', 'ramo_docentes.id_ramo', 'files.*', 'users.*')
-            ->where('id_ramo', $id_ramo)
-            ->where('id_docente', $_id_docente)
-            ->where('seguridad', 1)
-            ->distinct()
-            ->get();
 
-
-        $privados = File::where('id_usuario_ramo_docente',$id_usuario_ramo_docente)
-            ->where('seguridad', 2)
-            ->get();
+        $ramo = Ramo::find($id_ramo);
+        $archivosPublicos = $ramo->getArchivosPublicos($_id_docente);
+        $archivosPrivados = $ramo->getArchivosPrivados($id_usuario_ramo_docente);
 
         return response()->json([
-            'publicos' => $publicos,
-            'privados' => $privados
+            'publicos' => $archivosPublicos,
+            'privados' => $archivosPrivados
         ]);
     }
 

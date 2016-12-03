@@ -10,4 +10,8 @@ class File extends Model
     {
         return $this->belongsTo('Sophia\UsuarioRamoDocente', 'id_usuario_ramo_docente');
     }
+
+    public function likes() {
+        return $this->hasMany('Sophia\LikeFiles');
+    }
 }
