@@ -20,6 +20,7 @@ return array(
     'CreateLogAccesosTable' => $baseDir . '/database/migrations/2016_08_28_033011_create_log_accesos_table.php',
     'CreateMenusTable' => $baseDir . '/database/migrations/2016_08_28_031514_create_menus_table.php',
     'CreateModulosTable' => $baseDir . '/database/migrations/2016_08_28_031406_create_modulos_table.php',
+    'CreateOauthIdentitiesTable' => $baseDir . '/database/migrations/2016_12_01_103803_create_oauth_identities_table.php',
     'CreatePerfilModulosTable' => $baseDir . '/database/migrations/2016_08_28_031601_create_perfil_modulos_table.php',
     'CreatePerfilsTable' => $baseDir . '/database/migrations/2016_08_28_031344_create_perfils_table.php',
     'CreatePostCarrerasTable' => $baseDir . '/database/migrations/2016_10_10_205115_create_post_carreras_table.php',

@@ -20,6 +20,7 @@ class CreateFilesTable extends Migration
             $table->string('dir',255);
             $table->integer('size');
             $table->string('extension',5);
+            $table->integer('seguridad');
             $table->integer('id_usuario_ramo_docente')->unsigned();
             $table->foreign('id_usuario_ramo_docente')->references('id')->on('usuario_ramo_docentes');
         });
