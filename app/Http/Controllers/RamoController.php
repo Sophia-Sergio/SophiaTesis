@@ -64,7 +64,8 @@ class RamoController extends Controller
         return view("ramo.muro", ['ramo'=>$ramo]);
     }
 
-    public function contenido($id_ramo){
+    public function contenido($id_ramo)
+    {
         $id_usuario = Session::get('user')->id;
         $id_usuario_ramo_docente = DB::table('usuario_ramo_docentes')
             ->join('ramo_docentes', 'id_ramo_docente', '=', 'ramo_docentes.id')
@@ -90,12 +91,13 @@ class RamoController extends Controller
             ->join('usuario_ramo_docentes', 'id_usuario_ramo_docente', '=', 'usuario_ramo_docentes.id')
             ->join('ramo_docentes', 'id_ramo_docente', '=', 'ramo_docentes.id')
             ->join('users', 'id_usuario', '=', 'users.id')
-            ->select('ramo_docentes.id_docente', 'ramo_docentes.id_ramo', 'files.*', 'users.*')
+            ->select('ramo_docentes.id_docente', 'ramo_docentes.id_ramo', 'files.*', 'files.id as file_id', 'users.*')
             ->where('id_ramo', $id_ramo)
             ->where('id_docente', $_id_docente)
             ->where('seguridad', 1)
             ->distinct()
             ->get();
+
 
         Session::put('id_usuario_ramo_docente', $id_usuario_ramo_docente);
 
@@ -109,7 +111,7 @@ class RamoController extends Controller
         Session::put('ramo_docenteFiles', $ramo_docente);
 
         $id_usuario_ramo_docente = Session::get('id_usuario_ramo_docente')->id;
-        $usuario_ramo_docenteFiles = File::where('id_usuario_ramo_docente',$id_usuario_ramo_docente)
+        $usuario_ramo_docenteFiles = File::where('id_usuario_ramo_docente', $id_usuario_ramo_docente)
             ->where('seguridad', 2)
             ->get();
 
@@ -117,7 +119,6 @@ class RamoController extends Controller
         Session::put('usuario_ramo_docenteFiles', $usuario_ramo_docenteFiles);
 
         return view("ramo.contenido");
-
 
     }
 

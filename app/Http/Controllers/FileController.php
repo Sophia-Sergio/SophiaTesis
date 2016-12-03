@@ -55,7 +55,7 @@ class FileController extends Controller
             ->join('usuario_ramo_docentes', 'id_usuario_ramo_docente', '=', 'usuario_ramo_docentes.id')
             ->join('ramo_docentes', 'id_ramo_docente', '=', 'ramo_docentes.id')
             ->join('users', 'id_usuario', '=', 'users.id')
-            ->select('ramo_docentes.id_docente', 'ramo_docentes.id_ramo', 'files.*', 'users.*')
+            ->select('ramo_docentes.id_docente', 'ramo_docentes.id_ramo', 'files.*', 'files.id as file_id', 'users.*')
             ->where('id_ramo', $id_ramo)
             ->where('id_docente', $_id_docente)
             ->where('seguridad', 1)

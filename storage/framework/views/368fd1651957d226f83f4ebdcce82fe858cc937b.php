@@ -1,6 +1,4 @@
-@extends('layout.masterUsuario')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <?php
     $carrera = Session::get('carrera');
     $ramos = Session::get('ramos');
@@ -11,12 +9,12 @@
     $ramo_docenteFiles = Session::get('ramo_docenteFiles');
     ?>
 
-    <link rel="stylesheet" href="{{asset('css/index_UsuarioMuro.css')}}">
-    @include('alerts.request')
+    <link rel="stylesheet" href="<?php echo e(asset('css/index_UsuarioMuro.css')); ?>">
+    <?php echo $__env->make('alerts.request', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
     <div class="container bootstrap snippet" Style="width:90%">
         <div class="row">
             <div class="panel" Style="padding-left:15px; padding-right:15px">
-                <h2> Contenidos de {{ $ramo->nombre_ramo}} </h2>
+                <h2> Contenidos de <?php echo e($ramo->nombre_ramo); ?> </h2>
                 <hr/>
             </div>
             <div class="panel" Style="padding-left:15px; padding-right:15px; padding-top:15px">
@@ -24,7 +22,7 @@
                     <i class="glyphicon glyphicon-plus"></i>
                     <span>Seleccionar Archivos</span>
                     <!-- The file input field used as target for the file upload widget -->
-                    <input id="fileupload" type="file" name="document" data-token="{{ Session::token() }}" data-user-id="{{$usuario->id  }}"> <!-- Para seleccionar m�ltiples archivos !! <input id="fileupload" type="file" name="files[]" multiple> -->
+                    <input id="fileupload" type="file" name="document" data-token="<?php echo e(Session::token()); ?>" data-user-id="<?php echo e($usuario->id); ?>"> <!-- Para seleccionar m�ltiples archivos !! <input id="fileupload" type="file" name="files[]" multiple> -->
 
                 </span>
                 <br>
@@ -54,14 +52,14 @@
                     </tr>
                     </thead>
                     <tbody id="tablePrivate">
-                    @foreach($usuario_ramo_docenteFiles as $file)
+                    <?php $__currentLoopData = $usuario_ramo_docenteFiles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $file): $__env->incrementLoopIndices(); $loop = $__env->getFirstLoop(); ?>
                         <tr>
-                            <td><a href="/download/{{$file->id}}">{{$file->name}}</a></td>
-                            <td>{{$file->created_at}}</td>
-                            <td>{{$file->size}}</td>
-                            <td>{{$file->extension}}</td>
+                            <td><a href="/download/<?php echo e($file->id); ?>"><?php echo e($file->name); ?></a></td>
+                            <td><?php echo e($file->created_at); ?></td>
+                            <td><?php echo e($file->size); ?></td>
+                            <td><?php echo e($file->extension); ?></td>
                         </tr>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getFirstLoop(); ?>
 
                     </tbody>
                 </table>
@@ -83,23 +81,23 @@
                     </tr>
                     </thead>
                     <tbody id="tablePublic">
-                    @foreach($ramo_docenteFiles as $file)
+                    <?php $__currentLoopData = $ramo_docenteFiles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $file): $__env->incrementLoopIndices(); $loop = $__env->getFirstLoop(); ?>
                         <tr>
-                            <td><a href="/download/{{$file->file_id}}">{{$file->name}}</a></td>
-                            <td>{{$file->created_at}}</td>
-                            <td>{{$file->size}}</td>
-                            <td>{{$file->extension}}</td>
-                            <td>{{$file->nombre}} {{$file->apellido}}</td>
+                            <td><a href="/download/<?php echo e($file->file_id); ?>"><?php echo e($file->name); ?></a></td>
+                            <td><?php echo e($file->created_at); ?></td>
+                            <td><?php echo e($file->size); ?></td>
+                            <td><?php echo e($file->extension); ?></td>
+                            <td><?php echo e($file->nombre); ?> <?php echo e($file->apellido); ?></td>
                         </tr>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getFirstLoop(); ?>
                     </tbody>
                 </table>
                 <hr/>
             </div>
         </div>
     </div>
-@endsection
-@section('scripts')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('scripts'); ?>
     @parent
     <script>
         ;(function($)
@@ -177,4 +175,5 @@
 
         })(window.jQuery);
     </script>
-@stop
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.masterUsuario', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
