@@ -2,12 +2,13 @@
 
 namespace Sophia\Http\Controllers;
 
-use Illuminate\Http\Request;
+
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Sophia\Http\Requests;
 use Sophia\TipoInstitucion;
 use Sophia\User;
@@ -18,6 +19,9 @@ use Sophia\UsuarioRamoDocente;
 use Session;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Collection;
+use Sophia\Http\Requests\UsuarioCreateRequest;
+use Sophia\Http\Requests\UsuarioUpdateRequest;
+
 
 class UserController extends Controller
 {
@@ -27,11 +31,24 @@ class UserController extends Controller
         return view('admin.crearUsuarios');
     }
 
-    public function agregarUsuarioAdmin(){
-        $data = Request::all();
-        $dia = $data['dia_nacimiento'];
-        $mes = $data['mes_nacimiento'];
-        $ano = $data['ano_nacimiento'];
+    public function agregarUsuarioAdmin(Request $request){
+
+        $this->validate($request, [
+            'nombre' => 'required|min:3',
+            'apellido' => 'required|min:3',
+            'email' => 'email|required|unique:users',
+            'password' => 'required|min:6|confirmed',
+            'password_confirmation' => 'required',
+            'birth_day' => 'required',
+            'birth_month' => 'required',
+            'birth_year' => 'required',
+        ]);
+
+        $data = $request;
+
+        $dia = $request['birth_day'];
+        $mes = $request['birth_month'];
+        $ano = $request['birth_year'];
 
         $usuario = new User;
         $usuario->nombre=$data["nombre"];
@@ -40,20 +57,30 @@ class UserController extends Controller
         $usuario->fecha_nacimiento= $ano."-".$mes."-".$dia;
         $usuario->password=$data["password"];
         $usuario->estado=$data["estado"]; //input de formulario
+
+        //calculo edad
+
+        $dia_actual=date("j");
+        $mes_actual=date("n");
+        $ano_actual=date("Y");
+        if (($mes == $mes_actual) && ($dia > $dia_actual)) {
+            $ano_actual=($ano_actual-1); }
+        if ($mes > $mes_actual) {
+            $ano_actual=($ano_actual-1);}
+        $age=($ano_actual-$ano);
+
+        $usuario->edad = $age;
+        $usuario->reintentos = 0;
         $resul = $usuario->save();
 
-        if($resul){
-            return view("mensajes.msj_correcto")->with("msj", "Usuario Registrado Correctamente");
-        }else
-        {
-            return view("mensajes.msj_rechazado")->with("msj", "Hubo un Erorr, vuelva a intentarlo");
-        }  
+        Session::flash('message','Usuario Actualizado Correctamente');
+        return Redirect::to('/dashboard')->with(['id'=>Session::get('perfil')->id_perfil]);
     }
 
     public function edit($id)
     {
-        $usuario = \Sophia\User::find($id);
-        return view('admin.edit',['usuario'=>$usuario]);
+        $usuarioEditar = \Sophia\User::find($id);
+        return view('admin.editUsuario',['usuarioEditar'=>$usuarioEditar]);
     }
 
     public function update(UsuarioUpdateRequest $request, $id)
@@ -62,7 +89,7 @@ class UserController extends Controller
         $usuario->fill($request->all());
         $usuario->save();
         Session::flash('message','Usuario Actualizado Correctamente');
-        return Redirect::to('/admin');
+        return Redirect::to('/dashboard')->with(['id'=>Session::get('perfil')->id_perfil]);
     }
 
     public function verUsuarios()
@@ -82,7 +109,8 @@ class UserController extends Controller
             ]);
         }
         */
-        return view('admin.crearUsuarios');
+        $usuario = Session::get('user');
+        return view('admin.crearUsuarios', ['user'=>$usuario]);
     }
 
     public function getProfile()
@@ -206,11 +234,12 @@ class UserController extends Controller
                 ->distinct()
                 ->first();
 
+        Session::put('perfil', $perfil);
         if ($perfil->id_perfil==1)
         {
             return view('admin.index', [
-                'user'=>$usuario,
-                'perfil'=>$perfil->id_perfil]);
+
+                'user' => $usuario]);
         }
 
      // se retorna una vista, seg�n haya ingresado alg�n ramo o no

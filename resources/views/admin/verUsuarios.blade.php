@@ -23,7 +23,8 @@
 				<td>{{$usuario->estado}}</td>
 
 				<td>
-
+					<a href="{{ route('editUser', $usuario->id ) }}" class="btn btn-primary">Editar
+					</a>
 				</td>
 			</tbody>
 		@endforeach

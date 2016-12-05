@@ -5,8 +5,5 @@
 		<br>
 		<br>
 	@include('alerts.request')
-	@include('usuario.forms.crear')
-
-
-	
+	@include('user.forms.crear')
 @endsection

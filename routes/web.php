@@ -24,8 +24,6 @@ Route::group(['middleware' => ['web']], function(){
         return view('welcome');
     })->name('home');
 
-    Route::get('/userEdit', 'UserController@edit');
-
     Route::get('verUsuarios', 'UserController@verUsuarios');
 
     Route::get('crearUsuarios', 'UserController@crearUsuarios');
@@ -38,6 +36,20 @@ Route::group(['middleware' => ['web']], function(){
     Route::post('/signin', [
         'uses' => 'UserController@postSignIn',
         'as' => 'signin'
+    ]);
+    Route::post('/agregarUsuarioAdmin', [
+        'uses' => 'UserController@agregarUsuarioAdmin',
+        'as' => 'agregarUsuarioAdmin'
+    ]);
+    Route::get('/editUser/{id}', [
+        'uses' => 'UserController@edit',
+        'as' => 'editUser',
+        'middleware' => 'auth'
+    ]);
+    Route::get('/updateUser/{id}', [
+        'uses' => 'UserController@update',
+        'as' => 'updateUser',
+        'middleware' => 'auth'
     ]);
 
     Route::post('/updateProfile', [

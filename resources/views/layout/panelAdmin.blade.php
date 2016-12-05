@@ -11,7 +11,7 @@
           @endif
         </div>
         <div class="pull-left info">
-          <p>Sergio Torres</p>
+          <p>{{$usuario->nombre}} {{$usuario->apellido}}</p>
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
       </div>
@@ -29,7 +29,32 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
         <li class="header" style="color:white;">PANEL CONTROL</li>
-        <li class="treeview active">
+
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-folder"></i> <span>Instituciones</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="/verInstituciones"><i class="fa fa-circle-o"></i>Listar y Editar</a></li>
+            <li><a href="/crearInstituciones"><i class="fa fa-circle-o"></i>Crear</a></li>
+          </ul>
+        </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-folder"></i> <span>Carreras</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="/verCarreras"><i class="fa fa-circle-o"></i>Listar y Editar</a></li>
+            <li><a href="/crearCarreras"><i class="fa fa-circle-o"></i>Crear</a></li>
+          </ul>
+        </li>
+        <li class="treeview">
           <a href="#">
             <i class="fa fa-folder"></i> <span>Usuarios</span>
             <span class="pull-right-container">
@@ -39,7 +64,6 @@
           <ul class="treeview-menu">
             <li><a href="/verUsuarios"><i class="fa fa-circle-o"></i>Listar y Editar</a></li>
             <li><a href="/crearUsuarios"><i class="fa fa-circle-o"></i>Crear</a></li>
-            <li><a href="#"><i class="fa fa-circle-o"></i>Estadísticas</a></li>
           </ul>
         </li>
       </ul>

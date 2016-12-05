@@ -24,16 +24,22 @@
 <?php
 $carreras = Session::get('carreras');
 $ramos = Session::get('ramos');
-if (Session::has('usuario'))
+
+if (Session::has('user'))
 {
 
-  $usuario = Session::get('usuario');
+  $usuario = Session::get('user');
 }
 else
 {
   $usuario = $user;
-}
 
+}
+if (Session::has('perfil'))
+{
+
+  $perfil = Session::get('perfil')->id_perfil;
+}
 
 
 ?>
@@ -56,7 +62,7 @@ else
     
 
     <!-- Main content -->
-    <section class="content">
+    <section class="content" style="padding-top: 80px">
 
         @yield('content')
 
