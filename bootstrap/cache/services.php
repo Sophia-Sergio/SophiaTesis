@@ -28,7 +28,6 @@
     24 => 'Sophia\\Providers\\AuthServiceProvider',
     25 => 'Sophia\\Providers\\EventServiceProvider',
     26 => 'Sophia\\Providers\\RouteServiceProvider',
-    27 => 'Illuminate\\Html\\HtmlServiceProvider',
   ),
   'eager' => 
   array (
@@ -137,8 +136,6 @@
     'validator' => 'Illuminate\\Validation\\ValidationServiceProvider',
     'validation.presence' => 'Illuminate\\Validation\\ValidationServiceProvider',
     'Laravel\\Socialite\\Contracts\\Factory' => 'Laravel\\Socialite\\SocialiteServiceProvider',
-    'html' => 'Illuminate\\Html\\HtmlServiceProvider',
-    'form' => 'Illuminate\\Html\\HtmlServiceProvider',
   ),
   'when' => 
   array (
@@ -179,9 +176,6 @@
     array (
     ),
     'Laravel\\Socialite\\SocialiteServiceProvider' => 
-    array (
-    ),
-    'Illuminate\\Html\\HtmlServiceProvider' => 
     array (
     ),
   ),

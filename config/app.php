@@ -177,7 +177,7 @@ return [
         // Sophia\Providers\BroadcastServiceProvider::class,
         Sophia\Providers\EventServiceProvider::class,
         Sophia\Providers\RouteServiceProvider::class,
-        'Illuminate\Html\HtmlServiceProvider'
+        //'Illuminate\Html\HtmlServiceProvider'
 
     ],
 
