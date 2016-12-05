@@ -37,7 +37,6 @@ else
 }
 if (Session::has('perfil'))
 {
-
   $perfil = Session::get('perfil')->id_perfil;
 }
 

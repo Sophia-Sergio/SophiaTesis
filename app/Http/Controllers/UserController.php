@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Sophia\Http\Requests;
 use Sophia\TipoInstitucion;
+use Sophia\Institucion;
+use Sophia\Carrera;
 use Sophia\Perfil;
 use Sophia\Usuario_Perfil;
 use Sophia\User;
@@ -23,6 +25,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Collection;
 use Sophia\Http\Requests\UsuarioCreateRequest;
 use Sophia\Http\Requests\UsuarioUpdateRequest;
+use Sophia\Http\Requests\InstitucionUpdateRequest;
 
 
 class UserController extends Controller
@@ -75,15 +78,108 @@ class UserController extends Controller
         $usuario->reintentos = 0;
         $resul = $usuario->save();
 
-        Session::flash('message','Usuario Actualizado Correctamente');
+        Session::flash('message','Usuario Creado Correctamente');
         return Redirect::to('/dashboard')->with(['id'=>Session::get('perfil')->id_perfil]);
     }
+
+
+
+    public function agregarInstitucionAdmin(Request $request){
+
+        $this->validate($request, [
+            'nombre_institucion' => 'required|min:3',
+            'id_tipo_institucion' => 'required|max:1',
+
+        ]);
+
+        $data = $request;
+
+
+        $institucion = new Institucion;
+        $institucion->nombre_institucion=$data["nombre_institucion"];
+        $institucion->nombre_institucion_html=$data["nombre_institucion"];
+        $institucion->nombre_institucion_no_tilde=$data["nombre_institucion"];
+        $institucion->id_tipo_institucion=$data["id_tipo_institucion"];
+
+        $resul = $institucion->save();
+
+        Session::flash('message','Institucion Agregada Correctamente');
+        return Redirect::to('/dashboard')->with(['id'=>Session::get('perfil')->id_perfil]);
+    }
+
+    public function agregarCarreraAdmin(Request $request){
+
+        $this->validate($request, [
+            'nombre_carrera' => 'required|min:3',
+        ]);
+
+        $data = $request;
+
+
+        $carrera = new Carrera;
+        $carrera->nombre_carrera=$data["nombre_carrera"];
+        $carrera->nombre_institucion_html=$data["nombre_carrera"];
+        $carrera->nombre_institucion_no_tilde=$data["nombre_carrera"];
+        $resul = $carrera->save();
+
+        Session::flash('message','Institucion Agregada Correctamente');
+        return Redirect::to('/dashboard')->with(['id'=>Session::get('perfil')->id_perfil]);
+    }
+
+    public function agregarDocenteAdmin(Request $request){
+
+        $this->validate($request, [
+            'nombre' => 'required|min:3',
+            'apellido_paterno' => 'required|min:3',
+            'apellido_materno' => 'required|min:3',
+            'email' => 'required|min:3',
+            'estado' => 'required',
+        ]);
+
+        $data = $request;
+
+
+        $docente = new Docente;
+        $docente->nombre=$data["nombre"];
+        $docente->apellido_paterno=$data["apellido_paterno"];
+        $docente->apellido_materno=$data["apellido_materno"];
+        $docente->nombre_html=$data["nombre"];
+        $docente->apellido_paterno_html=$data["apellido_paterno"];
+        $docente->apellido_materno_html=$data["apellido_materno"];
+        $docente->nombre_no_tilde=$data["nombre"];
+        $docente->apellido_paterno_no_tilde=$data["apellido_paterno"];
+        $docente->apellido_materno_no_tilde=$data["apellido_materno"];
+        $docente->email=$data["email"];
+        $docente->estado=$data["estado"];
+
+        $resul = $docente->save();
+
+        Session::flash('message','Docente Agregado Correctamente');
+        return Redirect::to('/dashboard')->with(['id'=>Session::get('perfil')->id_perfil]);
+    }
+
 
     public function edit($id)
     {
         $usuarioEditar = \Sophia\User::find($id);
         return view('admin.editUsuario',['usuarioEditar'=>$usuarioEditar]);
     }
+    public function editInstitucion($id)
+    {
+        $institucionEditar = \Sophia\Institucion::find($id);
+        return view('admin.editInstitucion',['institucionEditar'=>$institucionEditar]);
+    }
+    public function editCarrera($id)
+    {
+        $carreraEditar = \Sophia\Carrera::find($id);
+        return view('admin.editCarrera',['carreraEditar'=>$carreraEditar]);
+    }
+    public function editDocente($id)
+    {
+        $docenteEditar = \Sophia\Docente::find($id);
+        return view('admin.editDocente',['docenteEditar'=>$docenteEditar]);
+    }
+
 
     public function update(UsuarioUpdateRequest $request, $id)
     {
@@ -94,25 +190,76 @@ class UserController extends Controller
         return Redirect::to('/dashboard')->with(['id'=>Session::get('perfil')->id_perfil]);
     }
 
+    public function updateInstitucion(InstitucionUpdateRequest $request, $id)
+    {
+        $institucion = \Sophia\Institucion::find($id);
+        $institucion->fill($request->all());
+        $institucion->save();
+        Session::flash('message','Institucion Actualizada Correctamente');
+        return Redirect::to('/dashboard')->with(['id'=>Session::get('perfil')->id_perfil]);
+    }
+    public function updateCarrera(CarreraUpdateRequest $request, $id)
+    {
+        $carrera = \Sophia\Carrera::find($id);
+        $carrera->fill($request->all());
+        $carrera->save();
+        Session::flash('message','Carrera Actualizada Correctamente');
+        return Redirect::to('/dashboard')->with(['id'=>Session::get('perfil')->id_perfil]);
+    }
+    public function updateDocente(DocenteUpdateRequest $request, $id)
+    {
+        $docente = \Sophia\Docente::find($id);
+        $docente->fill($request->all());
+        $docente->save();
+        Session::flash('message','Docente Actualizado Correctamente');
+        return Redirect::to('/dashboard')->with(['id'=>Session::get('perfil')->id_perfil]);
+    }
     public function verUsuarios()
     {
         $usuario = Session::get('user');
         $usuarios = \Sophia\User::All();
         return view('admin.verUsuarios',['user'=>$usuario], compact('usuarios'));
     }
+    public function verInstituciones()
+    {
+        $usuario = Session::get('user');
+        $instituciones = \Sophia\Institucion::All();
+        return view('admin.verInstituciones',['user'=>$usuario], compact('instituciones'));
+    }
+    public function verCarreras()
+    {
+        $usuario = Session::get('user');
+        $carreras = \Sophia\Carrera::All();
+        return view('admin.verCarreras',['user'=>$usuario], compact('carreras'));
+    }
+    public function verDocentes()
+    {
+        $usuario = Session::get('user');
+        $docentes = \Sophia\Docente::All();
+        return view('admin.verDocentes',['user'=>$usuario], compact('docentes'));
+    }
+
 
     public function crearUsuarios()
     {
-        /*
-        if($request->ajax()){
-            Genre::create($request->all());
-            return response()->json([
-                "mensaje" => "creado"
-            ]);
-        }
-        */
         $usuario = Session::get('user');
         return view('admin.crearUsuarios', ['user'=>$usuario]);
+    }
+    public function crearInstituciones()
+    {
+        $usuario = Session::get('user');
+        return view('admin.crearInstituciones', ['user'=>$usuario]);
+    }
+    public function crearCarreras()
+    {
+        $usuario = Session::get('user');
+        return view('admin.crearInstituciones', ['user'=>$usuario]);
+    }
+
+    public function crearDocentes()
+    {
+        $usuario = Session::get('user');
+        return view('admin.crearDocentes', ['user'=>$usuario]);
     }
 
     public function getProfile()
@@ -233,6 +380,10 @@ class UserController extends Controller
             return redirect()->back()->with(['message' => $message]); //le entrego a la sesi�n un mensaje de error
         }
     }
+
+
+
+
     public function getDashboard()
     {
    
@@ -331,8 +482,7 @@ class UserController extends Controller
             //Session::put('posteosRamo', $posteosRamo);
 
             // retornamos la vista index
-            return view('user.index',
-             ['perfil'=>$perfil]);
+            return view('user.index')->with(['perfil' => $perfil]);
         }
     }
     public function getLogout(){

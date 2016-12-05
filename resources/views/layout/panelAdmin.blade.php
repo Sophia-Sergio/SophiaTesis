@@ -28,7 +28,7 @@
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
-        <li class="header" style="color:white;">PANEL CONTROL</li>
+        <li class="header" style="color:white;">PANEL DE ADMINISTRACIÓN</li>
 
         <li class="treeview">
           <a href="#">
@@ -52,6 +52,18 @@
           <ul class="treeview-menu">
             <li><a href="/verCarreras"><i class="fa fa-circle-o"></i>Listar y Editar</a></li>
             <li><a href="/crearCarreras"><i class="fa fa-circle-o"></i>Crear</a></li>
+          </ul>
+        </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-folder"></i> <span>Docentes</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="/verDocentes"><i class="fa fa-circle-o"></i>Listar y Editar</a></li>
+            <li><a href="/crearDocentes"><i class="fa fa-circle-o"></i>Crear</a></li>
           </ul>
         </li>
         <li class="treeview">
