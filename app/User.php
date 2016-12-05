@@ -17,4 +17,9 @@ class User extends Model implements Authenticatable
     {
 
     }
+
+    public function getFullName()
+    {
+        return ucfirst($this->nombre) . ' ' . ucfirst($this->apellido);
+    }
 }

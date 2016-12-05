@@ -1,0 +1,48 @@
+@extends('layout.masterUsuario')
+
+@section('title')
+Sophia | Registro Académico
+@endsection
+
+
+@section('content')
+<div class="row" style="padding-top: 50px;">
+    <div class="col-sm-10">
+        <div class="panel panel-default">
+            <div class="panel-body" style="padding-left:50px;  padding-top:25px; padding-right:50px; padding-bottom:30px" >
+
+                <h3>Chats </h3>
+
+                @if (count($messages) < 1)
+                <p>
+                    Actualmente no posees mensajes
+                </p>
+                @else
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Conversación con</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($messages as $message)
+                                <tr>
+                                    @if ($message->sender != Auth::user()->id)
+                                        <td>{{ $message->sender_name }}</td>
+                                    @elseif($message->receiver != Auth::user()->id)
+                                        <td>{{ $message->receiver_name }}</td>
+                                    @endif
+                                    <td>
+                                        <a href="" class="btn btn-success">Ver Conversación</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
