@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Sophia\Http\Requests;
 use Sophia\TipoInstitucion;
+use Sophia\Perfil;
+use Sophia\Usuario_Perfil;
 use Sophia\User;
 use Sophia\Post;
 use Sophia\Ramo;
@@ -196,6 +198,17 @@ class UserController extends Controller
         $user->reintentos = 0;
         $user->save();
 
+
+        $user = User::where('email', $email)->first();
+
+        $perfil = new Usuario_Perfil();
+        $perfil->id_usuario = $user->id;
+        $perfil->id_perfil = 2;
+        DB::table('usuario_perfils')->insert([
+            ['id_usuario' => $user->id, 'id_perfil' => 2]
+        ]);
+
+
         Auth::login($user); //logear a usuario
         Session::put('user', $user);
         //Session::put('idRamo', $idRamo);
@@ -226,6 +239,8 @@ class UserController extends Controller
      // se retorna una vista, seg�n tipo de usuario
         $id = Session::get('user')->id;
         $usuario = Session::get('user');
+
+
 
         $perfil = DB::table('users')
                 ->join('usuario_perfils', 'usuario_perfils.id_usuario', '=', 'users.id')
