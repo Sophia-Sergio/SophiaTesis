@@ -26,16 +26,23 @@ Sophia | Registro Académico
                             </tr>
                         </thead>
                         <tbody>
+                            <?php $sender = []; $receiver = []; ?>
+
                             @foreach ($messages as $message)
                                 <tr>
-                                    @if ($message->sender != Auth::user()->id)
+                                    @if ($message->sender != Auth::user()->id && !in_array($message->sender, $sender))
+                                        <?php array_push($sender, $message->sender); ?>
                                         <td>{{ $message->sender_name }}</td>
-                                    @elseif($message->receiver != Auth::user()->id)
+                                        <td>
+                                            <a href="{{ route('messages.show', [$message->uuid]) }}" class="btn btn-success">Ver Conversación</a>
+                                        </td>
+                                    @elseif($message->receiver != Auth::user()->id && !in_array($message->receiver, $receiver))
+                                        <?php array_push($sender, $message->receiver); ?>
                                         <td>{{ $message->receiver_name }}</td>
+                                        <td>
+                                            <a href="{{ route('messages.show', [$message->uuid]) }}" class="btn btn-success">Ver Conversación</a>
+                                        </td>
                                     @endif
-                                    <td>
-                                        <a href="{{ route('messages.show', [$message->uuid]) }}" class="btn btn-success">Ver Conversación</a>
-                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

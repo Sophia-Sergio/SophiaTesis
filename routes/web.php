@@ -217,4 +217,5 @@ Route::group(['middleware' => ['web']], function(){
 
     require 'Routes/Social.php';
     require 'Routes/Messages.php';
+    require 'Routes/Users.php';
 });

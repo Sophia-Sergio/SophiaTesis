@@ -30,6 +30,7 @@
       <ul class="sidebar-menu">
         <a href="{{ route('dashboard')}}"><li class="header" style="color:white; background-color: black"><b>{{ $carrera->nombre_carrera }}</b></li></a>
       @foreach($ramos as $ramo)
+
         <li class="treeview">
           <a href="">
             <i class="fa fa-folder"></i><span>{{$ramo->nombre_ramo}}</span>
@@ -37,13 +38,15 @@
               <i class="fa fa-angle-left pull-right" ></i>
             </span>
           </a>
-          <ul class="treeview-menu">
-            <li><a href="/ramo/muro/{{$ramo->id_ramo}}"><i class="fa fa-circle-o"></i> Muro</a></li>
-            <li><a href="/ramo/contenido/{{$ramo->id_ramo}}"><i class="fa fa-circle-o"></i> Contenidos</a></li>
-            <li><a href="#"><i class="fa fa-circle-o"></i> Notas y Fechas de Prueba</a></li>
-            <li><a href="404.html"><i class="fa fa-circle-o"></i> Otros</a></li>
-            <li><a href="{{ route('messages.index') }}"><i class="fa fa-circle-o"></i> Mensajes</a></li>
-          </ul>
+            <ul class="treeview-menu">
+                <li>{{$ramo->id_ramo}}</li>
+                <li><a href="/ramo/muro/{{$ramo->id_ramo}}"><i class="fa fa-circle-o"></i> Muro</a></li>
+                <li><a href="/ramo/contenido/{{$ramo->id_ramo}}"><i class="fa fa-circle-o"></i> Contenidos</a></li>
+                <li><a href="#"><i class="fa fa-circle-o"></i> Notas y Fechas de Prueba</a></li>
+                <li><a href="404.html"><i class="fa fa-circle-o"></i> Otros</a></li>
+                <li><a href="{{ route('messages.my_messages', ['ramo' => $ramo->id]) }}"><i class="fa fa-circle-o"></i> Mensajes</a></li>
+                <li><a href="{{ route('users.by_ramo', ['ramo' => $ramo->id]) }}"><i class="fa fa-circle-o"></i> Usuarios</a></li>
+            </ul>
         </li>
       @endforeach
       </ul>

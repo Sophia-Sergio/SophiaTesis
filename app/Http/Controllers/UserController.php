@@ -546,5 +546,20 @@ class UserController extends Controller
         return redirect()->route('dashboard');
     }
 
+    /**
+     * Función para obtener los usuarios de un ramo específico
+     */
+    public function byRamo($ramo)
+    {
+        $users = DB::table('usuario_ramo_docentes')
+            ->join('ramo_docentes', 'usuario_ramo_docentes.id_ramo_docente', '=', 'ramo_docentes.id')
+            ->join('ramos', 'ramo_docentes.id_ramo', '=', 'ramos.id')
+            ->join('users', 'usuario_ramo_docentes.id_usuario', '=', 'users.id')
+            ->where('ramos.id', $ramo)
+            ->distinct()
+            ->orderBy('nombre_ramo')
+            ->get();
 
+        return view('user.by_ramo', compact('users'));
+    }
 }

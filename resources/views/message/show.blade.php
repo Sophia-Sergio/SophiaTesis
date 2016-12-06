@@ -15,22 +15,24 @@
                         <div class="col-md-12">
                             <ul class="media-list">
                                 @foreach ($messages as $message)
-                                <li class="media">
-                                    <div class="media-body">
-                                        <div class="media">
-                                            <a class="pull-left" href="#">
-                                                <img class="media-object img-circle" src="{{ URL::to('img/man_avatar.jpg') }}">
-                                            </a>
+                                    @if ($message->message != '-')
+                                        <li class="media">
                                             <div class="media-body">
-                                                {{ $message->message }}
-                                                <br>
-                                                <small class="text-muted">{{ $message->sender_name }} | {{ $message->formated_date }}</small>
-                                                <hr>
-                                            </div>
-                                        </div>
+                                                <div class="media">
+                                                    <a class="pull-left" href="#">
+                                                        <img class="media-object img-circle" src="{{ URL::to('img/man_avatar.jpg') }}">
+                                                    </a>
+                                                    <div class="media-body">
+                                                        {{ $message->message }}
+                                                        <br>
+                                                        <small class="text-muted">{{ $message->sender_name }} | {{ $message->formated_date }}</small>
+                                                        <hr>
+                                                    </div>
+                                                </div>
 
-                                    </div>
-                                </li>
+                                            </div>
+                                        </li>
+                                    @endif
                                 @endforeach
                             </ul>
                         </div>

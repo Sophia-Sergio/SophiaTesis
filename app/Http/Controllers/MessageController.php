@@ -4,6 +4,7 @@ namespace Sophia\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Sophia\Http\Requests\StoreMessage;
 use Sophia\Message;
 use Sophia\User;
@@ -24,9 +25,32 @@ class MessageController extends Controller
      */
     public function index()
     {
-        $messages = Message::where('sender', Auth::user()->id)
-            ->orWhere('receiver', Auth::user()->id)
+    }
+
+    public function myMessages($ramo)
+    {
+        $users = DB::table('usuario_ramo_docentes')
+            ->join('ramo_docentes', 'usuario_ramo_docentes.id_ramo_docente', '=', 'ramo_docentes.id')
+            ->join('ramos', 'ramo_docentes.id_ramo', '=', 'ramos.id')
+            ->join('users', 'usuario_ramo_docentes.id_usuario', '=', 'users.id')
+            ->where('ramos.id', $ramo)
+            ->distinct()
+            ->orderBy('nombre_ramo')
             ->get();
+
+        $messages = [];
+
+        foreach ($users as $user) {
+            $query1 = Message::where('sender', $user->id)
+                ->where('receiver', Auth::user()->id)
+                ->get();
+
+            $query2 = Message::where('sender', Auth::user()->id)
+                ->where('receiver', $user->id)
+                ->get();
+
+            $messages = $query1->merge($query2);
+        }
 
         foreach ($messages as $message) {
             $senderName = User::find($message->sender);
@@ -131,5 +155,35 @@ class MessageController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function checkmsg($user1, $user2)
+    {
+        $messages = Message::where('sender', $user1)
+            ->where('receiver', $user2)
+            ->first();
+
+        if (!empty($messages)) {
+            return redirect()->route('messages.show', ['id' => $messages->uuid]);
+        }
+
+        $messages = Message::where('sender', $user2)
+            ->where('receiver', $user1)
+            ->first();
+
+        if (!empty($messages)) {
+            return redirect()->route('messages.show', ['id' => $messages->uuid]);
+        }
+
+        $uuid = substr(md5(microtime()),rand(0,26),10);
+
+        Message::create([
+            'uuid' => $uuid,
+            'sender' => $user1,
+            'receiver' => $user2,
+            'message' => '-'
+        ]);
+
+        return redirect()->route('messages.show', ['id' => $uuid]);
     }
 }
