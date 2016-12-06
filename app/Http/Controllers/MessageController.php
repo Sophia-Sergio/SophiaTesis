@@ -39,7 +39,7 @@ class MessageController extends Controller
             ->get();
 
         $messages = [];
-
+        $count = 0;
         foreach ($users as $user) {
             $query1 = Message::where('sender', $user->id)
                 ->where('receiver', Auth::user()->id)
@@ -49,7 +49,12 @@ class MessageController extends Controller
                 ->where('receiver', $user->id)
                 ->get();
 
-            $messages = $query1->merge($query2);
+            if ($count == 0)
+                $messages = $query1->merge($query2);
+            else
+                $messages = $messages->merge($query1)->merge($query2);
+
+            $count++;
         }
 
         foreach ($messages as $message) {
