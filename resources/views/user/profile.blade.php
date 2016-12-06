@@ -43,8 +43,8 @@
                 <br/>
                 @if (Storage::disk('local')->has($usuario->id . '.jpg'))
                     <section class="row">
-                        <div class="col-md-6 col-md-offset-3" style="text-align: center">
-                            <img class="img-rounded" style="width:60%; padding-bottom: 20px" src="{{ route('profile.image', ['filename' => $usuario->id . '.jpg']) }}" alt="" class="img-responsive">
+                        <div class="col-md-6 col-md-offset-3" style="text-align: center; padding-bottom: 20px" >
+                            <img class="img-circle"  src="{{ route('profile.image', ['filename' => $usuario->id . '.jpg']) }}" alt="" style="width:250px; height:250px">
                         </div>
                     </section>
                 @endif
