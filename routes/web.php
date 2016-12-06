@@ -91,6 +91,7 @@ Route::group(['middleware' => ['web']], function(){
     Route::get('/download/{archivo}', 'FileController@download');
     Route::get('/likeFile/{archivo}', 'FileController@toggleLike');
 
+
     Route::get('/logout', [
         'uses' => 'UserController@getLogout',
         'as' => 'logout',
@@ -107,6 +108,8 @@ Route::group(['middleware' => ['web']], function(){
         'as' => 'posteoRamo.crear',
         'middleware' => 'auth'
     ]);
+
+    Route::get('/likePost/{post}', 'PostController@toggleLike');
 
     Route::get('ramo/muro/{ramo}', 'RamoController@index');
     Route::get('ramo/contenido/{ramo}', 'RamoController@contenido');

@@ -5,6 +5,7 @@ namespace Sophia\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Sophia\Http\Requests;
+use Sophia\LikePost;
 use Sophia\PostCarrera;
 use Sophia\PostRamo;
 use Session;
@@ -12,7 +13,7 @@ use Session;
 class PostController extends Controller
 {
     public function postCreatePostCarrera(Request $request){
-        //Validación
+        //Validaciï¿½n
         $this->validate($request, [
             'contenido' => 'required|max:1000',
         ]);
@@ -38,7 +39,7 @@ class PostController extends Controller
 
 
     public function postCreatePostRamo(Request $request){
-        //Validación
+        //Validaciï¿½n
         $this->validate($request, [
             'contenido' => 'required|max:1000',
         ]);
@@ -63,6 +64,38 @@ class PostController extends Controller
         $postRamo->estado=0;
         $postRamo->save();
         return back();
+    }
+
+
+    public function toggleLike($id_post) {
+
+        $id_user = Session::get('user')->id;
+        $post = PostRamo::find($id_post);
+
+        $actuales = LikePost::where('post_ramo_id', $id_post)
+            ->where('user_id', $id_user)
+            ->get()
+        ;
+
+        if(count($actuales) > 0) {
+            foreach($actuales as $actual) {
+                $actual->delete();
+            }
+        } else {
+            $nuevoLike = new LikePost();
+            $nuevoLike->post_ramo_id = $id_post;
+            $nuevoLike->user_id = $id_user;
+            $nuevoLike->save();
+        }
+
+        $totalLikes = $post->likes()->count();
+        $is_like = $post->isLikeUer($id_user);
+
+        return response()->json([
+            'totalLikes' => $totalLikes,
+            'isLike' => $is_like
+        ]);
+
     }
 
 }

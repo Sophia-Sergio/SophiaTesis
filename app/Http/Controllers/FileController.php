@@ -30,7 +30,6 @@ class FileController extends Controller
         $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
         $fileSize = $file->getClientSize();
 
-        $file->move($storagePath, $fileName);
 
         $file_ = new File();
         $file_->dir = $storagePath;
@@ -40,6 +39,8 @@ class FileController extends Controller
         $file_->extension = $fileType;
         $file_->seguridad = $seguridad_id;
         if ($file_->save())
+
+            $file->move($storagePath, $file_->id);
         {
             $message = "Archivo guardado";
         };
@@ -65,8 +66,8 @@ class FileController extends Controller
 
     public function download($id_archivo) {
         $file = File::find($id_archivo);
-        $url = trim($file->dir).'/'.$file->name;
-        return response()->download($url);
+        $url = trim($file->dir).'/'.$file->id;
+        return response()->download($url,$file->name);
     }
 
 
