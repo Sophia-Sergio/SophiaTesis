@@ -269,26 +269,38 @@ class UserController extends Controller
 
     public function updateProfile(Request $request)
     {
-    $this->validate($request, [
-        'first_name' => 'required|min:3',
-        /* 'last_name' => 'required|min:3',
-         'email' => 'email|required|unique:users',
-         'password' => 'required|min:6|confirmed',
-         'password_confirmation' => 'required',
-         'birth_day' => 'required',
-         'birth_month' => 'required',
-         'birth_year' => 'required',*/
-    ]);
 
-    $usuario = Auth::user();
-    $usuario->nombre = $request['first_name'];
-    $usuario->update();
-    $file = $request->file('image');
-    $filename = $request['first_name'].'-'.$usuario->id.'.jpg';
-    if ($file){
-        Storage::disk()->put($filename, File::get($file));
-    }
-    return redirect()->route('profile');
+
+        $this->validate($request, [
+            'first_name' => 'required|min:3',
+            'last_name' => 'required|min:3',
+            'email' => 'required|min:3',
+        ]);
+
+        $data = $request;
+
+        $usuario = Session::get('user');
+
+
+
+        DB::table('users')
+            ->where('id', $usuario->id)
+            ->update([
+                'nombre' => $request['first_name'],
+                'apellido' => $request['last_name'],
+                'email' => $request['email'],
+                'fecha_nacimiento' => $request['fecha_nacimiento'],
+            ]);
+        $usuario=User::find($usuario->id);
+        Session::set('user',$usuario );
+        $usuario = Session::get('user');
+
+        $file = $request->file('image');
+        $filename = $usuario->id.'.jpg';
+        if ($file){
+            Storage::disk()->put($filename, File::get($file));
+        }
+        return redirect()->route('profile');
     }
 
 
