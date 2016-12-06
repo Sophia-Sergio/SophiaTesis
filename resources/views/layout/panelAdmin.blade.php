@@ -4,8 +4,8 @@
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          @if (Storage::disk('local')->has( $usuario->nombre . '-' . $usuario->id . '.jpg'))
-            <img src="{{ route('profile.image', ['filename' => $usuario->nombre . '-' . $usuario->id . '.jpg']) }}" alt="" class="img-circle">
+          @if (Storage::disk('local')->has( $usuario->id . '.jpg'))
+            <img src="{{ route('profile.image', ['filename' => $usuario->id . '.jpg']) }}" alt="" class="img-circle">
             @else
             <img src="{{ URL::to('img/man_avatar.jpg')   }}" alt="" class="img-circle">
           @endif
@@ -28,7 +28,7 @@
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
-        <li class="header" style="color:white;">PANEL DE ADMINISTRACIÓN</li>
+        <li class="header" style="color:white;">PANEL DE ADMINISTRACIï¿½N</li>
 
         <li class="treeview">
           <a href="#">

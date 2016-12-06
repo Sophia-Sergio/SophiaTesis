@@ -36,6 +36,10 @@
 if (Session::has('carrera')) {
     $carrera = Session::get('carrera');
 }
+if (Session::has('perfil'))
+{
+  $perfil = Session::get('perfil')->id_perfil;
+}
 
 $ramos = Session::get('ramos');
 $usuario = Session::get('user');
@@ -45,23 +49,18 @@ $usuario = Session::get('user');
 <div class="wrapper" >
 
 //24-11-2016 CGG: nose entiende este if
-@if(Session::has('carrera'))
-{
 //24-11-2016 CGG: se llama al header de la pagina principal
   @include('layout.panelHeader')
-}
-@else
-//24-11-2016 CGG: esto nose para que sirve
-  @include('layout.panelHeaderFirst')
-@endif
 
   <!-- =============================================== -->
 
   <!-- Left side column. contains the sidebar -->
-@if(Session::has('carrera'))
+@if(Session::has('carrera') && $perfil=='2')
   @include('layout.panelUsuarioMuro')
-@else
+@elseif ($perfil=='2')
   @include('layout.panelUsuarioMuroFirst')
+@elseif ($perfil=='1')
+  @include('layout.panelAdmin')
 @endif
 
   <!-- =============================================== -->

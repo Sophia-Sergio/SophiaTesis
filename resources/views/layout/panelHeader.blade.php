@@ -106,8 +106,8 @@
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              @if (Storage::disk('local')->has( $usuario->nombre . '-' . $usuario->id . '.jpg'))
-                <img src="{{ route('profile.image', ['filename' => $usuario->nombre . '-' . $usuario->id . '.jpg']) }}" alt="" class="user-image">
+              @if (Storage::disk('local')->has( $usuario->id . '.jpg'))
+                <img src="{{ route('profile.image', ['filename' => $usuario->id . '.jpg']) }}" alt="" class="user-image">
               @else
                 <img src="{{ URL::to('img/man_avatar.jpg')   }}" alt="" class="user-image">
               @endif
@@ -116,16 +116,23 @@
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                @if (Storage::disk('local')->has( $usuario->nombre . '-' . $usuario->id . '.jpg'))
-                      <img src="{{ route('profile.image', ['filename' => $usuario->nombre . '-' . $usuario->id . '.jpg']) }}" alt="" class="img-circle">
+                @if (Storage::disk('local')->has( $usuario->id . '.jpg'))
+                      <img src="{{ route('profile.image', ['filename' => $usuario->id . '.jpg']) }}" alt="" class="img-circle">
                 @else
                   <img src="{{ URL::to('img/man_avatar.jpg')   }}" alt="" class="img-circle">
                 @endif
                 <p>
-                  {{$usuario->nombre}} {{$usuario->apellido}} - Estudiante
+                  {{$usuario->nombre}} {{$usuario->apellido}}
+                  @if ($perfil=='2')
+                    Estudiante
+                  @else
+                    Administrador
+                  @endif
                   <small>
                   @if($perfil!='1')
+                      @if(Session::has('carrera'))
                     {{ $carrera->nombre_carrera }}
+                      @endif
                   @endif
                   </small>
                 </p>
