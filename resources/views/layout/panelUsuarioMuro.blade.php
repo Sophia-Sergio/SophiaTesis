@@ -4,16 +4,18 @@
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          @if (Storage::disk('local')->has( $usuario->nombre . '-' . $usuario->id . '.jpg'))
-            <img src="{{ route('profile.image', ['filename' => $usuario->nombre . '-' . $usuario->id . '.jpg']) }}" alt="" class="img-circle">
+          @if (Storage::disk('local')->has($usuario->id . '.jpg'))
+            <img src="{{ route('profile.image', ['filename' => $usuario->id . '.jpg']) }}" alt="" class="img-circle " style="height:45px; width:45px">
             @else
-            <img src="{{ URL::to('img/man_avatar.jpg')   }}" alt="" class="img-circle">
+            <img src="{{ URL::to('img/man_avatar.jpg')   }}" alt="" class="img-rounded">
           @endif
         </div>
         <div class="pull-left info">
           <p>{{$usuario->nombre}} {{$usuario->apellido}}</p>
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
+        </br>
+        </br>
       </div>
       <!-- search form -->
       <form action="#" method="get" class="sidebar-form">
@@ -41,8 +43,6 @@
             <ul class="treeview-menu">
                 <li><a href="/ramo/muro/{{$ramo->id_ramo}}"><i class="fa fa-circle-o"></i> Muro</a></li>
                 <li><a href="/ramo/contenido/{{$ramo->id_ramo}}"><i class="fa fa-circle-o"></i> Contenidos</a></li>
-                <li><a href="#"><i class="fa fa-circle-o"></i> Notas y Fechas de Prueba</a></li>
-                <li><a href="404.html"><i class="fa fa-circle-o"></i> Otros</a></li>
                 <li><a href="{{ route('messages.my_messages', ['ramo' => $ramo->id]) }}"><i class="fa fa-circle-o"></i> Mensajes</a></li>
                 <li><a href="{{ route('users.by_ramo', ['ramo' => $ramo->id]) }}"><i class="fa fa-circle-o"></i> Usuarios</a></li>
             </ul>

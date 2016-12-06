@@ -162,7 +162,13 @@ class UserController extends Controller
     public function edit($id)
     {
         $usuarioEditar = \Sophia\User::find($id);
-        return view('admin.editUsuario',['usuarioEditar'=>$usuarioEditar]);
+        $perfilUsuarioEditar = DB::table('users')
+            ->join('usuario_perfils', 'usuario_perfils.id_usuario', '=', 'users.id')
+            ->select('id_perfil')
+            ->where('usuario_perfils.id_usuario', '=', $id)
+            ->distinct()
+            ->first();
+        return view('admin.editUsuario',['usuarioEditar'=>$usuarioEditar, 'perfilUsuarioEditar'=>$perfilUsuarioEditar]);
     }
     public function editInstitucion($id)
     {
@@ -186,6 +192,14 @@ class UserController extends Controller
         $usuario = \Sophia\User::find($id);
         $usuario->fill($request->all());
         $usuario->save();
+
+        DB::table('usuario_perfils')
+        ->where('id_usuario', $usuario->id)
+        ->update([
+            'id_perfil' => $request['perfil'],
+        ]);
+
+
         Session::flash('message','Usuario Actualizado Correctamente');
         return Redirect::to('/dashboard')->with(['id'=>Session::get('perfil')->id_perfil]);
     }
@@ -269,26 +283,38 @@ class UserController extends Controller
 
     public function updateProfile(Request $request)
     {
-    $this->validate($request, [
-        'first_name' => 'required|min:3',
-        /* 'last_name' => 'required|min:3',
-         'email' => 'email|required|unique:users',
-         'password' => 'required|min:6|confirmed',
-         'password_confirmation' => 'required',
-         'birth_day' => 'required',
-         'birth_month' => 'required',
-         'birth_year' => 'required',*/
-    ]);
 
-    $usuario = Auth::user();
-    $usuario->nombre = $request['first_name'];
-    $usuario->update();
-    $file = $request->file('image');
-    $filename = $request['first_name'].'-'.$usuario->id.'.jpg';
-    if ($file){
-        Storage::disk()->put($filename, File::get($file));
-    }
-    return redirect()->route('profile');
+
+        $this->validate($request, [
+            'first_name' => 'required|min:3',
+            'last_name' => 'required|min:3',
+            'email' => 'required|min:3',
+        ]);
+
+        $data = $request;
+
+        $usuario = Session::get('user');
+
+
+
+        DB::table('users')
+            ->where('id', $usuario->id)
+            ->update([
+                'nombre' => $request['first_name'],
+                'apellido' => $request['last_name'],
+                'email' => $request['email'],
+                'fecha_nacimiento' => $request['fecha_nacimiento'],
+            ]);
+        $usuario=User::find($usuario->id);
+        Session::set('user',$usuario );
+        $usuario = Session::get('user');
+
+        $file = $request->file('image');
+        $filename = $usuario->id.'.jpg';
+        if ($file){
+            Storage::disk()->put($filename, File::get($file));
+        }
+        return redirect()->route('profile');
     }
 
 
@@ -454,7 +480,7 @@ class UserController extends Controller
             $posteosCarrera = DB::table('post_carreras')
                 ->join('carreras', 'id_carrera', '=', 'carreras.id')
                 ->join('users', 'id_user', '=', 'users.id')
-                ->select('id_carrera', 'contenido', 'id_user',  'post_carreras.id', 'nombre_carrera', 'nombre', 'post_carreras.created_at')
+                ->select('id_carrera', 'contenido', 'id_user',  'post_carreras.id', 'nombre_carrera', 'nombre', 'apellido', 'post_carreras.created_at')
                 ->where('id_carrera', $id_carrera)
                 ->where('post_carreras.estado', '=', 1)
                 ->distinct()

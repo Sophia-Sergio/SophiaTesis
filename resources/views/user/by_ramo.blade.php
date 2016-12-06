@@ -3,8 +3,12 @@
 @section('title')
 Sophia | Registro Académico
 @endsection
-
-
+<?php
+if (Session::has('perfil'))
+{
+$perfil = Session::get('perfil')->id_perfil;
+}
+?>
 @section('content')
 <div class="row" style="padding-top: 50px;">
     <div class="col-sm-10">
@@ -18,7 +22,10 @@ Sophia | Registro Académico
                             <tr>
                                 <th>Nombre</th>
                                 <th>Apellido</th>
-                                <th>Acción</th>
+                                <th>Mensaje</th>
+                                @if ($perfil=='3')
+                                    <th>Bloquear</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -28,6 +35,15 @@ Sophia | Registro Académico
                                         <td>{{ $user->nombre }}</td>
                                         <td>{{ $user->apellido }}</td>
                                         <td><a href="{{ route('messages.check_msg', ['user1' => $user->id, 'user2' => Auth::user()->id]) }}" class="btn btn-success">Enviar Mensaje</a></td>
+                                        @if ($perfil=='3')
+                                        <td>
+                                            <select class="form-control" name="perfil" id="perfil">
+                                                <option  value="0" selected="selected" disabled="disabled">Seleccione...</option>
+                                                <option  value="1"  <?php if ($user->estado== 1) echo "selected='selected'";?>>Activo</option>
+                                                <option  value="0" <?php if ($user->estado == 0) echo "selected='selected'";?>>Inactivo</option>
+                                            </select>
+                                        </td>
+                                        @endif
                                     </tr>
                                 @endif
                             @endforeach

@@ -11,6 +11,10 @@ $carrera = Session::get('carrera');
 $ramos = Session::get('ramos');
 $usuario = Session::get('user');
 $posteosCarrera= Session::get('posteosCarrera');
+if (Session::has('perfil'))
+{
+    $perfil = Session::get('perfil')->id_perfil;
+}
 ?>
 <!-- http://bootdey.com/snippets/view/social-network-wall // de aquí saqué el template-->
 <link rel="stylesheet" href="{{asset('css/index_UsuarioMuro.css')}}">  
@@ -27,14 +31,14 @@ $posteosCarrera= Session::get('posteosCarrera');
         <div class="panel-body">
 
             <div class="fb-user-thumb">
-                @if (Storage::disk('local')->has( $posteoCarrera->nombre . '-' . $posteoCarrera->id_user. '.jpg'))
-                    <img src="{{ route('profile.image', ['filename' => $posteoCarrera->nombre . '-' . $posteoCarrera->id_user. '.jpg']) }}" alt="" class="img-circle">
+                @if (Storage::disk('local')->has($posteoCarrera->id_user. '.jpg'))
+                    <img src="{{ route('profile.image', ['filename' => $posteoCarrera->id_user. '.jpg']) }}" alt="" class="img-circle">
                 @else
                     <img src="{{ URL::to('img/man_avatar.jpg')   }}" alt="" class="img-circle">
                 @endif
             </div>
             <div class="fb-user-details">
-                <h3><a href="#" class="#"> {{ $posteoCarrera->nombre}}</a></h3>
+                <h3><a href="#" class="#"> {{ $posteoCarrera->nombre}} {{ $posteoCarrera->apellido }} </a></h3>
                 <p>{{ $posteoCarrera->created_at}}, USA</p>
             </div>
             <div class="clearfix"></div>
@@ -49,7 +53,7 @@ $posteosCarrera= Session::get('posteosCarrera');
                         <a href="#" title="Deja un comentario">Comentar</a>
                         <span>-</span>
                         <a href="#" title="Comparte con tus compañeros">Compartir</a>
-                        @if($posteoCarrera->id_user == $usuario->id)
+                        @if($posteoCarrera->id_user == $usuario->id || $perfil=='3' )
                             <span>-</span>
                             <a href="#" class="edit" title="Edita tu comentario">Editar</a>
                             <span>-</span>
