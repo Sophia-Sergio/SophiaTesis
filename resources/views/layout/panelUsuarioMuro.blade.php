@@ -39,7 +39,6 @@
             </span>
           </a>
             <ul class="treeview-menu">
-                <li>{{$ramo->id_ramo}}</li>
                 <li><a href="/ramo/muro/{{$ramo->id_ramo}}"><i class="fa fa-circle-o"></i> Muro</a></li>
                 <li><a href="/ramo/contenido/{{$ramo->id_ramo}}"><i class="fa fa-circle-o"></i> Contenidos</a></li>
                 <li><a href="#"><i class="fa fa-circle-o"></i> Notas y Fechas de Prueba</a></li>
