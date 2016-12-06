@@ -91,8 +91,8 @@ class MessageController extends Controller
 
         Message::create([
             'uuid' => $request['uuid'],
-            'sender' => $message->sender,
-            'receiver' => $message->receiver,
+            'sender' => Auth::user()->id,
+            'receiver' => Auth::user()->id != $message->receiver ? $message->receiver : $message->sender,
             'message' => $request['message']
         ]);
 
