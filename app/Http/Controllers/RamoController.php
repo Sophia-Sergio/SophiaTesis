@@ -27,7 +27,7 @@ class RamoController extends Controller
             ->join('users', 'id_user', '=', 'users.id')
             ->join('usuario_ramo_docentes', 'id_user', '=', 'usuario_ramo_docentes.id_usuario')
             ->join('ramo_docentes', 'usuario_ramo_docentes.id_ramo_docente', '=', 'ramo_docentes.id')
-            ->select('id_carrera', 'contenido', 'id_user',  'post_ramos.id', 'nombre_carrera', 'nombre', 'post_ramos.created_at')
+            ->select('id_carrera', 'contenido', 'id_user',  'post_ramos.id', 'nombre_carrera', 'nombre', 'apellido', 'post_ramos.created_at')
             ->where('id_carrera', $id_carrera)
             ->where('ramo_docentes.id_ramo', $id_ramo)
             ->where('post_ramos.estado', '=', 1)

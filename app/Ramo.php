@@ -14,7 +14,7 @@ class Ramo extends Model
         $archivos_publicos = File::join('usuario_ramo_docentes', 'id_usuario_ramo_docente', '=', 'usuario_ramo_docentes.id')
             ->join('ramo_docentes', 'id_ramo_docente', '=', 'ramo_docentes.id')
             ->join('users', 'id_usuario', '=', 'users.id')
-            ->select('ramo_docentes.id_docente', 'ramo_docentes.id_ramo', 'files.*', 'users.nombre')
+            ->select('ramo_docentes.id_docente', 'ramo_docentes.id_ramo', 'files.*', 'users.nombre', 'users.apellido')
             ->where('id_ramo', $this->id)
             ->where('id_docente', $_id_docente)
             ->where('seguridad', 1)
