@@ -17,6 +17,7 @@ if (Session::has('perfil'))
 }
 ?>
 <!-- http://bootdey.com/snippets/view/social-network-wall // de aquí saqué el template-->
+<script type="text/javascript" src="{{ URL::asset('js/carrera/dashboard/controller.js') }}"></script>
 <link rel="stylesheet" href="{{asset('css/index_UsuarioMuro.css')}}">  
 <div class="container bootstrap snippet" Style="width:80%">
   <div class="row">
@@ -24,110 +25,119 @@ if (Session::has('perfil'))
         <h2> Muro de {{ $carrera->nombre_carrera }} </h2>
         <hr/>
     </div>
-      @include('ramo.forms.postCarrera')
-      @foreach($posteosCarrera as $posteoCarrera)
-      <div class="panel">
+      <div id="postContent">
+          @include('ramo.forms.postCarrera')
+          @foreach($posteosCarrera as $posteoCarrera)
+          <div class="panel">
 
-        <div class="panel-body">
+            <div class="panel-body">
 
-            <div class="fb-user-thumb">
-                @if (Storage::disk('local')->has($posteoCarrera->id_user. '.jpg'))
-                    <img src="{{ route('profile.image', ['filename' => $posteoCarrera->id_user. '.jpg']) }}" alt="" class="img-circle">
-                @else
-                    <img src="{{ URL::to('img/man_avatar.jpg')   }}" alt="" class="img-circle">
-                @endif
-            </div>
-            <div class="fb-user-details">
-                <h3><a href="#" class="#"> {{ $posteoCarrera->nombre}} {{ $posteoCarrera->apellido }} </a></h3>
-                <p>{{ $posteoCarrera->created_at}}, USA</p>
-            </div>
-            <div class="clearfix"></div>
-            <p class="fb-user-status"> {{ $posteoCarrera->contenido }}
-                        </p>
-            <div class="fb-status-container fb-border">
-                <div class="fb-time-action">
-                    <article class="post">
-                        <a style="display:none">{{ $posteoCarrera->contenido }}</a>
-                        <a href="#" title="Me gusta!!">Me gusta</a>
-                        <span>-</span>
-                        <a href="#" title="Deja un comentario">Comentar</a>
-                        <span>-</span>
-                        <a href="#" title="Comparte con tus compañeros">Compartir</a>
-                        @if($posteoCarrera->id_user == $usuario->id || $perfil=='3' )
-                            <span>-</span>
-                            <a href="#" class="edit" title="Edita tu comentario">Editar</a>
-                            <span>-</span>
-                            <a href="{{ route('postCarrera.delete', ['id_posteo' => $posteoCarrera->id]) }}" title="Eliminar">Eliminar</a>
-                        @endif
-                    </article>
+                <div class="fb-user-thumb">
+                    @if (Storage::disk('local')->has($posteoCarrera->id_user. '.jpg'))
+                        <img src="{{ route('profile.image', ['filename' => $posteoCarrera->id_user. '.jpg']) }}" alt="" class="img-circle">
+                    @else
+                        <img src="{{ URL::to('img/man_avatar.jpg')   }}" alt="" class="img-circle">
+                    @endif
                 </div>
-            </div>
-
-            <di class="fb-status-container fb-border fb-gray-bg">
-                <div class="fb-time-action like-info">
-                    <a href="#">Jhon Due,</a>
-                    <a href="#">Danieal Kalion</a>
-                    <span>and</span>
-                    <a href="#">40 more</a>
-                    <span>like this</span>
+                <div class="fb-user-details">
+                    <h3><a href="#" class="#"> {{ $posteoCarrera->nombre}} {{ $posteoCarrera->apellido }} </a></h3>
+                    <p>{{ $posteoCarrera->created_at}}, USA</p>
                 </div>
-      
-                <ul class="fb-comments">
-                    <li>
-                        <a href="#" class="cmt-thumb">
-                            <img src="http://bootdey.com/img/Content/avatar/avatar3.png" alt="">
-                        </a>
-                        <div class="cmt-details">
-                            <a href="#">Jhone due</a>
-                            <span> is world famous professional photographer.  with forward thinking clients to create beautiful, </span>
-                            <p>40 minutes ago - <a href="#" class="like-link">Like</a></p>
-                        </div>
-                    </li>
-                    <li>
-                        <a href="#" class="cmt-thumb">
-                            <img src="http://bootdey.com/img/Content/avatar/avatar3.png" alt="">
-                        </a>
-                        <div class="cmt-details">
-                            <a href="#">Tawseef</a>
-                            <span> is world famous professional photographer.  with forward thinking clients to create beautiful, </span>
-                            <p>34 minutes ago - <a href="#" class="like-link">Like</a></p>
-                        </div>
-                    </li>
-      
-                    <li>
-                        <a href="#" class="cmt-thumb">
-                            <img src="http://bootdey.com/img/Content/avatar/avatar4.png" alt="">
-                        </a>
-                        <div class="cmt-details">
-                            <a href="#">Jhone due</a>
-                            <span> is world famous professional photographer.   </span>
-                            <p>15 minutes ago - <a href="#" class="like-link">Like</a></p>
-                        </div>
-                    </li>
-                    <li>
-                        <a href="#" class="cmt-thumb">
-                            <img src="http://bootdey.com/img/Content/avatar/avatar5.png" alt="">
-                        </a>
-                        <div class="cmt-details">
-                            <a href="#">Tawseef</a>
-                            <span> thinking clients to create beautiful world famous professional photographer.  </span>
-                            <p>2 minutes ago - <a href="#" class="like-link">Like</a></p>
-                        </div>
-                    </li>
-                    <li>
-                        <a href="#" class="cmt-thumb">
-                            <img src="http://bootdey.com/img/Content/avatar/avatar8.png" alt="">
-                        </a>
-                        <div class="cmt-form">
-                            <textarea class="form-control" placeholder="Write a comment..." name=""></textarea>
-                        </div>
-                    </li>
-                </ul>
                 <div class="clearfix"></div>
-            </di>
-        </div>
+                <p class="fb-user-status"> {{ $posteoCarrera->contenido }}
+                            </p>
+                <div class="fb-status-container fb-border">
+                    <div class="fb-time-action">
+                        <article class="post">
+                            <a style="display:none">{{ $posteoCarrera->contenido }}</a>
+
+
+                            @if ($posteoCarrera->is_like == true)
+                                <a href="javascript:" id="{{$posteoCarrera->id}}" class="setLike" title="Ya no me gusta!!">Ya no me gusta</a>
+                            @else
+                                <a href="javascript:" id="{{$posteoCarrera->id}}" class="setLike" title="Me gusta!!">Me gusta</a>
+                            @endif
+
+                            <span>-</span>
+                            <a href="#" title="Deja un comentario">Comentar</a>
+                            <span>-</span>
+                            <a href="#" title="Comparte con tus compañeros">Compartir</a>
+                            @if($posteoCarrera->id_user == $usuario->id || $perfil=='3' )
+                                <span>-</span>
+                                <a href="#" class="edit" title="Edita tu comentario">Editar</a>
+                                <span>-</span>
+                                <a href="{{ route('postCarrera.delete', ['id_posteo' => $posteoCarrera->id]) }}" title="Eliminar">Eliminar</a>
+                            @endif
+                        </article>
+                    </div>
+                </div>
+
+                <di class="fb-status-container fb-border fb-gray-bg">
+                    <div class="fb-time-action like-info">
+
+                        <span>A</span>
+                        <a href="#" id="{{$posteoCarrera->id}}_cont" >{{ $posteoCarrera->n_like_str }}</a>
+                        <span>les gusta esto</span>
+
+                    </div>
+
+                    <ul class="fb-comments">
+                        <li>
+                            <a href="#" class="cmt-thumb">
+                                <img src="http://bootdey.com/img/Content/avatar/avatar3.png" alt="">
+                            </a>
+                            <div class="cmt-details">
+                                <a href="#">Jhone due</a>
+                                <span> is world famous professional photographer.  with forward thinking clients to create beautiful, </span>
+                                <p>40 minutes ago - <a href="#" class="like-link">Like</a></p>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#" class="cmt-thumb">
+                                <img src="http://bootdey.com/img/Content/avatar/avatar3.png" alt="">
+                            </a>
+                            <div class="cmt-details">
+                                <a href="#">Tawseef</a>
+                                <span> is world famous professional photographer.  with forward thinking clients to create beautiful, </span>
+                                <p>34 minutes ago - <a href="#" class="like-link">Like</a></p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <a href="#" class="cmt-thumb">
+                                <img src="http://bootdey.com/img/Content/avatar/avatar4.png" alt="">
+                            </a>
+                            <div class="cmt-details">
+                                <a href="#">Jhone due</a>
+                                <span> is world famous professional photographer.   </span>
+                                <p>15 minutes ago - <a href="#" class="like-link">Like</a></p>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#" class="cmt-thumb">
+                                <img src="http://bootdey.com/img/Content/avatar/avatar5.png" alt="">
+                            </a>
+                            <div class="cmt-details">
+                                <a href="#">Tawseef</a>
+                                <span> thinking clients to create beautiful world famous professional photographer.  </span>
+                                <p>2 minutes ago - <a href="#" class="like-link">Like</a></p>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#" class="cmt-thumb">
+                                <img src="http://bootdey.com/img/Content/avatar/avatar8.png" alt="">
+                            </a>
+                            <div class="cmt-form">
+                                <textarea class="form-control" placeholder="Write a comment..." name=""></textarea>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </di>
+            </div>
+          </div>
+          @endforeach
       </div>
-      @endforeach
     </div>
 </div>
 @endsection

@@ -475,17 +475,10 @@ class UserController extends Controller
             Session::put('carrera', $carrera);
             
             $id_carrera = Session::get('carrera')->id_carrera;
+            $carrera = Carrera::find($id_carrera);
 
             //cargamos lista de posteos asociados a la carrera
-            $posteosCarrera = DB::table('post_carreras')
-                ->join('carreras', 'id_carrera', '=', 'carreras.id')
-                ->join('users', 'id_user', '=', 'users.id')
-                ->select('id_carrera', 'contenido', 'id_user',  'post_carreras.id', 'nombre_carrera', 'nombre', 'apellido', 'post_carreras.created_at')
-                ->where('id_carrera', $id_carrera)
-                ->where('post_carreras.estado', '=', 1)
-                ->distinct()
-                ->orderBy('created_at', 'desc')
-                ->get();
+            $posteosCarrera = $carrera->getPost();
 
             //$id_ramo = Session::get('ramo')->id;
             /*
