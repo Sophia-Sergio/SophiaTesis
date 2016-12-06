@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ae798d59ccf98891a77b11b3f7284a06",
-    "content-hash": "c2e29be08e0881b16ff7c04ec9784da6",
+    "hash": "218657559cbd87b03fbdd6c2de605024",
+    "content-hash": "f98d7708a568dfb99d1e4c76e56b9667",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -658,6 +658,60 @@
                 "oauth"
             ],
             "time": "2016-11-01 18:49:10"
+        },
+        {
+            "name": "laravelcollective/html",
+            "version": "v5.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/LaravelCollective/html.git",
+                "reference": "961ce141c16c6b085128f209496c26efd3e681ca"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/LaravelCollective/html/zipball/961ce141c16c6b085128f209496c26efd3e681ca",
+                "reference": "961ce141c16c6b085128f209496c26efd3e681ca",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/http": "5.3.*",
+                "illuminate/routing": "5.3.*",
+                "illuminate/session": "5.3.*",
+                "illuminate/support": "5.3.*",
+                "illuminate/view": "5.3.*",
+                "php": ">=5.6.4"
+            },
+            "require-dev": {
+                "illuminate/database": "5.3.*",
+                "mockery/mockery": "~0.9.4",
+                "phpunit/phpunit": "~5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Collective\\Html\\": "src/"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylorotwell@gmail.com"
+                },
+                {
+                    "name": "Adam Engebretson",
+                    "email": "adam@laravelcollective.com"
+                }
+            ],
+            "description": "HTML and Form Builders for the Laravel Framework",
+            "homepage": "http://laravelcollective.com",
+            "time": "2016-08-27 23:52:43"
         },
         {
             "name": "league/flysystem",
@@ -2918,16 +2972,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.7.1",
+            "version": "5.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "0158307fae98f8013eeac2ff2803fe8d4f6bc1a0"
+                "reference": "336aff0ac52e306c98e7455bc3e8d7b0bf777a5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0158307fae98f8013eeac2ff2803fe8d4f6bc1a0",
-                "reference": "0158307fae98f8013eeac2ff2803fe8d4f6bc1a0",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/336aff0ac52e306c98e7455bc3e8d7b0bf777a5e",
+                "reference": "336aff0ac52e306c98e7455bc3e8d7b0bf777a5e",
                 "shasum": ""
             },
             "require": {
@@ -2996,7 +3050,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-12-02 12:03:05"
+            "time": "2016-12-03 08:33:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",

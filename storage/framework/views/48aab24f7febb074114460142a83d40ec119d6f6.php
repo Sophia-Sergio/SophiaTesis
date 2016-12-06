@@ -16,7 +16,9 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-
+      <?php
+      $perfil = Session::get('perfil')->id_perfil; // inicio de sesión perfil, arreglo sin ver la causa del problema
+      ?>
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
           <!-- Messages: style can be found in dropdown.less-->
@@ -122,8 +124,10 @@
                 <p>
                   <?php echo e($usuario->nombre); ?> <?php echo e($usuario->apellido); ?> - Estudiante
                   <small>
+                  <?php if($perfil!='1'): ?>
                     <?php echo e($carrera->nombre_carrera); ?>
 
+                  <?php endif; ?>
                   </small>
                 </p>
               </li>

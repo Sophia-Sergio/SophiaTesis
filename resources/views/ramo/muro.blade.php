@@ -28,46 +28,44 @@ $usuario = Session::get('user');
 
                     <div class="panel-body">
 
-                        <div class="fb-user-thumb">
-                            @if (Storage::disk('local')->has( $posteoRamo->nombre . '-' . $posteoRamo->id_user. '.jpg'))
-                                <img src="{{ route('profile.image', ['filename' => $posteoRamo->nombre . '-' . $posteoRamo->id_user. '.jpg']) }}" alt="" class="img-circle">
-                            @else
-                                <img src="{{ URL::to('img/man_avatar.jpg')   }}" alt="" class="img-circle">
-                            @endif
-                        </div>
-                        <div class="fb-user-details">
-                            <h3><a href="#" class="#"> {{ $posteoRamo->nombre}}</a></h3>
-                            <p>{{ $posteoRamo->created_at}}, USA</p>
-                        </div>
-                        <div class="clearfix"></div>
-                        <p class="fb-user-status"> {{ $posteoRamo->contenido }}
-                        </p>
-                        <div class="fb-status-container fb-border">
-                            <div class="fb-time-action">
-                                <article class="post">
-                                    <a style="display:none">{{ $posteoRamo->contenido }}</a>
+                    <div class="fb-user-thumb">
+                        @if (Storage::disk('local')->has($posteoRamo->id_user.'.jpg'))
+                            <img src="{{ route('profile.image', ['filename' =>$posteoRamo->id_user.'.jpg']) }}" alt="" class="img-circle">
+                        @else
+                            <img src="{{ URL::to('img/man_avatar.jpg')   }}" alt="" class="img-circle">
+                        @endif
+                    </div>
+                    <div class="fb-user-details">
+                        <h3><a href="#" class="#"> {{ $posteoRamo->nombre }} {{ $posteoRamo->apellido }}</a></h3>
+                        <p>{{ $posteoRamo->created_at}}, USA</p>
+                    </div>
+                    <div class="clearfix"></div>
+                    <p class="fb-user-status"> {{ $posteoRamo->contenido }}
+                    </p>
+                    <div class="fb-status-container fb-border">
+                        <div class="fb-time-action">
+                            <article class="post">
+                                <a style="display:none">{{ $posteoRamo->contenido }}</a>
 
-                                    @if ($posteoRamo->is_like == true)
-                                        <a href="javascript:" id="{{$posteoRamo->id}}" class="setLike" title="Ya no me gusta!!">Ya no me gusta</a>
-                                    @else
-                                        <a href="javascript:" id="{{$posteoRamo->id}}" class="setLike" title="Me gusta!!">Me gusta</a>
-                                    @endif
+                                @if ($posteoRamo->is_like == true)
+                                    <a href="javascript:" id="{{$posteoRamo->id}}" class="setLike" title="Ya no me gusta!!">Ya no me gusta</a>
+                                @else
+                                    <a href="javascript:" id="{{$posteoRamo->id}}" class="setLike" title="Me gusta!!">Me gusta</a>
+                                @endif
 
-
-
+                                <span>-</span>
+                                <a href="#" title="Deja un comentario">Comentar</a>
+                                <span>-</span>
+                                <a href="#" title="Comparte con tus compañeros">Compartir</a>
+                                @if($posteoRamo->id_user == $usuario->id  || $perfil=='3' )
                                     <span>-</span>
-                                    <a href="#" title="Deja un comentario">Comentar</a>
+                                    <a href="#" class="edit" title="Edita tu comentario">Editar</a>
                                     <span>-</span>
-                                    <a href="#" title="Comparte con tus compañeros">Compartir</a>
-                                    @if($posteoRamo->id_user == $usuario->id)
-                                        <span>-</span>
-                                        <a href="#" class="edit" title="Edita tu comentario">Editar</a>
-                                        <span>-</span>
-                                        <a href="{{ route('postCarrera.delete', ['id_posteo' => $posteoRamo->id]) }}" title="Eliminar">Eliminar</a>
-                                    @endif
-                                </article>
-                            </div>
+                                    <a href="{{ route('postCarrera.delete', ['id_posteo' => $posteoRamo->id]) }}" title="Eliminar">Eliminar</a>
+                                @endif
+                            </article>
                         </div>
+                    </div>
 
                         <di class="fb-status-container fb-border fb-gray-bg">
                             <div class="fb-time-action like-info">

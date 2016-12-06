@@ -33,7 +33,7 @@ class MakeAuthCommand extends Command
         'auth/register.stub' => 'auth/register.blade.php',
         'auth/passwords/email.stub' => 'auth/passwords/email.blade.php',
         'auth/passwords/reset.stub' => 'auth/passwords/reset.blade.php',
-        'layout/app.stub' => 'layout/app.blade.php',
+        'layouts/app.stub' => 'layouts/app.blade.php',
         'home.stub' => 'home.blade.php',
     ];
 
@@ -71,8 +71,8 @@ class MakeAuthCommand extends Command
      */
     protected function createDirectories()
     {
-        if (! is_dir(base_path('resources/views/layout'))) {
-            mkdir(base_path('resources/views/layout'), 0755, true);
+        if (! is_dir(base_path('resources/views/layouts'))) {
+            mkdir(base_path('resources/views/layouts'), 0755, true);
         }
 
         if (! is_dir(base_path('resources/views/auth/passwords'))) {

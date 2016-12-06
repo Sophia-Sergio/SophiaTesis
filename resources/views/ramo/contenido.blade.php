@@ -80,7 +80,7 @@
                         <th>Tamaño</th>
                         <th>Tipo</th>
                         <th>Usuario</th>
-                        <th></th>
+                        <th>Likes</th>
                     </tr>
                     </thead>
                     <tbody id="tablePublic">

@@ -16,7 +16,9 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-
+      <?php
+      $perfil = Session::get('perfil')->id_perfil; // inicio de sesión perfil, arreglo sin ver la causa del problema
+      ?>
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
           <!-- Messages: style can be found in dropdown.less-->
@@ -104,8 +106,8 @@
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              @if (Storage::disk('local')->has( $usuario->nombre . '-' . $usuario->id . '.jpg'))
-                <img src="{{ route('profile.image', ['filename' => $usuario->nombre . '-' . $usuario->id . '.jpg']) }}" alt="" class="user-image">
+              @if (Storage::disk('local')->has( $usuario->id . '.jpg'))
+                <img src="{{ route('profile.image', ['filename' => $usuario->id . '.jpg']) }}" alt="" class="user-image">
               @else
                 <img src="{{ URL::to('img/man_avatar.jpg')   }}" alt="" class="user-image">
               @endif
@@ -114,15 +116,24 @@
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                @if (Storage::disk('local')->has( $usuario->nombre . '-' . $usuario->id . '.jpg'))
-                      <img src="{{ route('profile.image', ['filename' => $usuario->nombre . '-' . $usuario->id . '.jpg']) }}" alt="" class="img-circle">
+                @if (Storage::disk('local')->has( $usuario->id . '.jpg'))
+                      <img src="{{ route('profile.image', ['filename' => $usuario->id . '.jpg']) }}" alt="" class="img-circle">
                 @else
                   <img src="{{ URL::to('img/man_avatar.jpg')   }}" alt="" class="img-circle">
                 @endif
                 <p>
-                  {{$usuario->nombre}} {{$usuario->apellido}} - Estudiante
+                  {{$usuario->nombre}} {{$usuario->apellido}}
+                  @if ($perfil=='2')
+                    - Estudiante
+                  @else
+                    - Administrador
+                  @endif
                   <small>
+                  @if($perfil!='1')
+                      @if(Session::has('carrera'))
                     {{ $carrera->nombre_carrera }}
+                      @endif
+                  @endif
                   </small>
                 </p>
               </li>
@@ -130,13 +141,13 @@
               <li class="user-body">
                 <div class="row">
                   <div class="col-xs-4 text-center">
-                    <a href="#">Followers</a>
+                    <a href="#"></a>
                   </div>
                   <div class="col-xs-4 text-center">
-                    <a href="#">Sales</a>
+                    <a href="#"></a>
                   </div>
                   <div class="col-xs-4 text-center">
-                    <a href="#">Friends</a>
+                    <a href="#"></a>
                   </div>
                 </div>
                 <!-- /.row -->
@@ -147,20 +158,18 @@
                   <a href="{{ route('profile') }}" class="btn btn-default btn-flat">Perfil</a>
                 </div>
                 <div class="pull-right">
-                  <a href="{{ route('logout') }}" class="btn btn-default btn-flat">Cerrar Sesi�n</a>
+                  <a href="{{ route('logout') }}" class="btn btn-default btn-flat">Cerrar Sesión</a>
                 </div>
               </li>
             </ul>
           </li>
           <!-- Control Sidebar Toggle Button -->
           <li>
-            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+            <!--<a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>-->
           </li>
         </ul>
       </div>
     </nav>
-
-
     </div>
 
   </header>

@@ -5,9 +5,9 @@
     $ramo = Session::get('ramo');
     $usuario = Session::get('user');
     $posteosRamos= Session::get('posteosRamo');
-    $usuario_ramo_docenteFiles = Session::get('usuario_ramo_docenteFiles');
-    $ramo_docenteFiles = Session::get('ramo_docenteFiles');
     ?>
+
+    <script type="text/javascript" src="<?php echo e(URL::asset('js/ramo/contenido/controller.js')); ?>"></script>
 
     <link rel="stylesheet" href="<?php echo e(asset('css/index_UsuarioMuro.css')); ?>">
     <?php echo $__env->make('alerts.request', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
@@ -22,7 +22,7 @@
                     <i class="glyphicon glyphicon-plus"></i>
                     <span>Seleccionar Archivos</span>
                     <!-- The file input field used as target for the file upload widget -->
-                    <input id="fileupload" type="file" name="document" data-token="<?php echo e(Session::token()); ?>" data-user-id="<?php echo e($usuario->id); ?>"> <!-- Para seleccionar m�ltiples archivos !! <input id="fileupload" type="file" name="files[]" multiple> -->
+                    <input id="fileupload" type="file" name="document" data-token="<?php echo e(Session::token()); ?>" data-user-id="<?php echo e($usuario->id); ?>"> <!-- Para seleccionar m?ltiples archivos !! <input id="fileupload" type="file" name="files[]" multiple> -->
 
                 </span>
                 <br>
@@ -47,12 +47,12 @@
                     <tr>
                         <th>Nombre</th>
                         <th>Creado</th>
-                        <th>Tama�o</th>
+                        <th>Tamaño</th>
                         <th>Tipo</th>
                     </tr>
                     </thead>
                     <tbody id="tablePrivate">
-                    <?php $__currentLoopData = $usuario_ramo_docenteFiles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $file): $__env->incrementLoopIndices(); $loop = $__env->getFirstLoop(); ?>
+                    <?php $__currentLoopData = $archivos_privados; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $file): $__env->incrementLoopIndices(); $loop = $__env->getFirstLoop(); ?>
                         <tr>
                             <td><a href="/download/<?php echo e($file->id); ?>"><?php echo e($file->name); ?></a></td>
                             <td><?php echo e($file->created_at); ?></td>
@@ -75,19 +75,30 @@
                     <tr>
                         <th>Nombre</th>
                         <th>Creado</th>
-                        <th>Tama�o</th>
+                        <th>Tamaño</th>
                         <th>Tipo</th>
                         <th>Usuario</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody id="tablePublic">
-                    <?php $__currentLoopData = $ramo_docenteFiles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $file): $__env->incrementLoopIndices(); $loop = $__env->getFirstLoop(); ?>
+                    <?php $__currentLoopData = $archivos_publicos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $file): $__env->incrementLoopIndices(); $loop = $__env->getFirstLoop(); ?>
                         <tr>
-                            <td><a href="/download/<?php echo e($file->file_id); ?>"><?php echo e($file->name); ?></a></td>
+                            <td><a href="/download/<?php echo e($file->id); ?>"><?php echo e($file->name); ?></a></td>
                             <td><?php echo e($file->created_at); ?></td>
                             <td><?php echo e($file->size); ?></td>
                             <td><?php echo e($file->extension); ?></td>
                             <td><?php echo e($file->nombre); ?> <?php echo e($file->apellido); ?></td>
+                            <td>
+
+                                <span id="<?php echo e($file->id); ?>_cont" class="badge badge_like"><?php echo e($file->n_like); ?></span>
+
+                                <?php if($file->is_like == true): ?>
+                                    <span id="<?php echo e($file->id); ?>" class="like like_active glyphicon glyphicon-thumbs-up"></span>
+                                <?php else: ?>
+                                    <span id="<?php echo e($file->id); ?>" class="like glyphicon glyphicon-thumbs-up"></span>
+                                <?php endif; ?>
+                            </td>
                         </tr>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getFirstLoop(); ?>
                     </tbody>
@@ -96,84 +107,7 @@
             </div>
         </div>
     </div>
+
 <?php $__env->stopSection(); ?>
-<?php $__env->startSection('scripts'); ?>
-    @parent
-    <script>
-        ;(function($)
-        {
-            'use strict';
-            $(document).ready(function()
-            {
-                var $fileupload = $('#fileupload'),
-                        $upload_success = $('#upload-success');
 
-
-                $fileupload.bind('fileuploadsubmit', function (e, data) {
-                    // The example input, doesn't have to be part of the upload form:
-                    data.formData = {_token: $fileupload.data('token'), user_id: $fileupload.data('userId'), seguridad_id: $('#selSeguridad').val()};
-                });
-
-
-                $fileupload.fileupload({
-                    url: '/upload',
-                    dataType: 'json',
-                    formData: {_token: $fileupload.data('token'), user_id: $fileupload.data('userId'), seguridad_id: $('#selSeguridad').val()},
-
-                    progressall: function (e, data) {
-                        var progress = parseInt(data.loaded / data.total * 100, 10);
-                        $('#progress .progress-bar').css(
-                                'width',
-                                progress + '%'
-                        );
-                    },
-                    fail: function(e, data) {
-                        alert('Fail!');
-                    },
-                    done: function (e, data) {
-                        $upload_success.removeClass('hide').hide().slideDown('fast');
-                        $('#progress .progress-bar').css('width',0);
-
-                        var cadPub = '';
-                        data.result.publicos.forEach(function (item, index) {
-
-                            console.log(item);
-
-                            var cadena = '<td><a href="/download/'+item.file_id+'">'+item.name+'</a></td>';
-                            cadena += '<td>'+item.created_at+'</td>';
-                            cadena += '<td>'+item.size+'</td>';
-                            cadena += '<td>'+item.extension+'</td>';
-                            cadena += '<td>'+item.nombre+'</td>';
-                            cadena = '<tr>'+cadena+'</tr>';
-                            cadPub = cadPub+cadena;
-                        });
-
-                        $('#tablePublic').html(cadPub);
-
-
-                        var cadPriv = '';
-                        data.result.privados.forEach(function (item, index) {
-                            var cadena = '<td><a href="/download/'+item.id+'">'+item.name+'</a></td>';
-                            cadena += '<td>'+item.created_at+'</td>';
-                            cadena += '<td>'+item.size+'</td>';
-                            cadena += '<td>'+item.extension+'</td>';
-                            cadena = '<tr>'+cadena+'</tr>';
-                            cadPriv = cadPriv+cadena;
-                        });
-
-                        $('#tablePrivate').html(cadPriv);
-
-//                    setTimeout(function(){
-//                        location.reload();
-//                    }, 2000);
-                    }
-                });
-
-            });
-
-
-
-        })(window.jQuery);
-    </script>
-<?php $__env->stopSection(); ?>
 <?php echo $__env->make('layout.masterUsuario', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

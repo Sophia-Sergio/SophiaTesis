@@ -6,9 +6,11 @@ use Illuminate\Http\Request;
 use Sophia\Http\Requests;
 use Socialite;
 use Sophia\OauthIdentity;
+use Sophia\Perfil;
 use Sophia\User;
 use Illuminate\Support\Facades\Auth;
 use Session;
+use Sophia\Usuario_Perfil;
 
 class SocialAuthController extends Controller
 {
@@ -52,6 +54,11 @@ class SocialAuthController extends Controller
             ]);
 
             $user = $insert;
+
+            Usuario_Perfil::create([
+                'id_usuario' => $user->id,
+                'id_perfil' => 2
+            ]);
         }
 
         // Validar si la relación usuario provider existe

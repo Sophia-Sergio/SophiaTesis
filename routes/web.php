@@ -24,7 +24,6 @@ Route::group(['middleware' => ['web']], function(){
         return view('welcome');
     })->name('home');
 
-
     Route::post('/signup', [
         'uses' => 'UserController@postSignUp',
         'as' => 'signup'
@@ -34,6 +33,93 @@ Route::group(['middleware' => ['web']], function(){
         'uses' => 'UserController@postSignIn',
         'as' => 'signin'
     ]);
+
+    Route::get('verUsuarios', 'UserController@verUsuarios');
+
+    Route::get('crearUsuarios', 'UserController@crearUsuarios');
+
+
+    Route::post('/agregarUsuarioAdmin', [
+        'uses' => 'UserController@agregarUsuarioAdmin',
+        'as' => 'agregarUsuarioAdmin'
+    ]);
+    Route::get('/editUser/{id}', [
+        'uses' => 'UserController@edit',
+        'as' => 'editUser',
+        'middleware' => 'auth'
+    ]);
+    Route::get('/updateUser/{id}', [
+        'uses' => 'UserController@update',
+        'as' => 'updateUser',
+        'middleware' => 'auth'
+    ]);
+
+
+
+    Route::get('verInstituciones', 'UserController@verInstituciones');
+
+    Route::get('crearInstituciones', 'UserController@crearInstituciones');
+
+
+    Route::post('/agregarInstitucionAdmin', [
+        'uses' => 'UserController@agregarInstitucionAdmin',
+        'as' => 'agregarInstitucionAdmin'
+    ]);
+    Route::get('/editInstitucion/{id}', [
+        'uses' => 'UserController@editInstitucion',
+        'as' => 'editInstitucion',
+        'middleware' => 'auth'
+    ]);
+    Route::get('/updateInstitucion/{id}', [
+        'uses' => 'UserController@updateInstitucion',
+        'as' => 'updateInstitucion',
+        'middleware' => 'auth'
+    ]);
+
+
+
+    Route::get('verCarreras', 'UserController@verCarreras');
+    Route::get('crearCarreras', 'UserController@crearCarreras');
+    Route::post('/agregarCarreraAdmin', [
+        'uses' => 'UserController@agregarCarreraAdmin',
+        'as' => 'agregarCarreraAdmin'
+    ]);
+    Route::get('/editCarrera/{id}', [
+        'uses' => 'UserController@editCarrera',
+        'as' => 'editCarrera',
+        'middleware' => 'auth'
+    ]);
+    Route::get('/updateCarrera/{id}', [
+        'uses' => 'UserController@updateCarrera',
+        'as' => 'updateCarrera',
+        'middleware' => 'auth'
+    ]);
+
+
+    Route::get('verDocentes', 'UserController@verDocentes');
+    Route::get('crearDocentes', 'UserController@crearDocentes');
+    Route::post('/agregarDocenteAdmin', [
+        'uses' => 'UserController@agregarDocenteAdmin',
+        'as' => 'agregarDocenteAdmin'
+    ]);
+    Route::get('/editDocente/{id}', [
+        'uses' => 'UserController@editDocente',
+        'as' => 'editDocente',
+        'middleware' => 'auth'
+    ]);
+    Route::get('/updateDocente/{id}', [
+        'uses' => 'UserController@updateDocente',
+        'as' => 'updateDocente',
+        'middleware' => 'auth'
+    ]);
+
+
+
+
+
+
+
+
 
     Route::post('/updateProfile', [
         'uses' => 'UserController@updateProfile',
@@ -133,4 +219,6 @@ Route::group(['middleware' => ['web']], function(){
     });
 
     require 'Routes/Social.php';
+    require 'Routes/Messages.php';
+    require 'Routes/Users.php';
 });
