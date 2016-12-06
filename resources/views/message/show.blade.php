@@ -20,7 +20,7 @@
                                             <div class="media-body">
                                                 <div class="media">
                                                     <a class="pull-left" href="#">
-                                                        <img class="media-object img-circle" src="{{ URL::to('img/man_avatar.jpg') }}">
+                                                        <img class="media-object img-circle" src="{{ $message->sender_avatar }}">
                                                     </a>
                                                     <div class="media-body">
                                                         {{ $message->message }}

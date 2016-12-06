@@ -5,8 +5,11 @@ namespace Sophia\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 use Sophia\Http\Requests\StoreMessage;
 use Sophia\Message;
+use Sophia\OauthIdentity;
 use Sophia\User;
 use Carbon\Carbon;
 
@@ -115,14 +118,30 @@ class MessageController extends Controller
         $messages = Message::where('uuid', $id)->orderBy('created_at', 'desc')->get();
 
         foreach ($messages as $message) {
+            // Set sender name
             $senderName = User::find($message->sender);
             $message->sender_name = $senderName->getFullName();
 
+            // Set receiver name
             $receiverName = User::find($message->receiver);
             $message->receiver_name = $receiverName->getFullName();
 
+            // Set created at format
             $date = Carbon::createFromFormat('Y-m-d H:i:s', $message->created_at)->format('E\l d-m-Y \a \l\a\s H:i');
             $message->formated_date = $date;
+
+            $noAvatar = URL::to('img/man_avatar.jpg');
+
+            // Set Avatar
+            $fromProvider = OauthIdentity::where('user_id', $message->sender)->first();
+
+            if (isset($fromProvider->avatar) && !empty($fromProvider->avatar)) {
+                $message->sender_avatar = $fromProvider->avatar;
+            } elseif (Storage::disk('local')->has( $message->sender . '.jpg')) {
+                $message->sender_avatar = route('profile.image', ['filename' => $message->sender . '.jpg']);
+            } else {
+                $message->sender_avatar = $noAvatar;
+            }
         }
 
         return view('message.show', compact('messages'));
