@@ -114,6 +114,7 @@ return array(
     'Hamcrest\\Xml\\HasXPath' => $vendorDir . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Xml/HasXPath.php',
     'InstitucionCarrerasTableSeeder' => $baseDir . '/database/seeds/InstitucionCarrerasTableSeeder.php',
     'InstitucionsTableSeeder' => $baseDir . '/database/seeds/InstitucionsTableSeeder.php',
+    'MessagesTableSeeder' => $baseDir . '/database/seeds/MessagesTableSeeder.php',
     'ModulosTableSeeder' => $baseDir . '/database/seeds/ModulosTableSeeder.php',
     'PHPUnit\\Framework\\Assert' => $vendorDir . '/phpunit/phpunit/src/ForwardCompatibility/Assert.php',
     'PHPUnit\\Framework\\BaseTestListener' => $vendorDir . '/phpunit/phpunit/src/ForwardCompatibility/BaseTestListener.php',

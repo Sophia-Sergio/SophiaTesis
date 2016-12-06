@@ -34,7 +34,7 @@ Sophia | Registro Académico
                                         <td>{{ $message->receiver_name }}</td>
                                     @endif
                                     <td>
-                                        <a href="" class="btn btn-success">Ver Conversación</a>
+                                        <a href="{{ route('messages.show', [$message->uuid]) }}" class="btn btn-success">Ver Conversación</a>
                                     </td>
                                 </tr>
                             @endforeach

@@ -22,6 +22,8 @@
   <link rel="stylesheet" href="{{ URL::to('/bower_components/jquery-file-upload/css/jquery.fileupload.css') }}">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
+  <link rel="stylesheet" href="{{ URL::to('css/messages.css') }}">
+
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -75,7 +77,7 @@ $usuario = Session::get('user');
   </div>
   <!-- /.content-wrapper -->
 
- 
+
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">

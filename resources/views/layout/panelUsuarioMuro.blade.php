@@ -42,6 +42,7 @@
             <li><a href="/ramo/contenido/{{$ramo->id_ramo}}"><i class="fa fa-circle-o"></i> Contenidos</a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i> Notas y Fechas de Prueba</a></li>
             <li><a href="404.html"><i class="fa fa-circle-o"></i> Otros</a></li>
+            <li><a href="{{ route('messages.index') }}"><i class="fa fa-circle-o"></i> Mensajes</a></li>
           </ul>
         </li>
       @endforeach

@@ -24,6 +24,8 @@ class CreateMessagesTable extends Migration
             $table->integer('receiver')->unsigned();
             $table->foreign('receiver')->references('id')->on('users');
 
+            $table->longText('message');
+
             $table->timestamps();
         });
     }
