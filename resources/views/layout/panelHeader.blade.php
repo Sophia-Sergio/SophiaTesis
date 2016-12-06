@@ -124,9 +124,9 @@
                 <p>
                   {{$usuario->nombre}} {{$usuario->apellido}}
                   @if ($perfil=='2')
-                    Estudiante
+                    - Estudiante
                   @else
-                    Administrador
+                    - Administrador
                   @endif
                   <small>
                   @if($perfil!='1')
@@ -141,13 +141,13 @@
               <li class="user-body">
                 <div class="row">
                   <div class="col-xs-4 text-center">
-                    <a href="#">Followers</a>
+                    <a href="#"></a>
                   </div>
                   <div class="col-xs-4 text-center">
-                    <a href="#">Sales</a>
+                    <a href="#"></a>
                   </div>
                   <div class="col-xs-4 text-center">
-                    <a href="#">Friends</a>
+                    <a href="#"></a>
                   </div>
                 </div>
                 <!-- /.row -->
@@ -158,20 +158,18 @@
                   <a href="{{ route('profile') }}" class="btn btn-default btn-flat">Perfil</a>
                 </div>
                 <div class="pull-right">
-                  <a href="{{ route('logout') }}" class="btn btn-default btn-flat">Cerrar Sesi�n</a>
+                  <a href="{{ route('logout') }}" class="btn btn-default btn-flat">Cerrar Sesión</a>
                 </div>
               </li>
             </ul>
           </li>
           <!-- Control Sidebar Toggle Button -->
           <li>
-            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+            <!--<a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>-->
           </li>
         </ul>
       </div>
     </nav>
-
-
     </div>
 
   </header>

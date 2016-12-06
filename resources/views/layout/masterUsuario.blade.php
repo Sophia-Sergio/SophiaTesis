@@ -55,7 +55,7 @@ $usuario = Session::get('user');
   <!-- =============================================== -->
 
   <!-- Left side column. contains the sidebar -->
-@if(Session::has('carrera') && $perfil=='2')
+@if(Session::has('carrera') && ($perfil=='2' ||$perfil=='3') )
   @include('layout.panelUsuarioMuro')
 @elseif ($perfil=='2')
   @include('layout.panelUsuarioMuroFirst')

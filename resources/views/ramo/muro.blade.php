@@ -28,14 +28,14 @@ $posteosRamos= Session::get('posteosRamo');
                 <div class="panel-body">
 
                     <div class="fb-user-thumb">
-                        @if (Storage::disk('local')->has( $posteoRamo->nombre . '-' . $posteoRamo->id_user. '.jpg'))
-                            <img src="{{ route('profile.image', ['filename' => $posteoRamo->nombre . '-' . $posteoRamo->id_user. '.jpg']) }}" alt="" class="img-circle">
+                        @if (Storage::disk('local')->has($posteoRamo->id_user.'.jpg'))
+                            <img src="{{ route('profile.image', ['filename' =>$posteoRamo->id_user.'.jpg']) }}" alt="" class="img-circle">
                         @else
                             <img src="{{ URL::to('img/man_avatar.jpg')   }}" alt="" class="img-circle">
                         @endif
                     </div>
                     <div class="fb-user-details">
-                        <h3><a href="#" class="#"> {{ $posteoRamo->nombre}}</a></h3>
+                        <h3><a href="#" class="#"> {{ $posteoRamo->nombre }} {{ $posteoRamo->apellido }}</a></h3>
                         <p>{{ $posteoRamo->created_at}}, USA</p>
                     </div>
                     <div class="clearfix"></div>
@@ -50,7 +50,7 @@ $posteosRamos= Session::get('posteosRamo');
                                 <a href="#" title="Deja un comentario">Comentar</a>
                                 <span>-</span>
                                 <a href="#" title="Comparte con tus compañeros">Compartir</a>
-                                @if($posteoRamo->id_user == $usuario->id)
+                                @if($posteoRamo->id_user == $usuario->id  || $perfil=='3' )
                                     <span>-</span>
                                     <a href="#" class="edit" title="Edita tu comentario">Editar</a>
                                     <span>-</span>
