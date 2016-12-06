@@ -22,7 +22,7 @@ class PerfilsTableSeeder extends Seeder {
                 //perfil administrador
                 \DB::table('perfils')->insert(array(
                     'codigo_perfil'         => 'ADM',
-                    'descripcion_perfil'    => 'administrador',
+                    'descripcion_perfil'    => 'Administrador',
                     'estado_perfil'         => 'ACTIVO'
                 ));
                 
@@ -30,6 +30,12 @@ class PerfilsTableSeeder extends Seeder {
                 \DB::table('perfils')->insert(array(
                     'codigo_perfil'         => 'USR',
                     'descripcion_perfil'    => 'Usuario',
+                    'estado_perfil'         => 'ACTIVO'
+                ));
+
+                \DB::table('perfils')->insert(array(
+                    'codigo_perfil'         => 'SUPERUSR',
+                    'descripcion_perfil'    => 'SuperUsuario',
                     'estado_perfil'         => 'ACTIVO'
                 ));
         }

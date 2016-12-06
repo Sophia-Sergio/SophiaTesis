@@ -10,6 +10,8 @@ use Sophia\LikePostCarrera;
 use Sophia\PostCarrera;
 use Sophia\PostRamo;
 use Session;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class PostController extends Controller
 {
@@ -66,7 +68,22 @@ class PostController extends Controller
         $postRamo->save();
         return back();
     }
+    public function postEditPost(Request $request)
+    {
+        $this->validate($request, [
+            'body' => 'required'
+        ]);
+        $post = PostCarrera::find($request['postId']);
+        $post->contenido = $request['body'];
 
+
+        DB::table('post_ramos')
+            ->where('id', $request['postId'])
+            ->update([
+                'contenido' => $request['body'],
+            ]);
+         Redirect::back()->with;
+    }
 
     public function toggleLike($id_post) {
 

@@ -11,6 +11,12 @@
 $carrera = Session::get('carrera');
 $ramos = Session::get('ramos');
 $usuario = Session::get('user');
+
+if (Session::has('perfil'))
+{
+    $perfil = Session::get('perfil')->id_perfil;
+}
+
 ?>
         <!-- http://bootdey.com/snippets/view/social-network-wall // de aquí saqué el template-->
 <script type="text/javascript" src="{{ URL::asset('js/ramo/muro/controller.js') }}"></script>
@@ -44,7 +50,7 @@ $usuario = Session::get('user');
                     </p>
                     <div class="fb-status-container fb-border">
                         <div class="fb-time-action">
-                            <article class="post">
+                            <article class="post" data-postid="{{ $posteoRamo->id }}">
                                 <a style="display:none">{{ $posteoRamo->contenido }}</a>
 
                                 @if ($posteoRamo->is_like == true)
@@ -140,22 +146,29 @@ $usuario = Session::get('user');
     </div>
 </div>
 @endsection
-<div class="modal fade" tabindex="-1" role="dialog" id="editPost">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" tabindex="-1" role="dialog" id="edit-modal">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Edita </h4>
+                <h4 class="modal-title">Editar posteo</h4>
             </div>
             <div class="modal-body">
                 <form>
-                    <textarea type="text" id="contenido_editar" name="contenido_editar" class="form-control" rows="2"></textarea>
+                    <div class="form-group">
+                        <label for="post-body">Edit the Post</label>
+                        <textarea class="form-control" name="post-body" id="post-body" rows="5"></textarea>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary">Guardar cambios</button>
+                <button type="button" class="btn btn-primary" id="modal-save">Guardar Cambios</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<script>
+    var token = '{{ Session::token() }}';
+    var urlEdit = '{{ route('edit') }}';
+</script>

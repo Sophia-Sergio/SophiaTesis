@@ -3,9 +3,12 @@ var postBodyElement = null;
 
 $('.post').find('.edit').on('click', function(event){
     event.preventDefault();
-    var postBody = event.target.parentNode.childNodes[1].textContent;
-    $('#contenido_editar').val(postBody);
-    $('#editPost').modal();
+    postBodyElement = event.target.parentNode.childNodes[1];
+    var postBody = postBodyElement.textContent;
+
+    postId = event.target.parentNode.dataset['postid'];
+    $('#post-body').val(postBody);
+    $('#edit-modal').modal();
 });
 
 $('#modal-save').on('click', function () {
