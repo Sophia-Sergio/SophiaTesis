@@ -4,8 +4,10 @@ namespace Sophia\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Sophia\Http\Requests\StoreMessage;
 use Sophia\Message;
 use Sophia\User;
+use Carbon\Carbon;
 
 class MessageController extends Controller
 {
@@ -44,7 +46,7 @@ class MessageController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -55,7 +57,22 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        if (isset($request['uuid']) && !empty($request['uuid']))
+            $uuid = $request['uuid'];
+        else
+            $uuid = substr(md5(microtime()),rand(0,26),10);
+
+        $message = Message::where('uuid', $uuid)->first();
+
+        Message::create([
+            'uuid' => $request['uuid'],
+            'sender' => $message->sender,
+            'receiver' => $message->receiver,
+            'message' => $request['message']
+        ]);
+
+        return redirect()->route('messages.show', ['id' => $uuid]);
     }
 
     /**
@@ -66,7 +83,20 @@ class MessageController extends Controller
      */
     public function show($id)
     {
-        return view('message.show');
+        $messages = Message::where('uuid', $id)->orderBy('created_at', 'desc')->get();
+
+        foreach ($messages as $message) {
+            $senderName = User::find($message->sender);
+            $message->sender_name = $senderName->getFullName();
+
+            $receiverName = User::find($message->receiver);
+            $message->receiver_name = $receiverName->getFullName();
+
+            $date = Carbon::createFromFormat('Y-m-d H:i:s', $message->created_at)->format('E\l d-m-Y \a \l\a\s H:i');
+            $message->formated_date = $date;
+        }
+
+        return view('message.show', compact('messages'));
     }
 
     /**

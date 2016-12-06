@@ -14,6 +14,7 @@
                     <div class="row current-chat-area">
                         <div class="col-md-12">
                             <ul class="media-list">
+                                @foreach ($messages as $message)
                                 <li class="media">
                                     <div class="media-body">
                                         <div class="media">
@@ -21,75 +22,31 @@
                                                 <img class="media-object img-circle" src="{{ URL::to('img/man_avatar.jpg') }}">
                                             </a>
                                             <div class="media-body">
-                                                Donec sit amet ligula enim. Duis vel condimentum massa.
-                                                Donec sit amet ligula enim. Duis vel condimentum massa.Donec sit amet ligula enim.
-                                                Duis vel condimentum massa.
-                                                Donec sit amet ligula enim. Duis vel condimentum massa.
+                                                {{ $message->message }}
                                                 <br>
-                                                <small class="text-muted">Alex Deo | 23rd June at 5:00pm</small>
+                                                <small class="text-muted">{{ $message->sender_name }} | {{ $message->formated_date }}</small>
                                                 <hr>
                                             </div>
                                         </div>
 
                                     </div>
                                 </li>
-                                <li class="media">
-                                    <div class="media-body">
-                                        <div class="media">
-                                            <a class="pull-left" href="#">
-                                                <img class="media-object img-circle " src="https://app.teamsupport.com/dc/1078/UserAvatar/2733968/48/1470773158079">
-                                            </a>
-                                            <div class="media-body">
-                                                Donec sit amet ligula enim. Duis vel condimentum massa.
-                                                Donec sit amet ligula enim. Duis vel condimentum massa.Donec sit amet ligula enim.
-                                                Duis vel condimentum massa.
-                                                Donec sit amet ligula enim. Duis vel condimentum massa.
-                                                <br>
-                                                <small class="text-muted">Jhon Rexa | 23rd June at 5:00pm</small>
-                                                <hr>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="media">
-                                    <div class="media-body">
-                                        <div class="media">
-                                            <a class="pull-left" href="#">
-                                                <img class="media-object img-circle " src="https://app.teamsupport.com/dc/1078/UserAvatar/1839999/48/1470773165634">
-                                            </a>
-                                            <div class="media-body">
-                                                Donec sit amet ligula enim. Duis vel condimentum massa.
-                                                Donec sit amet ligula enim. Duis vel condimentum massa.Donec sit amet ligula enim.
-                                                Duis vel condimentum massa.
-                                                Donec sit amet ligula enim. Duis vel condimentum massa.
-                                                <br>
-                                                <small class="text-muted">Alex Deo | 23rd June at 5:00pm</small>
-                                                <hr>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="media">
-                                    <div class="media-body">
-                                        <div class="media">
-                                            <a class="pull-left" href="#">
-                                                <img class="media-object img-circle" src="https://app.teamsupport.com/dc/1078/UserAvatar/2733968/48/1470773158079">
-                                            </a>
-                                            <div class="media-body">
-                                                Donec sit amet ligula enim. Duis vel condimentum massa.
-                                                Donec sit amet ligula enim. Duis vel condimentum massa.Donec sit amet ligula enim.
-                                                Duis vel condimentum massa.
-                                                Donec sit amet ligula enim. Duis vel condimentum massa.
-                                                <br>
-                                                <small class="text-muted">Jhon Rexa | 23rd June at 5:00pm</small>
-                                                <hr>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
+
+                    {!! Form::open(['route' => 'messages.store']) !!}
+                        <div style="display:none;">
+                            <input type="text" id="uuid" name="uuid" value="{{ Request::segment(2) }}" readonly class="form-control">
+                        </div>
+
+                        <textarea name="message" id="message" cols="30" rows="10" class="form-control" required></textarea>
+
+
+                        <br>
+                        {{ Form::submit('Nuevo mensaje', ['class' => 'btn btn-success', 'style' => 'width: 100%']) }}
+                    {!! Form::close() !!}
 
                 </div>
             </div>

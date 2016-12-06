@@ -24,10 +24,11 @@
     20 => 'Illuminate\\Validation\\ValidationServiceProvider',
     21 => 'Illuminate\\View\\ViewServiceProvider',
     22 => 'Laravel\\Socialite\\SocialiteServiceProvider',
-    23 => 'Sophia\\Providers\\AppServiceProvider',
-    24 => 'Sophia\\Providers\\AuthServiceProvider',
-    25 => 'Sophia\\Providers\\EventServiceProvider',
-    26 => 'Sophia\\Providers\\RouteServiceProvider',
+    23 => 'Collective\\Html\\HtmlServiceProvider',
+    24 => 'Sophia\\Providers\\AppServiceProvider',
+    25 => 'Sophia\\Providers\\AuthServiceProvider',
+    26 => 'Sophia\\Providers\\EventServiceProvider',
+    27 => 'Sophia\\Providers\\RouteServiceProvider',
   ),
   'eager' => 
   array (
@@ -136,6 +137,10 @@
     'validator' => 'Illuminate\\Validation\\ValidationServiceProvider',
     'validation.presence' => 'Illuminate\\Validation\\ValidationServiceProvider',
     'Laravel\\Socialite\\Contracts\\Factory' => 'Laravel\\Socialite\\SocialiteServiceProvider',
+    'html' => 'Collective\\Html\\HtmlServiceProvider',
+    'form' => 'Collective\\Html\\HtmlServiceProvider',
+    'Collective\\Html\\HtmlBuilder' => 'Collective\\Html\\HtmlServiceProvider',
+    'Collective\\Html\\FormBuilder' => 'Collective\\Html\\HtmlServiceProvider',
   ),
   'when' => 
   array (
@@ -176,6 +181,9 @@
     array (
     ),
     'Laravel\\Socialite\\SocialiteServiceProvider' => 
+    array (
+    ),
+    'Collective\\Html\\HtmlServiceProvider' => 
     array (
     ),
   ),

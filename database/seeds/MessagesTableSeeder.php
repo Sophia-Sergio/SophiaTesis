@@ -18,7 +18,8 @@ class MessagesTableSeeder extends Seeder
                 'uuid' => substr(md5(microtime()),rand(0,26),10),
                 'sender' => rand(1, 50),
                 'receiver' => rand(1, 50),
-                'message' => $faker->text
+                'message' => $faker->text,
+                'created_at' => date('Y-m-d H:i:s')
             ]);
         }
     }
