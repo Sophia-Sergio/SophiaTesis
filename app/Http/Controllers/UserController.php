@@ -24,7 +24,11 @@ use Session;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Collection;
 use Sophia\Http\Requests\UsuarioCreateRequest;
+
+
 use Sophia\Http\Requests\UsuarioUpdateRequest;
+use Sophia\Http\Requests\CarreraUpdateRequest;
+use Sophia\Http\Requests\DocenteUpdateRequest;
 use Sophia\Http\Requests\InstitucionUpdateRequest;
 
 
@@ -141,6 +145,8 @@ class UserController extends Controller
 
         $docente = new Docente;
         $docente->nombre=$data["nombre"];
+
+        return $docente->nombre;
         $docente->apellido_paterno=$data["apellido_paterno"];
         $docente->apellido_materno=$data["apellido_materno"];
         $docente->nombre_html=$data["nombre"];

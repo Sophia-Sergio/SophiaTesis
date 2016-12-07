@@ -73,16 +73,13 @@ class PostController extends Controller
         $this->validate($request, [
             'body' => 'required'
         ]);
-        $post = PostCarrera::find($request['postId']);
-        $post->contenido = $request['body'];
-
 
         DB::table('post_ramos')
             ->where('id', $request['postId'])
             ->update([
                 'contenido' => $request['body'],
             ]);
-         Redirect::back()->with;
+         Redirect::back();
     }
 
     public function toggleLike($id_post) {

@@ -9,7 +9,9 @@ use Session;
 
 class Carrera extends Model
 {
-    //
+    protected $fillable = [
+        'nombre_carrera'
+    ];
 
     public function getPost() {
         $id_user = Session::get('user')->id;
