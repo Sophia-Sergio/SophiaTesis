@@ -6,9 +6,12 @@ use Illuminate\Http\Request;
 
 use Sophia\Http\Requests;
 use Sophia\LikePost;
+use Sophia\LikePostCarrera;
 use Sophia\PostCarrera;
 use Sophia\PostRamo;
 use Session;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class PostController extends Controller
 {
@@ -65,7 +68,19 @@ class PostController extends Controller
         $postRamo->save();
         return back();
     }
+    public function postEditPost(Request $request)
+    {
+        $this->validate($request, [
+            'body' => 'required'
+        ]);
 
+        DB::table('post_ramos')
+            ->where('id', $request['postId'])
+            ->update([
+                'contenido' => $request['body'],
+            ]);
+         Redirect::back();
+    }
 
     public function toggleLike($id_post) {
 
@@ -95,7 +110,37 @@ class PostController extends Controller
             'totalLikes' => $totalLikes,
             'isLike' => $is_like
         ]);
+    }
 
+
+    public function toggleLikeCarrera($id_post) {
+
+        $id_user = Session::get('user')->id;
+        $post = PostCarrera::find($id_post);
+
+        $actuales = LikePostCarrera::where('post_carrera_id', $id_post)
+            ->where('user_id', $id_user)
+            ->get()
+        ;
+
+        if(count($actuales) > 0) {
+            foreach($actuales as $actual) {
+                $actual->delete();
+            }
+        } else {
+            $nuevoLike = new LikePostCarrera();
+            $nuevoLike->post_carrera_id = $id_post;
+            $nuevoLike->user_id = $id_user;
+            $nuevoLike->save();
+        }
+
+        $totalLikes = $post->likes()->count();
+        $is_like = $post->isLikeUer($id_user);
+
+        return response()->json([
+            'totalLikes' => $totalLikes,
+            'isLike' => $is_like
+        ]);
     }
 
 }

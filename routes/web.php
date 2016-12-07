@@ -114,9 +114,10 @@ Route::group(['middleware' => ['web']], function(){
     ]);
 
 
-
-
-
+    Route::post('/edit', [
+        'uses' => 'PostController@postEditPost',
+        'as' => 'edit'
+    ]);
 
 
 
@@ -196,6 +197,7 @@ Route::group(['middleware' => ['web']], function(){
     ]);
 
     Route::get('/likePost/{post}', 'PostController@toggleLike');
+    Route::get('/likePostCarrera/{post}', 'PostController@toggleLikeCarrera');
 
     Route::get('ramo/muro/{ramo}', 'RamoController@index');
     Route::get('ramo/contenido/{ramo}', 'RamoController@contenido');

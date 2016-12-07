@@ -24,7 +24,11 @@ use Session;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Collection;
 use Sophia\Http\Requests\UsuarioCreateRequest;
+
+
 use Sophia\Http\Requests\UsuarioUpdateRequest;
+use Sophia\Http\Requests\CarreraUpdateRequest;
+use Sophia\Http\Requests\DocenteUpdateRequest;
 use Sophia\Http\Requests\InstitucionUpdateRequest;
 
 
@@ -141,6 +145,8 @@ class UserController extends Controller
 
         $docente = new Docente;
         $docente->nombre=$data["nombre"];
+
+        return $docente->nombre;
         $docente->apellido_paterno=$data["apellido_paterno"];
         $docente->apellido_materno=$data["apellido_materno"];
         $docente->nombre_html=$data["nombre"];
@@ -475,17 +481,10 @@ class UserController extends Controller
             Session::put('carrera', $carrera);
             
             $id_carrera = Session::get('carrera')->id_carrera;
+            $carrera = Carrera::find($id_carrera);
 
             //cargamos lista de posteos asociados a la carrera
-            $posteosCarrera = DB::table('post_carreras')
-                ->join('carreras', 'id_carrera', '=', 'carreras.id')
-                ->join('users', 'id_user', '=', 'users.id')
-                ->select('id_carrera', 'contenido', 'id_user',  'post_carreras.id', 'nombre_carrera', 'nombre', 'apellido', 'post_carreras.created_at')
-                ->where('id_carrera', $id_carrera)
-                ->where('post_carreras.estado', '=', 1)
-                ->distinct()
-                ->orderBy('created_at', 'desc')
-                ->get();
+            $posteosCarrera = $carrera->getPost();
 
             //$id_ramo = Session::get('ramo')->id;
             /*

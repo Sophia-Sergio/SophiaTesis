@@ -17,6 +17,7 @@ return array(
     'CreateInstitucionsTable' => $baseDir . '/database/migrations/2016_09_24_000625_create_institucions_table.php',
     'CreateLikeCarrerasTable' => $baseDir . '/database/migrations/2016_10_23_020641_create_like_carreras_table.php',
     'CreateLikeFile' => $baseDir . '/database/migrations/2016_12_03_133650_create_like_file.php',
+    'CreateLikePostCarreraTable' => $baseDir . '/database/migrations/2016_12_06_162122_create_like_post_carrera_table.php',
     'CreateLikePostTable' => $baseDir . '/database/migrations/2016_12_05_214004_create_like_post_table.php',
     'CreateLikeRamosTable' => $baseDir . '/database/migrations/2016_10_23_020657_create_like_ramos_table.php',
     'CreateLogAccesosTable' => $baseDir . '/database/migrations/2016_08_28_033011_create_log_accesos_table.php',
