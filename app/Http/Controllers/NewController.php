@@ -5,6 +5,7 @@ namespace Sophia\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Sophia\File;
 use Sophia\PostRamo;
 use Sophia\RamoDocente;
 use Sophia\UsuarioRamoDocente;
@@ -28,6 +29,15 @@ class NewController extends Controller
             ->limit(3)
             ->get();
 
-        return view('new.index', compact('posts'));
+        $files = UsuarioRamoDocente::join('files', 'files.id_usuario_ramo_docente', '=', 'usuario_ramo_docentes.id')
+            ->join('users', 'users.id', '=','usuario_ramo_docentes.id_usuario')
+            ->select('files.*', 'users.id', 'users.nombre', 'users.apellido')
+            ->where('files.seguridad', 2)
+            ->where('usuario_ramo_docentes.id', $usuarioRamoDocente)
+            ->orderBy('files.created_at', 'desc')
+            ->limit(3)
+            ->get();
+
+        return view('new.index', compact('posts', 'files'));
     }
 }
