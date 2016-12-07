@@ -117,6 +117,11 @@ class MessageController extends Controller
      */
     public function show($id)
     {
+        // Actualizar los mensajes a leídos
+        Message::where('uuid', $id)
+            ->where('receiver', Auth::user()->id)
+            ->update(['read' => 1]);
+
         $messages = Message::where('uuid', $id)->orderBy('created_at', 'desc')->get();
 
         foreach ($messages as $message) {

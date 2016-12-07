@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'AddReadToUsersTable' => $baseDir . '/database/migrations/2016_12_07_162721_add_read_to_users_table.php',
     'AdministradorTableSeeder' => $baseDir . '/database/seeds/AdministradorTableSeeder.php',
     'CarreraRamosTableSeeder' => $baseDir . '/database/seeds/CarreraRamosTableSeeder.php',
     'CarrerasTableSeeder' => $baseDir . '/database/seeds/CarrerasTableSeeder.php',

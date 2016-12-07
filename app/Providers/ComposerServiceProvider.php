@@ -15,7 +15,11 @@ class ComposerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        View::composer('layout.panelHeader', ProfileComposer::class);
+        View::composer(
+            ['message.show'],
+            //'App\Http\ViewComposers\ProfileComposer'
+            ProfileComposer::class
+        );
     }
 
     /**

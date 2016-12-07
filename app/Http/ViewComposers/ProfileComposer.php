@@ -15,8 +15,8 @@ class ProfileComposer
      */
     public function compose(View $view)
     {
-        $users = User::all();
-        $view->with('count', $users->count());
+        $count = User::all();
+        $view->with('count', 123);
     }
 
 }

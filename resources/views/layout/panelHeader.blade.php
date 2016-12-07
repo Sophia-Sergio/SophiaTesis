@@ -23,17 +23,16 @@
         <ul class="nav navbar-nav">
           <!-- Messages: style can be found in dropdown.less-->
 
-          <li class="dropdown messages-menu">
+          <li id="open-read-msg" class="dropdown messages-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-envelope-o"></i>
-              <span class="label label-success">69</span>
+              <span id="count-new-msg" class="label label-success"></span>
             </a>
             <ul class="dropdown-menu">
-              <li class="header">You have 4 messages</li>
-              <li>
-                <!-- inner menu: contains the actual data -->
-                <ul class="menu">
-                  <li><!-- start message -->
+              <li id="title-new-msg" class="header"></li>
+              <li id="unread-container">
+                <!--<ul id="ul-unread" class="menu">
+                  <!--<li>
                     <a href="#">
                       <div class="pull-left">
                         <img src="" class="img-circle" alt="User Image">
@@ -45,10 +44,9 @@
                       <p>Why not buy a new awesome theme?</p>
                     </a>
                   </li>
-                  <!-- end message -->
-                </ul>
+                </ul>-->
               </li>
-              <li class="footer"><a href="#">See All Messages</a></li>
+              <li class="footer"><a href="#">Ver todos los mensajes</a></li>
             </ul>
           </li>
           <!-- Notifications: style can be found in dropdown.less -->
