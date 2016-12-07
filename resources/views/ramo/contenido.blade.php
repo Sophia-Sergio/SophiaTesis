@@ -35,15 +35,23 @@
                 </div>
 
                 <div class="form-group col-md-6" style="padding-left: 0px;">
-                    <label for="selSeguridad">Seguridad:</label>
+                    <label for="selSeguridad">Seguridad</label>
                     <select class="form-control" id="selSeguridad">
                         <option value="1" selected>Publico</option>
                         <option value="2">Privado</option>
                     </select>
                 </div>
-
-
-                <table class="table table-bordered table-striped table-hover">.
+                <div class="form-group col-md-6" style="padding-left: 0px;">
+                    <label for="selTipo">Tipo Archivo</label>
+                    <select class="form-control" id="selSeguridad">
+                        <option value="0">Seleccione...</option>
+                        <option value="1">Prueba</option>
+                        <option value="2">Trabajo o Tarea</option>
+                        <option value="3">Apunte de Clases</option>
+                        <option value="4">Tesis</option>
+                    </select>
+                </div>
+                                <table class="table table-bordered table-striped table-hover">.
                     <caption>Documentos Privados</caption>
                     <thead>
                     <tr>
@@ -70,11 +78,33 @@
         </div>
 
         <div class="row">
+            <div class="form-group col-md-6" style="padding-left: 15px; padding-top:15px">
+                <label for="selTipo">Tipo Contenido</label>
+                <select class="form-control" id="selSeguridad">
+                    <option value="0">Seleccione...</option>
+                    <option value="1">Prueba</option>
+                    <option value="2">Trabajo o Tarea</option>
+                    <option value="3">Apunte de Clases</option>
+                    <option value="4">Tesis</option>
+                </select>
+            </div>
+            <div class="form-group col-md-6" style="padding-left: 15px; padding-top:15px">
+                <label for="selTipo">Ordenar</label>
+                <select class="form-control" id="selSeguridad">
+                    <option value="0">Seleccione...</option>
+                    <option value="1">Más valorados</option>
+                    <option value="2">Más descargados</option>
+                    <option value="3">Por fecha ascendentes</option>
+                    <option value="4">Por fecha descendente</option>
+
+                </select>
+            </div>
             <div class="panel" Style="padding-left:15px; padding-right:15px; padding-top:15px">
                 <table class="table table-bordered table-striped table-hover">.
                     <caption>Documentos P&uacute;blicos</caption>
                     <thead>
                     <tr>
+                        <th>Tipo Contenido</th>
                         <th>Nombre</th>
                         <th>Creado</th>
                         <th>Tamaño</th>
