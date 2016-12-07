@@ -25,6 +25,7 @@ if (Session::has('perfil'))
     <div class="row">
         <div class="panel" Style="padding-left:15px; padding-right:15px">
             <h2> Muro de {{ $ramo->nombre_ramo}} </h2>
+            <h4><a href="{{ route('news', ['ramo' => $ramo->id]) }}">Noticias</a></h4>
             <hr/>
         </div>
         <div id="postContent">
