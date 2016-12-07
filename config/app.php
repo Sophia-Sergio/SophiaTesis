@@ -168,7 +168,6 @@ return [
          */
         Laravel\Socialite\SocialiteServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
-        'Sophia\Providers\ComposerServiceProvider',
 
 
         /*

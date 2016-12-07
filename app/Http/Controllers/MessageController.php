@@ -104,7 +104,9 @@ class MessageController extends Controller
             'message' => $request['message']
         ]);
 
-        return redirect()->route('messages.show', ['id' => $uuid]);
+        return response()->json(['status' => 1], 200);
+
+        //return redirect()->route('messages.show', ['id' => $uuid]);
     }
 
     /**
@@ -145,6 +147,43 @@ class MessageController extends Controller
         }
 
         return view('message.show', compact('messages'));
+    }
+
+    public function chats($uuid)
+    {
+        $messages = Message::where('uuid', $uuid)
+            ->where('message', '<>', '-')
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        foreach ($messages as $message) {
+            // Set sender name
+            $senderName = User::find($message->sender);
+            $message->sender_name = $senderName->getFullName();
+
+            // Set receiver name
+            $receiverName = User::find($message->receiver);
+            $message->receiver_name = $receiverName->getFullName();
+
+            // Set created at format
+            $date = Carbon::createFromFormat('Y-m-d H:i:s', $message->created_at)->format('E\l d-m-Y \a \l\a\s H:i');
+            $message->formated_date = $date;
+
+            $noAvatar = URL::to('img/man_avatar.jpg');
+
+            // Set Avatar
+            $fromProvider = OauthIdentity::where('user_id', $message->sender)->first();
+
+            if (isset($fromProvider->avatar) && !empty($fromProvider->avatar)) {
+                $message->sender_avatar = $fromProvider->avatar;
+            } elseif (Storage::disk('local')->has( $message->sender . '.jpg')) {
+                $message->sender_avatar = route('profile.image', ['filename' => $message->sender . '.jpg']);
+            } else {
+                $message->sender_avatar = $noAvatar;
+            }
+        }
+
+        return $messages;
     }
 
     /**

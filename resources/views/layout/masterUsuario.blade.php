@@ -31,6 +31,10 @@
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
+
+    <script>
+        const siteUrl = "{{ URL::to('/') }}/";
+    </script>
 </head>
 <?php
 if (Session::has('carrera')) {
@@ -288,5 +292,7 @@ $usuario = Session::get('user');
 <script src=" {{ URL::to('/bower_components/jquery-file-upload/js/vendor/jquery.ui.widget.js')}}"></script>
 <script src=" {{ URL::to('/bower_components/jquery-file-upload/js/jquery.fileupload.js')}}"></script>
 @show
+
+@stack('scripts')
 </body>
 </html>
