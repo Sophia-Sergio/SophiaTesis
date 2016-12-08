@@ -317,34 +317,45 @@ $usuario = Session::get('user');
     function getUnreadMsg() {
         $.get( endPointUnreadMessage, function( response ) {
 
+            console.log(response);
+
             $('#count-new-msg').text(response.length);
             $('#title-new-msg').text('Tienes ' + response.length + ' mensajes nuevos')
 
             if (!$("#open-read-msg").hasClass('open')) {
                 getUnreadHTML(response);
-                console.log('llamado');
             }
         });
     }
 
     function getUnreadHTML(response) {
-        $.each( response, function( key, value ) {
-            var html = '';
-            html +=     '<ul id="ul-unread" class="menu">';
-            html +=         '<li>';
-            html +=             '<a href="'+siteUrl+'messages/'+value.uuid+'">';
-            html +=                 '<div class="pull-left">';
-            html +=                     '<img src="'+value.sender_avatar+'" class="img-circle" alt="User Image">';
-            html +=                 '</div>';
-            html +=                 '<h4>';
-            html +=                     value.sender_name;
-            html +=                 '</h4>';
-            html +=                 '<p>'+value.message+'</p>';
-            html +=             '</a>';
-            html +=         '</li>';
-            html +=     '</ul>';
 
-            $("#unread-container").append(html);
+        var used = [];
+
+        $("#unread-container").empty();
+
+        $.each( response, function( key, value ) {
+
+            if(used.indexOf(value.uuid) == -1) {
+                var html = '';
+                html +=     '<ul id="ul-unread" class="menu">';
+                html +=         '<li>';
+                html +=             '<a href="'+siteUrl+'messages/'+value.uuid+'">';
+                html +=                 '<div class="pull-left">';
+                html +=                     '<img src="'+value.sender_avatar+'" class="img-circle" alt="User Image">';
+                html +=                 '</div>';
+                html +=                 '<h4>';
+                html +=                     value.sender_name;
+                html +=                 '</h4>';
+                html +=                 '<p>'+value.message+'</p>';
+                html +=             '</a>';
+                html +=         '</li>';
+                html +=     '</ul>';
+
+                $("#unread-container").append(html);
+
+                used.push(value.uuid);
+            }
         });
     }
 </script>

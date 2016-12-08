@@ -254,4 +254,15 @@ class MessageController extends Controller
 
         return redirect()->route('messages.show', ['id' => $uuid]);
     }
+
+    /**
+     * Marcar mensaje como leído
+     *
+     * @param $id
+     */
+    public function markAsRead($id)
+    {
+        Message::where('uuid', $id)
+            ->update(['read' => 1]);
+    }
 }

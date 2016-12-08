@@ -40,6 +40,8 @@
     const endPointCreateMessage = siteUrl + "messages";
     const endPointGetMessages = siteUrl + "messages/{{ Request::segment(2) }}/chat";
 
+    $("#msg-container").animate({ scrollTop: 9999 }, 2000);
+
     $( "#new-message" ).submit(function( event ) {
         event.preventDefault();
 
@@ -78,7 +80,6 @@
         $.get( endPointGetMessages, function( response ) {
 
             $.each( response, function( key, value ) {
-
                 if ($("#li-" + value.id).length == 0) {
                     createElement(value);
                 }
@@ -109,6 +110,14 @@
         html += '</li>';
 
         $(".media-list").append(html);
+
+        $("#msg-container").animate({ scrollTop: 9999 }, 2000);
+
+        if(value.read == 0 || value.read == "0") {
+            $.get( "{{ route('messages.markAsRead', ['id' => Request::segment(2)]) }}", function( data ) {
+                console.log('aca' + value.id);
+            });
+        }
     }
 </script>
 @endpush

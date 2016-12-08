@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Message extends Model
 {
     protected $fillable = [
-        'uuid', 'sender', 'receiver', 'message'
+        'uuid', 'sender', 'receiver', 'message', 'read'
     ];
 
     public function getAllMessagesByUser($user)

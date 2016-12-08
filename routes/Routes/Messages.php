@@ -10,6 +10,7 @@ Route::get('/messages/unread', function () {
     $messages = \Sophia\Message::where('read', 0)
         ->where('receiver', \Auth::user()->id)
         ->where('message', '<>', '-')
+        ->orderBy('created_at', 'desc')
         ->get();
 
     foreach ($messages as $message) {
@@ -41,6 +42,11 @@ Route::get('/messages/unread', function () {
 
     return $messages;
 });
+
+Route::get('/messages/mark_read/{id}', [
+    'as' => 'messages.markAsRead',
+    'uses' => 'MessageController@markAsRead'
+]);
 
 // Listar conversación de 2 usuarios
 Route::get('/messages/{uuid}/chat', [
