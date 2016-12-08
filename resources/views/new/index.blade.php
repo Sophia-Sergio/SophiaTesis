@@ -13,7 +13,7 @@
 
                     <h3>Noticias </h3>
 
-                    <h4>3 últimos archivos subidos</h4>
+                    <h4>Últimos archivos relevantes</h4>
 
                     <table class="table table-bordered table-striped table-hover">.
                         <caption>Documentos P&uacute;blicos</caption>
@@ -24,7 +24,6 @@
                             <th>Tamaño</th>
                             <th>Tipo</th>
                             <th>Usuario</th>
-                            <th>Likes</th>
                         </tr>
                         </thead>
                         <tbody id="tablePublic">
@@ -35,22 +34,39 @@
                                 <td>{{$file->size}}</td>
                                 <td>{{$file->extension}}</td>
                                 <td>{{$file->nombre}} {{$file->apellido}}</td>
-                                <td>
-
-                                    <span id="{{$file->id}}_cont" class="badge badge_like">{{ $file->n_like }}</span>
-
-                                    @if ($file->is_like == true)
-                                        <span id="{{$file->id}}" class="like like_active glyphicon glyphicon-thumbs-up"></span>
-                                    @else
-                                        <span id="{{$file->id}}" class="like glyphicon glyphicon-thumbs-up"></span>
-                                    @endif
-                                </td>
                             </tr>
                         @endforeach
                         </tbody>
                     </table>
 
 
+                    <h4 style="margin-top: 50px;">Últimos post más relevantes</h4>
+
+                    <div id="postContent">
+                        @foreach($posts as $post)
+                            <div class="panel" >
+                                <div class="panel-body">
+                                    <div class="fb-user-thumb">
+                                        <img src="{{ \Sophia\User::getAvatar($post->id_user) }}" alt="" class="img-circle">
+                                    </div>
+
+                                    <div class="fb-user-details">
+                                        <h3><a href="#" class="#"> {{ \Sophia\User::find($post->id_user)->getFullName() }}</a></h3>
+                                        <p>{{ $post->created_at}}</p>
+                                    </div>
+
+                                    <div class="clearfix"></div>
+
+                                    <p class="fb-user-status">
+                                        {{ $post->contenido }}
+                                    </p>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+
+                    <!--
                     <h4>3 últimos post que han recibido likes</h4>
 
                     <div id="postContent">
@@ -163,7 +179,7 @@
                             </div>
                         @endforeach
                     </div>
-
+                    -->
                 </div>
             </div>
         </div>
