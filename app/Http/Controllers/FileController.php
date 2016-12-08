@@ -3,6 +3,7 @@
 namespace Sophia\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Sophia\File;
 use Sophia\Http\Requests;
 use Session;
@@ -10,12 +11,15 @@ use Sophia\UsuarioRamoDocente;
 use Sophia\Ramo;
 use Sophia\LikeFiles;
 use Illuminate\Support\Facades\DB;
+use Yajra\Datatables\Facades\Datatables;
+
 class FileController extends Controller
 {
     public function upload(){
         $file = \Request::file('document');
 
         $seguridad_id = \Request::all()['seguridad_id'];
+        $type = \Request::all()['type'];
 
         $id_user = Session::get('user')->id;
         $id_usuario_ramo_docente = Session::get('id_usuario_ramo_docente')->id;
@@ -38,6 +42,8 @@ class FileController extends Controller
         $file_->name = $fileName;
         $file_->extension = $fileType;
         $file_->seguridad = $seguridad_id;
+        $file_->type = $type;
+
         if ($file_->save())
 
             $file->move($storagePath, $file_->id);
@@ -100,5 +106,75 @@ class FileController extends Controller
 
 
 
+    }
+
+    public function destroy($id)
+    {
+        // Eliminar likes del archivo
+        LikeFiles::where('file_id', $id)->delete();
+
+        // Eliminar archivos
+        File::find($id)->delete();
+
+        return response()->json(['status' => 1], 200);
+    }
+
+    /**
+     * Generar tabla para archivos privados
+     *
+     * @param Request $request
+     * @return mixed
+     */
+    public function privateTable(Request $request, $idRamo)
+    {
+        $getData = UsuarioRamoDocente::getByRamoAndUser($idRamo, Auth::user()->id);
+        $idUsuarioRamoDocente = $getData->id;
+        $idDocente = $getData->id_docente;
+
+        $ramo = Ramo::find($idRamo);
+
+        $files = $ramo->getArchivosPrivados($idUsuarioRamoDocente);
+
+        return Datatables::of($files)
+            ->filterColumn('files.id', function($query, $keyword) {
+                $query->whereRaw("files.id) like ?", ["%{$keyword}%"]);
+            })
+            ->addColumn('action', function ($file) {
+                return '<a href="#" id="remove-'.$file->id.'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove"></i> Eliminar</a>';
+            })
+            ->make(true);
+
+        return $datatables->make(true);
+    }
+
+    /**
+     * Generar tabla para archivos públicos
+     *
+     * @param Request $request
+     * @param $idRamo
+     * @return mixed
+     */
+    public function publicTable(Request $request, $idRamo)
+    {
+        $getData = UsuarioRamoDocente::getByRamoAndUser($idRamo, Auth::user()->id);
+        $idUsuarioRamoDocente = $getData->id;
+        $idDocente = $getData->id_docente;
+
+        $ramo = Ramo::find($idRamo);
+
+        $files = $ramo->getArchivosPublicos($idDocente);
+
+        return Datatables::of($files)
+            ->editColumn('name', function ($file) {
+                return "<a href='/download/{$file->id}'>{$file->name}</a>";
+            })
+            ->addColumn('action', function ($file) {
+                $statusLike = ($file->is_like) ?  'like like_active glyphicon glyphicon-thumbs-up' : 'like glyphicon glyphicon-thumbs-up';
+                return "<span id='{$file->id}_cont' class='{$file->id}_cont badge badge_like'>{$file->n_like}</span>
+                    <span id='like-{$file->id}' class='like-{$file->id} {$statusLike}'></span>";
+            })
+            ->make(true);
+
+        return $datatables->make(true);
     }
 }

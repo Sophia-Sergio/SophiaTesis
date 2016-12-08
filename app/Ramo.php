@@ -15,7 +15,17 @@ class Ramo extends Model
         $archivos_publicos = File::join('usuario_ramo_docentes', 'id_usuario_ramo_docente', '=', 'usuario_ramo_docentes.id')
             ->join('ramo_docentes', 'id_ramo_docente', '=', 'ramo_docentes.id')
             ->join('users', 'id_usuario', '=', 'users.id')
-            ->select('ramo_docentes.id_docente', 'ramo_docentes.id_ramo', 'files.*', 'users.nombre', 'users.apellido')
+            ->select(
+                \DB::raw(
+                    'ramo_docentes.id_docente, ramo_docentes.id_ramo, files.*, users.nombre, users.apellido,
+                    CASE type
+                        WHEN 1 then "Prueba"
+                        WHEN 2 then "Tarea o Trabajo"
+                        WHEN 3 then "Apunte"
+                        WHEN 4 then "Tesis"
+                        END AS type'
+                )
+            )
             ->where('id_ramo', $this->id)
             ->where('id_docente', $_id_docente)
             ->where('seguridad', 1)
@@ -31,11 +41,22 @@ class Ramo extends Model
     }
 
     public function getArchivosPrivados($id_usuario_ramo_docente) {
-        $archivos_privados = File::where('id_usuario_ramo_docente',$id_usuario_ramo_docente)
+        $files = File::where('id_usuario_ramo_docente',$id_usuario_ramo_docente)
+            ->select(
+                \DB::raw(
+                    'id, created_at, updated_at, name, dir, size, extension, seguridad, id_usuario_ramo_docente,
+                    CASE type
+                        WHEN 1 then "Prueba"
+                        WHEN 2 then "Tarea o Trabajo"
+                        WHEN 3 then "Apunte"
+                        WHEN 4 then "Tesis"
+                        END AS type'
+                )
+            )
             ->whereIn('seguridad', [1, 2])
             ->get();
 
-        return $archivos_privados;
+        return $files;
     }
 
 

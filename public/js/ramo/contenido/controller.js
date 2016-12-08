@@ -10,14 +10,18 @@ $(document).ready(function()
         $upload_success = $('#upload-success');
 
     $fileupload.bind('fileuploadsubmit', function (e, data) {
-        // The example input, doesn't have to be part of the upload form:
-        data.formData = {_token: $fileupload.data('token'), user_id: $fileupload.data('userId'), seguridad_id: $('#selSeguridad').val()};
+        data.formData = {
+            _token: $fileupload.data('token'),
+            user_id: $fileupload.data('userId'),
+            seguridad_id: $('#selSeguridad').val(),
+            type: $('#selTipo').val()
+        };
     });
 
     $fileupload.fileupload({
         url: '/upload',
         dataType: 'json',
-        formData: {_token: $fileupload.data('token'), user_id: $fileupload.data('userId'), seguridad_id: $('#selSeguridad').val()},
+        formData: {_token: $fileupload.data('token'), user_id: $fileupload.data('userId'), seguridad_id: $('#selSeguridad').val(), type: $("#selTipo").val()},
 
         progressall: function (e, data) {
             var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -33,32 +37,8 @@ $(document).ready(function()
             $upload_success.removeClass('hide').hide().slideDown('fast');
             $('#progress .progress-bar').css('width',0);
 
-            var cadPub = '';
-            data.result.publicos.forEach(function (item, index) {
-
-                var cadena = '<td><a href="/download/'+item.id+'">'+item.name+'</a></td>';
-                cadena += '<td>'+item.created_at+'</td>';
-                cadena += '<td>'+item.size+'</td>';
-                cadena += '<td>'+item.extension+'</td>';
-                cadena += '<td>'+item.nombre+'</td>';
-                cadena += '<td><span id="'+item.id+'_cont" class="badge badge_like">'+item.n_like+'</span><span id="'+item.id+'" class="like glyphicon glyphicon-thumbs-up"></span></td>';
-                cadena = '<tr>'+cadena+'</tr>';
-
-                cadPub = cadPub+cadena;
-            });
-            $('#tablePublic').html(cadPub);
-
-
-            var cadPriv = '';
-            data.result.privados.forEach(function (item, index) {
-                var cadena = '<td><a href="/download/'+item.id+'">'+item.name+'</a></td>';
-                cadena += '<td>'+item.created_at+'</td>';
-                cadena += '<td>'+item.size+'</td>';
-                cadena += '<td>'+item.extension+'</td>';
-                cadena = '<tr>'+cadena+'</tr>';
-                cadPriv = cadPriv+cadena;
-            });
-            $('#tablePrivate').html(cadPriv);
+            genPrivateTable();
+            genPublicTable();
         }
     });
 
