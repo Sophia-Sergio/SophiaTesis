@@ -169,3 +169,8 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script type="text/javascript" src="<?php echo e(URL::asset('js/ramo/contenido/controller.js')); ?>"></script>
+<script type="text/javascript" src="<?php echo e(URL::asset('js/ramo/muro/controller.js')); ?>"></script>
+@endpush

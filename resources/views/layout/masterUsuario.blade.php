@@ -24,6 +24,10 @@
 
   <link rel="stylesheet" href="{{ URL::to('css/messages.css') }}">
 
+    <!-- Datatables -->
+    <link rel="stylesheet" href="{{ URL::to('bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ URL::to('bower_components/datatables.net-buttons-bs/css/buttons.bootstrap.min.css') }}">
+
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -291,6 +295,12 @@ $usuario = Session::get('user');
 <script src=" {{ URL::to('js/app_new.js')}}"></script>
 <script src=" {{ URL::to('/bower_components/jquery-file-upload/js/vendor/jquery.ui.widget.js')}}"></script>
 <script src=" {{ URL::to('/bower_components/jquery-file-upload/js/jquery.fileupload.js')}}"></script>
+
+<!-- Datatables -->
+<script src=" {{ URL::to('/bower_components/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+<script src=" {{ URL::to('/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
+<script src=" {{ URL::to('/bower_components/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
+<script src=" {{ URL::to('/bower_components/datatables.net-buttons-bs/js/buttons.bootstrap.min.js')}}"></script>
 @show
 
 <script>
