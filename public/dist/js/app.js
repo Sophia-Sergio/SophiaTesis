@@ -168,7 +168,7 @@ $(function () {
   }
 
   //Add slimscroll to navbar dropdown
-  if (o.navbarMenuSlimscroll && typeof $.fn.slimscroll != 'undefined') {
+  if (o.navbarMenuSlimscroll && typeof $.fn.slimscroll !== 'undefined') {
     $(".navbar .menu").slimscroll({
       height: o.navbarMenuHeight,
       alwaysVisible: false,
@@ -194,7 +194,7 @@ $(function () {
   }
 
   //Activate fast click
-  if (o.enableFastclick && typeof FastClick != 'undefined') {
+  if (o.enableFastclick && typeof FastClick !== 'undefined') {
     FastClick.attach(document.body);
   }
 
@@ -278,16 +278,16 @@ function _init() {
     fixSidebar: function () {
       //Make sure the body tag has the .fixed class
       if (!$("body").hasClass("fixed")) {
-        if (typeof $.fn.slimScroll != 'undefined') {
+        if (typeof $.fn.slimScroll !== 'undefined') {
           $(".sidebar").slimScroll({destroy: true}).height("auto");
         }
         return;
-      } else if (typeof $.fn.slimScroll == 'undefined' && window.console) {
+      } else if (typeof $.fn.slimScroll === 'undefined' && window.console) {
         window.console.error("Error: the fixed layout requires the slimscroll plugin!");
       }
       //Enable slimscroll for fixed layout
       if ($.AdminLTE.options.sidebarSlimScroll) {
-        if (typeof $.fn.slimScroll != 'undefined') {
+        if (typeof $.fn.slimScroll !== 'undefined') {
           //Destroy if it exists
           $(".sidebar").slimScroll({destroy: true}).height("auto");
           //Add slimscroll
@@ -400,7 +400,6 @@ function _init() {
           checkElement.slideUp(animationSpeed, function () {
             checkElement.removeClass('menu-open');
             //Fix the layout in case the sidebar stretches over the height of the window
-            //_this.layout.fix();
           });
           checkElement.parent("li").removeClass("active");
         }
@@ -735,7 +734,7 @@ function _init() {
 
     return this.each(function () {
 
-      if (typeof $.fn.iCheck != 'undefined') {
+      if (typeof $.fn.iCheck !== 'undefined') {
         $('input', this).on('ifChecked', function () {
           var ele = $(this).parents("li").first();
           ele.toggleClass("done");

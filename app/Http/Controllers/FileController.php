@@ -39,15 +39,10 @@ class FileController extends Controller
         $file_->extension = $fileType;
         $file_->seguridad = $seguridad_id;
         if ($file_->save())
-
-            $file->move($storagePath, $file_->id);
         {
+            $file->move($storagePath, $file_->id);
             $message = "Archivo guardado";
         };
-        //return $file->move($storagePath, $fileName);
-        //return redirect()->action('RamoController@contenido', ['ramo' => $id_ramo])->with(['message_positivo' => $message]);
-
-
         /**
          * Retornamos los archivos para poder mostrarlos
          */
