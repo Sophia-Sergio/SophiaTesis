@@ -45,7 +45,13 @@
         var controller = "{{ $controller }}";
         var action = "{{ $action }}";
 
-
+        $(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                }
+            });
+        });
     </script>
 </head>
 <?php
@@ -313,63 +319,6 @@ $usuario = Session::get('user');
 
 <script src=" {{ URL::to('/js/notifications.js')}}"></script>
 @show
-
-<script>
-    const endPointUnreadMessage = siteUrl + "messages/unread";
-
-    // Consultar al iniciar
-    getUnreadMsg();
-
-    // Consultar nuevos mensajes cada x segundos
-    window.setInterval(function(){
-        getUnreadMsg();
-    }, 3000);
-
-    function getUnreadMsg() {
-        $.get( endPointUnreadMessage, function( response ) {
-
-            console.log(response);
-
-            $('#count-new-msg').text(response.length);
-            $('#title-new-msg').text('Tienes ' + response.length + ' mensajes nuevos')
-
-            if (!$("#open-read-msg").hasClass('open')) {
-                getUnreadHTML(response);
-            }
-        });
-    }
-
-    function getUnreadHTML(response) {
-
-        var used = [];
-
-        $("#unread-container").empty();
-
-        $.each( response, function( key, value ) {
-
-            if(used.indexOf(value.uuid) == -1) {
-                var html = '';
-                html +=     '<ul id="ul-unread" class="menu">';
-                html +=         '<li>';
-                html +=             '<a href="'+siteUrl+'messages/'+value.uuid+'">';
-                html +=                 '<div class="pull-left">';
-                html +=                     '<img src="'+value.sender_avatar+'" class="img-circle" alt="User Image">';
-                html +=                 '</div>';
-                html +=                 '<h4>';
-                html +=                     value.sender_name;
-                html +=                 '</h4>';
-                html +=                 '<p>'+value.message+'</p>';
-                html +=             '</a>';
-                html +=         '</li>';
-                html +=     '</ul>';
-
-                $("#unread-container").append(html);
-
-                used.push(value.uuid);
-            }
-        });
-    }
-</script>
 
 @stack('scripts')
 </body>

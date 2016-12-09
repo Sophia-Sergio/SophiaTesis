@@ -166,16 +166,8 @@
     }
 
     $(function() {
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': "{{ csrf_token() }}"
-            }
-        });
-
         genPrivateTable();
         genPublicTable();
-
     });
 
     function genPrivateTable() {
@@ -262,7 +254,6 @@
 
     // Click en botón eliminar
     $(document).on('click', ".btn-danger",function(){
-        alert('asdf');
         event.preventDefault();
         var split = this.id.split("-");
         deleteFile(split[1]);
