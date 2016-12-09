@@ -4,6 +4,11 @@
     Sophia | Registro Académico
 @endsection
 
+<?php
+if (Session::has('perfil')) {
+    $perfil = Session::get('perfil')->id_perfil;
+}
+?>
 
 @section('content')
     <div class="row" style="padding-top: 50px;">
