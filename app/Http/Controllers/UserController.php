@@ -159,7 +159,6 @@ class UserController extends Controller
         $docente = new Docente;
         $docente->nombre=$data["nombre"];
 
-        return $docente->nombre;
         $docente->apellido_paterno=$data["apellido_paterno"];
         $docente->apellido_materno=$data["apellido_materno"];
         $docente->nombre_html=$data["nombre"];
@@ -403,7 +402,6 @@ class UserController extends Controller
 
         Auth::login($user); //logear a usuario
         Session::put('user', $user);
-        //Session::put('idRamo', $idRamo);
         return redirect()->route('dashboard');
 
     }
@@ -498,20 +496,6 @@ class UserController extends Controller
 
             //cargamos lista de posteos asociados a la carrera
             $posteosCarrera = $carrera->getPost();
-
-            //$id_ramo = Session::get('ramo')->id;
-            /*
-            $posteosRamo = DB::table('post_ramos')
-                ->join('carreras', 'id_carrera', '=', 'carreras.id')
-                ->join('users', 'id_user', '=', 'users.id')
-                ->select('id_carrera', 'contenido', 'id_user',  'posts.id', 'nombre_carrera', 'nombre', 'posts.created_at')
-                ->where('id_carrera', $id_carrera)
-                ->where('id_usuario_ramo_docente', $id_usuario_ramo_docente)
-                ->where('posts.estado', '=', 1)
-                ->distinct()
-                ->orderBy('created_at', 'desc')
-                ->get();
-            */
 
             // cargamos en variable session la lista de ramos
             Session::put('ramos', $ramos);
