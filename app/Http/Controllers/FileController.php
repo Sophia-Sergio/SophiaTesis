@@ -198,7 +198,8 @@ class FileController extends Controller
             ->select('files.*', 'users.nombre', 'users.apellido','ramo_docentes.id_ramo')
             ->where('files.seguridad', 1)
             ->where('users.id', '<>', Auth::user()->id)
-            ->where('usuario_ramo_docentes.id', $postData->id_usuario_ramo_docente)
+            //->where('usuario_ramo_docentes.id', $postData->id_usuario_ramo_docente)
+            ->where('usuario_ramo_docentes.id', $postData->id)
             ->orderBy('files.created_at', 'desc')
             ->get();
 
