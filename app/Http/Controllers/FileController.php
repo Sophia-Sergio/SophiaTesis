@@ -186,10 +186,17 @@ class FileController extends Controller
             //->join('post_ramos', 'post_ramos.id_usuario_ramo_docente', '=', 'usuario_ramo_docentes.id')
             ->join('usuario_ramo_docentes as urm', 'urm.id_ramo_docente', '=', 'ramo_docentes.id')
             ->where('urm.id_usuario', Auth::user()->id)
-            ->first();
+            //->first();
+            ->get();
 
         if(empty($postData)) {
             return $output;
+        }
+
+        $ramos = [];
+
+        foreach($postData as $data) {
+            array_push($ramos, $data->id_ramo);
         }
 
         $files = UsuarioRamoDocente::join('files', 'files.id_usuario_ramo_docente', '=', 'usuario_ramo_docentes.id')
@@ -199,7 +206,7 @@ class FileController extends Controller
             ->where('files.seguridad', 1)
             ->where('users.id', '<>', Auth::user()->id)
             //->where('usuario_ramo_docentes.id', $postData->id_usuario_ramo_docente)
-            ->where('usuario_ramo_docentes.id', $postData->id)
+            ->whereIn('id_ramo', $ramos)
             ->orderBy('files.created_at', 'desc')
             ->get();
 
