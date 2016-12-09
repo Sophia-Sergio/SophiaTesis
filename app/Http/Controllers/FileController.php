@@ -177,4 +177,66 @@ class FileController extends Controller
 
         return $datatables->make(true);
     }
+
+    public function notSeen()
+    {
+        $postData = UsuarioRamoDocente::join('ramo_docentes', 'usuario_ramo_docentes.id_ramo_docente', '=', 'ramo_docentes.id')
+            ->join('post_ramos', 'post_ramos.id_usuario_ramo_docente', '=', 'usuario_ramo_docentes.id')
+            ->join('usuario_ramo_docentes as urm', 'urm.id_ramo_docente', '=', 'ramo_docentes.id')
+            ->where('urm.id_usuario', Auth::user()->id)
+            ->first();
+
+        $files = UsuarioRamoDocente::join('files', 'files.id_usuario_ramo_docente', '=', 'usuario_ramo_docentes.id')
+            ->join('users', 'users.id', '=','usuario_ramo_docentes.id_usuario')
+            ->join('ramo_docentes', 'ramo_docentes.id', '=','usuario_ramo_docentes.id_ramo_docente')
+            ->select('files.*', 'users.nombre', 'users.apellido','ramo_docentes.id_ramo')
+            ->where('files.seguridad', 1)
+            ->where('users.id', '<>', Auth::user()->id)
+            ->where('usuario_ramo_docentes.id', $postData->id_usuario_ramo_docente)
+            ->orderBy('files.created_at', 'desc')
+            ->get();
+
+        $output = [];
+
+        foreach ($files as $file) {
+
+            if(!is_null($file->seen)) {
+                $users = json_decode($file->seen, true);
+
+                if(!array_key_exists(Auth::user()->id, $users)) {
+                    array_push($output, $file);
+                }
+            } else {
+                array_push($output, $file);
+            }
+        }
+
+        return $output;
+    }
+
+    /**
+     * Marcar como leída las notificaciones de archivos
+     *
+     * @param $idRamo
+     * @param $idUsuarioRamoDocente
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function markAsSeen($idRamo, $idUsuarioRamoDocente)
+    {
+        $me = Auth::user()->id;
+
+        $files = File::where('id_usuario_ramo_docente', $idUsuarioRamoDocente)->get();
+
+        foreach ($files as $file) {
+
+            if(is_null($file->seen) || !array_key_exists($me, $file->seen)) {
+                $user = $file->seen;
+                $user[$me] = $me;
+                $file->seen = $user;
+                $file->save();
+            }
+        }
+
+        return redirect()->route('ramo.contenido', ['ramo' => $idRamo]);
+    }
 }

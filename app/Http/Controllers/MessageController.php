@@ -89,7 +89,6 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
-
         if (isset($request['uuid']) && !empty($request['uuid']))
             $uuid = $request['uuid'];
         else
@@ -263,6 +262,7 @@ class MessageController extends Controller
     public function markAsRead($id)
     {
         Message::where('uuid', $id)
+            ->where('receiver', Auth::user()->id)
             ->update(['read' => 1]);
     }
 }

@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'AddReadToUsersTable' => $baseDir . '/database/migrations/2016_12_07_162721_add_read_to_users_table.php',
+    'AddSeenToFiles' => $baseDir . '/database/migrations/2016_12_08_184101_add_seen_to_files.php',
     'AddTypeToFiles' => $baseDir . '/database/migrations/2016_12_08_121147_add_type_to_files.php',
     'AdministradorTableSeeder' => $baseDir . '/database/seeds/AdministradorTableSeeder.php',
     'CarreraRamosTableSeeder' => $baseDir . '/database/seeds/CarreraRamosTableSeeder.php',

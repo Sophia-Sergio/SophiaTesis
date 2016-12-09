@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class File extends Model
 {
+
+    protected $casts = [
+        'seen' => 'array'
+    ];
+
     public function usuarioRamoDocente()
     {
         return $this->belongsTo('Sophia\UsuarioRamoDocente', 'id_usuario_ramo_docente');
@@ -14,7 +19,6 @@ class File extends Model
     public function likes() {
         return $this->hasMany('Sophia\LikeFiles');
     }
-
 
     public function isLikeUer ($idUser) {
 

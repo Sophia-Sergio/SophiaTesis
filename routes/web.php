@@ -200,7 +200,12 @@ Route::group(['middleware' => ['web']], function(){
     Route::get('/likePostCarrera/{post}', 'PostController@toggleLikeCarrera');
 
     Route::get('ramo/muro/{ramo}', 'RamoController@index');
-    Route::get('ramo/contenido/{ramo}', 'RamoController@contenido');
+
+    Route::get('ramo/contenido/{ramo}', [
+        'uses' => 'RamoController@contenido',
+        'as' => 'ramo.contenido'
+    ]);
+
     /*
     Route::get('tomaCarrera', function () {
         return view('user.registroAcademicoRamos');
