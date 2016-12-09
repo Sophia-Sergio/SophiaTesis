@@ -23,8 +23,9 @@ class NewController extends Controller
             ->where('ramo_docentes.id_ramo', $ramo)
             ->first();
 
-        //dd($postData);
-        //echo $postData->id_usuario_ramo_docente;
+        if(empty($postData)) {
+            return view('new.index');
+        }
 
         $postsWithLikes = PostRamo::where('id_usuario_ramo_docente', $postData->id_usuario_ramo_docente)
             ->join('like_post', 'like_post.post_ramo_id', '=', 'post_ramos.id')
@@ -33,9 +34,7 @@ class NewController extends Controller
             ->limit(3)
             ->get();
 
-        //dd($postsWithLikes);
-
-        $posts = $postsWithLikes;
+        $posts = (isset($postsWithLikes)) ? $postsWithLikes : [];
 
         $files = UsuarioRamoDocente::join('files', 'files.id_usuario_ramo_docente', '=', 'usuario_ramo_docentes.id')
             ->join('users', 'users.id', '=','usuario_ramo_docentes.id_usuario')
