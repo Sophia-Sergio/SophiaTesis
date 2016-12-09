@@ -302,6 +302,7 @@ $usuario = Session::get('user');
 <script src=" {{ URL::to('/bower_components/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
 <script src=" {{ URL::to('/bower_components/datatables.net-buttons-bs/js/buttons.bootstrap.min.js')}}"></script>
 
+
 <script src=" {{ URL::to('/js/notifications.js')}}"></script>
 @show
 

@@ -92,12 +92,14 @@ class RamoController extends Controller
 
 
         $archivosPublicos = $ramo->getArchivosPublicos($_id_docente);
-        $archivosPrivados = $ramo->getArchivosPrivados($id_usuario_ramo_docente);
 
+        // No es sólo archivos privados, son públicos y privados del usuario conectado
+        $archivosPrivados = $ramo->getArchivosPrivados($id_usuario_ramo_docente);
 
         return view("ramo.contenido", [
             'archivos_publicos' => $archivosPublicos,
             'archivos_privados' => $archivosPrivados,
+            'ramo' => $ramo
         ]);
 
     }

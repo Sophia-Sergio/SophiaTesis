@@ -178,6 +178,11 @@ class FileController extends Controller
         return $datatables->make(true);
     }
 
+    /**
+     * Listar archivos no vistos
+     *
+     * @return array
+     */
     public function notSeen()
     {
         $postData = UsuarioRamoDocente::join('ramo_docentes', 'usuario_ramo_docentes.id_ramo_docente', '=', 'ramo_docentes.id')

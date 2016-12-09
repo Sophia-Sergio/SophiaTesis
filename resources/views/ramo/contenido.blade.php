@@ -188,7 +188,7 @@
                 "url": "{{ URL::to('/js/dataTables-es.json') }}"
             },
             ajax: {
-                url: '{!! route('files.privateDataTable', ['idRamo' => 35]) !!}',
+                url: '{!! route('files.privateDataTable', ['idRamo' => $ramo->id]) !!}',
                 method: 'POST'
             },
             columns: [
@@ -229,7 +229,7 @@
                 "url": "{{ URL::to('/js/dataTables-es.json') }}"
             },
             ajax: {
-                url: '{!! route('files.publicDataTable', ['idRamo' => 35]) !!}',
+                url: '{!! route('files.publicDataTable', ['idRamo' => $ramo->id]) !!}',
                 method: 'POST'
             },
             columns: [
