@@ -38,6 +38,14 @@
 
     <script>
         const siteUrl = "{{ URL::to('/') }}/";
+
+        <?php list(,,,$route) = explode("\\", Route::getCurrentRoute()->getActionName()); ?>
+        <?php list($controller, $action) = explode('@', $route); ?>
+
+        var controller = "{{ $controller }}";
+        var action = "{{ $action }}";
+
+
     </script>
 </head>
 <?php

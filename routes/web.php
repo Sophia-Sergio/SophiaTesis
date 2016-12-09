@@ -16,13 +16,23 @@ use Illuminate\Support\Facades\Input;
 
 Route::group(['middleware' => ['web']], function(){
 
-    Route::get('login', function () {
+    Route::get('/login', [
+        'uses' => 'UserController@signInUp',
+        'as' => 'home'
+    ]);
+
+    Route::get('/', [
+        'uses' => 'UserController@signInUp',
+        'as' => 'home'
+    ]);
+
+    /*Route::get('login', function () {
         return view('welcome');
     })->name('home');
 
     Route::get('/', function () {
         return view('welcome');
-    })->name('home');
+    })->name('home');*/
 
     Route::post('/signup', [
         'uses' => 'UserController@postSignUp',
@@ -224,11 +234,12 @@ Route::group(['middleware' => ['web']], function(){
             ->join('carreras', 'institucion_carreras.id_carrera', '=', 'carreras.id')->get();
         Return Response::json($carrera);
     });
+});
 
-    require 'Routes/Social.php';
+Route::group(['middleware' => ['web', 'auth']], function () {
     require 'Routes/Messages.php';
+    require 'Routes/Social.php';
     require 'Routes/Users.php';
     require 'Routes/News.php';
-
     require 'Routes/FilesRoute.php';
 });

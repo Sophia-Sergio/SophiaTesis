@@ -34,6 +34,19 @@ use Sophia\Http\Requests\InstitucionUpdateRequest;
 
 class UserController extends Controller
 {
+    /**
+     * Vista de sign in y sign up
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function signInUp()
+    {
+        if (Auth::check()) {
+            return redirect('/dashboard');
+        } else {
+            return view('welcome');
+        }
+    }
+
     //ADMINISTADROR
     public function create()
     {
