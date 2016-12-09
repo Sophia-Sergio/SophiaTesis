@@ -180,11 +180,17 @@ class FileController extends Controller
      */
     public function notSeen()
     {
+        $output = [];
+
         $postData = UsuarioRamoDocente::join('ramo_docentes', 'usuario_ramo_docentes.id_ramo_docente', '=', 'ramo_docentes.id')
             ->join('post_ramos', 'post_ramos.id_usuario_ramo_docente', '=', 'usuario_ramo_docentes.id')
             ->join('usuario_ramo_docentes as urm', 'urm.id_ramo_docente', '=', 'ramo_docentes.id')
             ->where('urm.id_usuario', Auth::user()->id)
             ->first();
+
+        if(empty($postData)) {
+            return $output;
+        }
 
         $files = UsuarioRamoDocente::join('files', 'files.id_usuario_ramo_docente', '=', 'usuario_ramo_docentes.id')
             ->join('users', 'users.id', '=','usuario_ramo_docentes.id_usuario')
@@ -196,7 +202,9 @@ class FileController extends Controller
             ->orderBy('files.created_at', 'desc')
             ->get();
 
-        $output = [];
+        if (empty($postData)) {
+            return $output;
+        }
 
         foreach ($files as $file) {
 
