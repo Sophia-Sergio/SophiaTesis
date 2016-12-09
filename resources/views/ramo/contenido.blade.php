@@ -77,15 +77,6 @@
                             <th>Acción</th>
                         </tr>
                     </thead>
-                    <tfoot>
-                        <tr>
-                            <th id="private-foot-name">Nombre</th>
-                            <th id="private-foot-created">Creado</th>
-                            <th id="private-foot-size">Tamaño</th>
-                            <th id="private-foot-type">Tipo</th>
-                            <th id="private-foot-action">Acción</th>
-                        </tr>
-                    </tfoot>
                 </table>
             </div>
         </div>
