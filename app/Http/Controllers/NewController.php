@@ -19,7 +19,7 @@ class NewController extends Controller
         $endWeek = Carbon::now()->endOfWeek();
 
         $postData = UsuarioRamoDocente::join('ramo_docentes', 'usuario_ramo_docentes.id_ramo_docente', '=', 'ramo_docentes.id')
-            ->join('post_ramos', 'post_ramos.id_usuario_ramo_docente', '=', 'usuario_ramo_docentes.id')
+            //->join('post_ramos', 'post_ramos.id_usuario_ramo_docente', '=', 'usuario_ramo_docentes.id')
             ->where('ramo_docentes.id_ramo', $ramo)
             ->first();
 
