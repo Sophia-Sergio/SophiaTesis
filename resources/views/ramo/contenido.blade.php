@@ -105,8 +105,6 @@
     </div>
 
 @endsection
-
-
 @push('scripts')
 <script>
     // Validar datos necesarios al subir archivo
