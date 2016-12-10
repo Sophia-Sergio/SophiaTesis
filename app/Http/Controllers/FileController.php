@@ -48,7 +48,7 @@ class FileController extends Controller
         {
             $file->move($storagePath, $file_->id);
             $message = "Archivo guardado";
-        };
+        }
         /**
          * Retornamos los archivos para poder mostrarlos
          */
@@ -79,8 +79,7 @@ class FileController extends Controller
 
         $actuales = LikeFiles::where('file_id', $id_archivo)
             ->where('user_id', $id_user)
-            ->get()
-        ;
+            ->get();
 
         if(count($actuales) > 0) {
             foreach($actuales as $actual) {
@@ -92,15 +91,10 @@ class FileController extends Controller
             $nuevoLike->user_id = $id_user;
             $nuevoLike->save();
         }
-
         $totalLikes = $file->likes()->count();
-
         return response()->json([
             'totalLikes' => $totalLikes
         ]);
-
-
-
     }
 
     public function destroy($id)
