@@ -134,6 +134,9 @@ class FileController extends Controller
             ->filterColumn('files.id', function($query, $keyword) {
                 $query->whereRaw("files.id) like ?", ["%{$keyword}%"]);
             })
+            ->editColumn('name', function ($file) {
+                return "<a href='/download/{$file->id}'>{$file->name}</a>";
+            })
             ->addColumn('action', function ($file) {
                 return '<a href="#" id="remove-'.$file->id.'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove"></i> Eliminar</a>';
             })

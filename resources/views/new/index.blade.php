@@ -34,7 +34,7 @@ if (Session::has('perfil')) {
                             <tbody id="tablePublic">
                             @foreach($files as $file)
                                 <tr>
-                                    <td><a href="/download/{{$file->id}}">{{$file->name}}</a></td>
+                                    <td><a href="/download/{{$file->id_file}}">{{$file->name}}</a></td>
                                     <td>{{$file->created_at}}</td>
                                     <td>{{$file->size}}</td>
                                     <td>{{$file->extension}}</td>

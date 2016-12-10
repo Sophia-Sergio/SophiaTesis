@@ -73,6 +73,7 @@
                             <th>Nombre</th>
                             <th>Creado</th>
                             <th>Tamaño</th>
+                            <th>Extensión</th>
                             <th>Tipo</th>
                             <th>Acción</th>
                         </tr>
@@ -92,6 +93,7 @@
                         <th>Nombre</th>
                         <th>Creado</th>
                         <th>Tamaño</th>
+                        <th>Extensión</th>
                         <th>Tipo</th>
                         <th>Acción</th>
                     </tr>
@@ -178,6 +180,7 @@
                 { data: 'name', name: 'name' },
                 { data: 'created_at', name: 'created_at' },
                 { data: 'size', name: 'size' },
+                { data: 'extension', name: 'extension' },
                 { data: 'type', name: 'type' },
                 { data: 'action', name: 'action', orderable: false, searchable: false }
             ],
@@ -219,6 +222,7 @@
                 { data: 'name', name: 'name' },
                 { data: 'created_at', name: 'created_at' },
                 { data: 'size', name: 'size' },
+                { data: 'extension', name: 'extension' },
                 { data: 'type', name: 'type' },
                 { data: 'action', name: 'action' }
             ],
