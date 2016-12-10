@@ -160,6 +160,9 @@ class FileController extends Controller
             ->editColumn('name', function ($file) {
                 return "<a href='/download/{$file->id}'>{$file->name}</a>";
             })
+            ->editColumn('nombre', function ($file) {
+                return "{$file->nombre} {$file->apellido}";
+            })
             ->addColumn('action', function ($file) {
                 $statusLike = ($file->is_like) ?  'like like_active glyphicon glyphicon-thumbs-up' : 'like glyphicon glyphicon-thumbs-up';
                 return "<span id='{$file->id}_cont' class='{$file->id}_cont badge badge_like'>{$file->n_like}</span>
