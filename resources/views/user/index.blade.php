@@ -21,11 +21,10 @@ if (Session::has('perfil'))
 <link rel="stylesheet" href="{{asset('css/index_UsuarioMuro.css')}}">  
 <div class="container bootstrap snippet" Style="width:80%">
   <div class="row">
-  	<div class="panel" Style="padding-left:15px; padding-right:15px">
+  	<div class="panel" Style="padding-left:15px; padding-right:15px; text-align:center ">
         <h2> Muro de {{ $carrera->nombre_carrera }} </h2>
         <hr/>
     </div>
-
       <div id="postContent">
           @include('ramo.forms.postCarrera')
           @foreach($posteosCarrera as $posteoCarrera)
@@ -78,58 +77,6 @@ if (Session::has('perfil'))
                         <a href="#" id="{{$posteoCarrera->id}}_cont" >{{ $posteoCarrera->n_like_str }}</a>
                         <span>les gusta esto</span>
                     </div>
-
-                    <ul class="fb-comments">
-                        <li>
-                            <a href="#" class="cmt-thumb">
-                                <img src="http://bootdey.com/img/Content/avatar/avatar3.png" alt="">
-                            </a>
-                            <div class="cmt-details">
-                                <a href="#">Jhone due</a>
-                                <span> is world famous professional photographer.  with forward thinking clients to create beautiful, </span>
-                                <p>40 minutes ago - <a href="#" class="like-link">Like</a></p>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="#" class="cmt-thumb">
-                                <img src="http://bootdey.com/img/Content/avatar/avatar3.png" alt="">
-                            </a>
-                            <div class="cmt-details">
-                                <a href="#">Tawseef</a>
-                                <span> is world famous professional photographer.  with forward thinking clients to create beautiful, </span>
-                                <p>34 minutes ago - <a href="#" class="like-link">Like</a></p>
-                            </div>
-                        </li>
-
-                        <li>
-                            <a href="#" class="cmt-thumb">
-                                <img src="http://bootdey.com/img/Content/avatar/avatar4.png" alt="">
-                            </a>
-                            <div class="cmt-details">
-                                <a href="#">Jhone due</a>
-                                <span> is world famous professional photographer.   </span>
-                                <p>15 minutes ago - <a href="#" class="like-link">Like</a></p>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="#" class="cmt-thumb">
-                                <img src="http://bootdey.com/img/Content/avatar/avatar5.png" alt="">
-                            </a>
-                            <div class="cmt-details">
-                                <a href="#">Tawseef</a>
-                                <span> thinking clients to create beautiful world famous professional photographer.  </span>
-                                <p>2 minutes ago - <a href="#" class="like-link">Like</a></p>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="#" class="cmt-thumb">
-                                <img src="http://bootdey.com/img/Content/avatar/avatar8.png" alt="">
-                            </a>
-                            <div class="cmt-form">
-                                <textarea class="form-control" placeholder="Write a comment..." name=""></textarea>
-                            </div>
-                        </li>
-                    </ul>
                     <div class="clearfix"></div>
                 </di>
             </div>

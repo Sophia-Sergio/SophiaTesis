@@ -60,7 +60,7 @@ class Ramo extends Model
     }
 
 
-    public function getPost ($id_carrera) {
+    public function getPost ($id_carrera, $id_ramo) {
         $id_user = Session::get('user')->id;
 
         $posteosRamo = PostRamo::join('carreras', 'id_carrera', '=', 'carreras.id')
