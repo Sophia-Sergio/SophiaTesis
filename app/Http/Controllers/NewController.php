@@ -19,7 +19,7 @@ class NewController extends Controller
         $endWeek = Carbon::now()->endOfWeek();
 
         $postData = UsuarioRamoDocente::join('ramo_docentes', 'usuario_ramo_docentes.id_ramo_docente', '=', 'ramo_docentes.id')
-            //->join('post_ramos', 'post_ramos.id_usuario_ramo_docente', '=', 'usuario_ramo_docentes.id')
+            ->join('post_ramos', 'post_ramos.id_usuario_ramo_docente', '=', 'usuario_ramo_docentes.id')
             ->where('ramo_docentes.id_ramo', $ramo)
             ->first();
 
@@ -29,11 +29,10 @@ class NewController extends Controller
 
         $postsWithLikes = PostRamo::where('id_usuario_ramo_docente', $postData->id_usuario_ramo_docente)
             ->join('like_post', 'like_post.post_ramo_id', '=', 'post_ramos.id')
-            //->whereBetween('like_post.created_at', [$startWeek, $endWeek])
             ->orderBy('like_post.created_at', 'desc')
             ->limit(3)
             ->get();
-
+        //dd($postData);
         $posts = (isset($postsWithLikes)) ? $postsWithLikes : [];
 
         $files = UsuarioRamoDocente::join('files', 'files.id_usuario_ramo_docente', '=', 'usuario_ramo_docentes.id')
