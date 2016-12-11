@@ -19,6 +19,7 @@ use Sophia\User;
 use Sophia\Post;
 use Sophia\Ramo;
 use Sophia\Docente;
+use Sophia\Publicidad;
 use Sophia\UsuarioRamoDocente;
 use Sophia\UsersSeguidos;
 use Session;
@@ -315,6 +316,26 @@ class UserController extends Controller
         return view('publicidad.crearPublicidad');
     }
 
+    public function agregarPublicidadAdmin(Request $request)
+    {
+        $publicidad = new Publicidad();
+        $storagePath = storage_path();
+
+        $file = \Request::file('image');
+        $publicidad->name = $file->getClientOriginalName();
+        $publicidad->size = $file->getClientSize();
+        $publicidad->dir = $storagePath;
+        $fileType = pathinfo($publicidad->name, PATHINFO_EXTENSION);
+        $publicidad->extension = $fileType;
+        $publicidad->url = $request['url'];
+        $publicidad->empresa = $request['empresa'];
+
+        if ($publicidad->save()){
+            $filename = 'id'.$publicidad->id.'_publicidad.jpg';
+            Storage::disk()->put($filename, File::get($file));
+        }
+    }
+
     public function updateProfile(Request $request)
     {
 
@@ -353,6 +374,12 @@ class UserController extends Controller
 
 
     public function getUserImage($filename)
+    {
+        $file = Storage::disk('local')->get($filename);
+        return new Response($file, 200);
+    }
+
+    public function getPublicidadImage($filename)
     {
         $file = Storage::disk('local')->get($filename);
         return new Response($file, 200);
@@ -458,6 +485,10 @@ class UserController extends Controller
                 ->where('usuario_perfils.id_usuario', '=', $id)
                 ->distinct()
                 ->first();
+        $id_publicidad = DB::table('publicidads')
+            ->select('id')
+            ->orderBy('id', 'desc')
+            ->first();
 
         Session::put('perfil', $perfil);
         if ($perfil->id_perfil==1)
@@ -531,7 +562,9 @@ class UserController extends Controller
             // retornamos la vista index
             return view('user.index', [
                 'elementosSeguidos' => $elementosSeguidos
-            ])->with(['perfil' => $perfil]);
+            ])->with(['perfil' => $perfil,
+            'id_publicidad' => $id_publicidad->id
+            ]);
         }
     }
     public function getLogout(){
