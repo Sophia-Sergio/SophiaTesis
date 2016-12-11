@@ -236,9 +236,12 @@ Route::group(['middleware' => ['web']], function(){
     });
 });
 
+// No requieren autenticación
+require 'Routes/Social.php';
+
+// Requieren autenticación
 Route::group(['middleware' => ['web', 'auth']], function () {
     require 'Routes/Messages.php';
-    require 'Routes/Social.php';
     require 'Routes/Users.php';
     require 'Routes/News.php';
     require 'Routes/FilesRoute.php';
