@@ -132,7 +132,12 @@ Route::group(['middleware' => ['web']], function(){
         'as' => 'edit'
     ]);
 
-
+    Route::get
+    ('crearPublicidad', [
+        'uses' => 'UserController@crearPublicidad',
+        'as' => 'crearPublicidad',
+        'middleware' => 'auth'
+    ]);
 
 
     Route::post('/updateProfile', [
