@@ -49,6 +49,21 @@
         </li>
       @endforeach
       </ul>
+      <ul class="sidebar-menu">
+        <a href="{{ route('dashboard')}}"><li class="header" style="color:white; background-color: black"><b>Orientación Educativa</b></li></a>
+          <li class="treeview">
+            <a href="">
+              <i class="fa fa-folder"></i><span>Información general</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right" ></i>
+            </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="/ramos_dificiles"><i class="fa fa-circle-o"></i> Ramos más difíciles</a></li>
+              <li><a href="/profesores_dificiles{{$ramo->id_ramo}}"><i class="fa fa-circle-o"></i> Profesores más exigentes</a></li>
+            </ul>
+          </li>
+      </ul>
     </section>
     <!-- /.sidebar -->
   </aside>
