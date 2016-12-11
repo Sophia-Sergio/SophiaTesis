@@ -50,6 +50,11 @@ Route::group(['middleware' => ['web']], function(){
 
     Route::get('user/seguir_usuario/{user_id}', 'UserController@toggleLikeSeguirUsuario');
 
+    Route::post('/agregarPublicidadAdmin', [
+        'uses' => 'UserController@agregarPublicidadAdmin',
+        'as' => 'agregarPublicidadAdmin'
+    ]);
+
 
     Route::post('/agregarUsuarioAdmin', [
         'uses' => 'UserController@agregarUsuarioAdmin',
@@ -148,6 +153,11 @@ Route::group(['middleware' => ['web']], function(){
     Route::get('/userimage/{filename}', [
         'uses' => 'UserController@getUserImage',
         'as' => 'profile.image'
+    ]);
+
+    Route::get('/publicidadimage/{filename}', [
+        'uses' => 'UserController@getPublicidadImage',
+        'as' => 'publicidad.image'
     ]);
 
 
