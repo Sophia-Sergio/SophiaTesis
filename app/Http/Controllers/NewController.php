@@ -37,7 +37,7 @@ class NewController extends Controller
 
         $files = UsuarioRamoDocente::join('files', 'files.id_usuario_ramo_docente', '=', 'usuario_ramo_docentes.id')
             ->join('users', 'users.id', '=','usuario_ramo_docentes.id_usuario')
-            ->select('files.*', 'users.id', 'users.nombre', 'users.apellido')
+            ->select('files.*', 'files.id as id_file','users.id', 'users.nombre', 'users.apellido')
             ->where('files.seguridad', 1)
             ->where('usuario_ramo_docentes.id', $postData->id_usuario_ramo_docente)
             ->orderBy('files.created_at', 'desc')

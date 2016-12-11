@@ -60,6 +60,7 @@ Route::group(['middleware' => ['web']], function(){
         'as' => 'editUser',
         'middleware' => 'auth'
     ]);
+
     Route::get('/updateUser/{id}', [
         'uses' => 'UserController@update',
         'as' => 'updateUser',

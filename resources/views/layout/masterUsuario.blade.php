@@ -91,7 +91,7 @@ $usuario = Session::get('user');
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <!-- Main content -->
-    <section class="content" style="padding-top: 80px">
+    <section class="content" style="padding-top: 50px">
         @yield('content')
     </section>
     <!-- /.content -->

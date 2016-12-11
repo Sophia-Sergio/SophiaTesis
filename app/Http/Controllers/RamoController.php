@@ -22,7 +22,7 @@ class RamoController extends Controller
         $id_carrera = Session::get('carrera')->id_carrera;
         $id_usuario = Session::get('user')->id;
 
-        $posteosRamo = $ramo->getPost($id_carrera);
+        $posteosRamo = $ramo->getPost($id_carrera, $id_ramo);
 
         $id_usuario_ramo_docente = DB::table('usuario_ramo_docentes')
             ->join('ramo_docentes', 'id_ramo_docente', '=', 'ramo_docentes.id')
@@ -31,6 +31,7 @@ class RamoController extends Controller
             ->where('id_usuario', $id_usuario)
             ->distinct()
             ->first();
+
 
         $id_docente = DB::table('usuario_ramo_docentes')
             ->join('ramo_docentes', 'id_ramo_docente', '=', 'ramo_docentes.id')

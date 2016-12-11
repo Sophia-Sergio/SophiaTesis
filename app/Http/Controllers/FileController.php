@@ -48,7 +48,7 @@ class FileController extends Controller
         {
             $file->move($storagePath, $file_->id);
             $message = "Archivo guardado";
-        };
+        }
         /**
          * Retornamos los archivos para poder mostrarlos
          */
@@ -79,8 +79,7 @@ class FileController extends Controller
 
         $actuales = LikeFiles::where('file_id', $id_archivo)
             ->where('user_id', $id_user)
-            ->get()
-        ;
+            ->get();
 
         if(count($actuales) > 0) {
             foreach($actuales as $actual) {
@@ -92,15 +91,10 @@ class FileController extends Controller
             $nuevoLike->user_id = $id_user;
             $nuevoLike->save();
         }
-
         $totalLikes = $file->likes()->count();
-
         return response()->json([
             'totalLikes' => $totalLikes
         ]);
-
-
-
     }
 
     public function destroy($id)
@@ -134,6 +128,9 @@ class FileController extends Controller
             ->filterColumn('files.id', function($query, $keyword) {
                 $query->whereRaw("files.id) like ?", ["%{$keyword}%"]);
             })
+            ->editColumn('name', function ($file) {
+                return "<a href='/download/{$file->id}'>{$file->name}</a>";
+            })
             ->addColumn('action', function ($file) {
                 return '<a href="#" id="remove-'.$file->id.'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove"></i> Eliminar</a>';
             })
@@ -162,6 +159,9 @@ class FileController extends Controller
         return Datatables::of($files)
             ->editColumn('name', function ($file) {
                 return "<a href='/download/{$file->id}'>{$file->name}</a>";
+            })
+            ->editColumn('nombre', function ($file) {
+                return "{$file->nombre} {$file->apellido}";
             })
             ->addColumn('action', function ($file) {
                 $statusLike = ($file->is_like) ?  'like like_active glyphicon glyphicon-thumbs-up' : 'like glyphicon glyphicon-thumbs-up';
