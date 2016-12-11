@@ -1,5 +1,5 @@
 @extends('layout.masterAdmin')
-	@section('content')
+@section('content')
 	@include('alerts.request')
 	@include('carrera.forms.crear')
 @endsection

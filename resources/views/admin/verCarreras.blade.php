@@ -1,24 +1,26 @@
 @extends('layout.masterAdmin')
 @section('content')
-	<br>
-	<br>
-	<br>
-	<table class="table">
+	<div class="panel" style="padding-left:15px; padding-right:15px; text-align:center; margin:auto ">
+		<h3><i class="fa fa-shield"></i> Carreras</h3>
+		<hr>
+		<table class="table  table-striped table-hover table-condensed " id="carreras" name="carreras">
 		<thead>
-			<th>id</th>
-			<th>Nombre Carrera</th>
-			<th>Operacion</th>
+			<th class="header" style=" text-align:center; padding-right: 12px">id</th>
+			<th class="header" style=" text-align:center; padding-right: 12px">Nombre Carrera</th>
+			<th class="header" style=" text-align:center; padding-right: 12px">Operacion</th>
 		</thead>
+		<tbody>
 		@foreach($carreras as $carrera)
-			<tbody>
+			<tr>
 				<td>{{$carrera->id}}</td>
 				<td>{{$carrera->nombre_carrera}}</td>
 				<td>
 					<a href="{{ route('editCarrera', $carrera->id ) }}" class="btn btn-primary">Editar
 					</a>
 				</td>
-			</tbody>
+			</tr>
 		@endforeach
+		</tbody>
 	</table>
 </div>
 @endsection

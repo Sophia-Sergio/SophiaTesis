@@ -1,11 +1,10 @@
 <div class="col-sm-2">
 </div>
-<div class="col-sm-6">
-<div id="notificacion_resul_fanu"></div>
-	<div class="">
+<div class="col-sm-8">
+	<div class="panel" style="padding-left:15px; padding-right:15px; text-align:center ">
 		<h3><i class="fa fa-shield"></i> Creación de Carreras</h3>
 	  	<hr>
-	  	<form id="f_nuevo_usuario" method="post" action="agregarCarreraAdmin" class="form-horizontal form_entrada" >
+	  	<form id="f_nuevo_usuario" method="post" action="agregarCarreraAdmin" class="form_entrada" >
 	  	<input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">    
 			<div class="form-group">
 			  <label class="control-label" for="" >Nombre</label>
