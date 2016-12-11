@@ -48,6 +48,8 @@ Route::group(['middleware' => ['web']], function(){
 
     Route::get('crearUsuarios', 'UserController@crearUsuarios');
 
+    Route::get('user/seguir_usuario/{user_id}', 'UserController@toggleLikeSeguirUsuario');
+
 
     Route::post('/agregarUsuarioAdmin', [
         'uses' => 'UserController@agregarUsuarioAdmin',

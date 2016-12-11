@@ -10,6 +10,9 @@ $perfil = Session::get('perfil')->id_perfil;
 }
 ?>
 @section('content')
+
+<script type="text/javascript" src="{{ URL::asset('js/users/ramo/controller.js') }}"></script>
+
 <div class="row" style="padding-top: 50px;">
     <div class="col-sm-10">
         <div class="panel panel-default">
@@ -23,6 +26,7 @@ $perfil = Session::get('perfil')->id_perfil;
                                 <th>Nombre</th>
                                 <th>Apellido</th>
                                 <th>Mensaje</th>
+                                <th>Seguir</th>
                                 @if ($perfil=='3')
                                     <th>Bloquear</th>
                                 @endif
@@ -35,6 +39,15 @@ $perfil = Session::get('perfil')->id_perfil;
                                         <td>{{ $user->nombre }}</td>
                                         <td>{{ $user->apellido }}</td>
                                         <td><a href="{{ route('messages.check_msg', ['user1' => $user->id, 'user2' => Auth::user()->id]) }}" class="btn btn-success">Enviar Mensaje</a></td>
+                                        <td>
+                                            <a href="javascript:" id="{{ $user->id }}" class="btn btn-success btn-seguir">
+                                            @if ($user->siguiendo == true)
+                                                Dejar de seguir
+                                            @else
+                                                Seguir
+                                            @endif
+                                            </a>
+                                        </td>
                                         @if ($perfil=='3')
                                         <td>
                                             <select class="form-control" name="perfil" id="perfil">

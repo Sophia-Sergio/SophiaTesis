@@ -20,6 +20,7 @@ use Sophia\Post;
 use Sophia\Ramo;
 use Sophia\Docente;
 use Sophia\UsuarioRamoDocente;
+use Sophia\UsersSeguidos;
 use Session;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Collection;
@@ -490,12 +491,14 @@ class UserController extends Controller
 
             //cargamos en variable session la carrera seleccionada por el alumno
             Session::put('carrera', $carrera);
-            
-            $id_carrera = Session::get('carrera')->id_carrera;
-            $carrera = Carrera::find($id_carrera);
+
+
+            $id_carrera = $carrera->id_carrera;
+
+            $carreraObj = Carrera::find($id_carrera);
 
             //cargamos lista de posteos asociados a la carrera
-            $posteosCarrera = $carrera->getPost();
+            $posteosCarrera = $carreraObj->getPost();
 
             // cargamos en variable session la lista de ramos
             Session::put('ramos', $ramos);
@@ -503,8 +506,17 @@ class UserController extends Controller
             Session::put('posteosCarrera', $posteosCarrera);
             //Session::put('posteosRamo', $posteosRamo);
 
+
+            /**
+             * Obtenemos la informacion de las actividades de los usuarios seguidos
+             */
+
+            $elementosSeguidos = $carreraObj->getElementoSeguidores($id);
+
             // retornamos la vista index
-            return view('user.index')->with(['perfil' => $perfil]);
+            return view('user.index', [
+                'elementosSeguidos' => $elementosSeguidos
+            ])->with(['perfil' => $perfil]);
         }
     }
     public function getLogout(){
@@ -573,6 +585,9 @@ class UserController extends Controller
      */
     public function byRamo($ramo)
     {
+        $id_user = Session::get('user')->id;
+        $usuario = User::find($id_user);
+
         $users = DB::table('usuario_ramo_docentes')
             ->join('ramo_docentes', 'usuario_ramo_docentes.id_ramo_docente', '=', 'ramo_docentes.id')
             ->join('ramos', 'ramo_docentes.id_ramo', '=', 'ramos.id')
@@ -582,6 +597,44 @@ class UserController extends Controller
             ->orderBy('nombre_ramo')
             ->get();
 
+        $seguidos_ids = $usuario->getArrayIdsUserSeguidos();
+
+        foreach($users as $us) {
+            if(in_array($us->id, $seguidos_ids)) {
+                $us->siguiendo = true;
+            } else {
+                $us->siguiendo = false;
+            }
+        }
+
         return view('user.by_ramo', compact('users'));
+    }
+
+
+    /**
+     * Agregamos o eliminamos seguir a un usuario
+     */
+    public function toggleLikeSeguirUsuario ($user_seguido_id) {
+
+        $id_user = Session::get('user')->id;
+
+        $userActual = User::find($id_user);
+
+        $actuales = UsersSeguidos::where('user_seguido_id', $user_seguido_id)
+            ->where('user_id', $id_user)
+            ->get()
+        ;
+        $siguiendo = false;
+
+        if(count($actuales) > 0) {
+            $userActual->deleteSeguirUser($user_seguido_id);
+        } else {
+            $userActual->addSeguirUser($user_seguido_id);
+            $siguiendo = true;
+        }
+
+        return response()->json([
+            'siguiendo' => $siguiendo
+        ]);
     }
 }

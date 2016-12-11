@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
+use Sophia\UsersSeguidos;
 
 class User extends Model implements Authenticatable
 {
@@ -14,6 +15,20 @@ class User extends Model implements Authenticatable
     protected $fillable = [
         'nombre', 'apellido', 'email', 'password', 'fecha_nacimiento', 'edad', 'estado', 'reintentos'
     ];
+
+    public function userSeguidos () {
+        return $this->hasMany('Sophia\UsersSeguidos');
+    }
+
+    public function getArrayIdsUserSeguidos () {
+        $users = $this->userSeguidos;
+        $response = array();
+        foreach ($users as $user) {
+            $response[] = $user->user_seguido_id;
+        }
+
+        return $response;
+    }
 
     public function findOrCreateByEmail()
     {
@@ -41,5 +56,18 @@ class User extends Model implements Authenticatable
         }
 
         return $avatar;
+    }
+
+    public function addSeguirUser($user_seguido_id) {
+        $siguendo = new UsersSeguidos();
+        $siguendo->user_id = $this->id;
+        $siguendo->user_seguido_id = $user_seguido_id;
+        $siguendo->save();
+    }
+
+    public function deleteSeguirUser($user_seguido_id) {
+        UsersSeguidos::where('user_id', $this->id)
+            ->where('user_seguido_id', $user_seguido_id)
+            ->delete();
     }
 }
