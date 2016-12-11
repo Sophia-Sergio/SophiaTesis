@@ -250,7 +250,15 @@ class UserController extends Controller
     public function verUsuarios()
     {
         $usuario = Session::get('user');
-        $usuarios = \Sophia\User::All();
+        //$usuarios = \Sophia\User::All();
+
+        $usuarios = DB::table('users')
+            ->join('usuario_perfils', 'usuario_perfils.id_usuario', '=', 'users.id')
+            ->join('perfils', 'usuario_perfils.id_perfil', '=', 'perfils.id')
+            ->select('users.id', 'users.estado', 'id_perfil', 'id_usuario', 'nombre', 'apellido', 'fecha_nacimiento', 'email', 'descripcion_perfil')
+            ->distinct()
+            ->get();
+
         return view('admin.verUsuarios',['user'=>$usuario], compact('usuarios'));
     }
     public function verInstituciones()
@@ -259,12 +267,14 @@ class UserController extends Controller
         $instituciones = \Sophia\Institucion::All();
         return view('admin.verInstituciones',['user'=>$usuario], compact('instituciones'));
     }
+
     public function verCarreras()
     {
         $usuario = Session::get('user');
         $carreras = \Sophia\Carrera::All();
         return view('admin.verCarreras',['user'=>$usuario], compact('carreras'));
     }
+
     public function verDocentes()
     {
         $usuario = Session::get('user');
@@ -286,7 +296,7 @@ class UserController extends Controller
     public function crearCarreras()
     {
         $usuario = Session::get('user');
-        return view('admin.crearInstituciones', ['user'=>$usuario]);
+        return view('admin.crearCarreras', ['user'=>$usuario]);
     }
 
     public function crearDocentes()
@@ -298,6 +308,11 @@ class UserController extends Controller
     public function getProfile()
     {
         return view ('user.profile');
+    }
+
+    public function crearPublicidad()
+    {
+        return view('publicidad.crearPublicidad');
     }
 
     public function updateProfile(Request $request)
