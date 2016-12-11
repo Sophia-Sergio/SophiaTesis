@@ -8,6 +8,7 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+   <link rel="stylesheet"  href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="{{ URL::to('css/AdminLTE.min.css') }}">
     <link rel="stylesheet" href="{{ URL::to('css/skins/_all-skins.min.css') }}">
     <link rel="stylesheet" href="{{ URL::to('css/masterLogin.css') }}">
@@ -62,9 +63,7 @@ if (Session::has('perfil'))
 
     <!-- Main content -->
     <section class="content" style="padding-top: 80px">
-
         @yield('content')
-
     </section>
     <!-- /.content -->
   </div>
@@ -277,5 +276,45 @@ if (Session::has('perfil'))
     <script src=" {{ URL::to('plugins/fastclick/fastclick.js')}}"></script>
     <script src=" {{ URL::to('dist/js/app.min.js')}}"></script>
     <script src=" {{ URL::to('dist/js/demo.js')}}"></script>
+    <script src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+    <script>
+
+    $(document).ready(function(){
+        $('#usuarios').DataTable(
+                {
+                  "language": {
+                    "url": "{{ URL::to('/js/dataTables-es.json') }}"
+                  },
+                }
+        )
+     });
+    $(document).ready(function(){
+      $('#instituciones').DataTable(
+              {
+                "language": {
+                  "url": "{{ URL::to('/js/dataTables-es.json') }}"
+                },
+              }
+      )
+    });
+    $(document).ready(function(){
+      $('#docentes').DataTable(
+              {
+                "language": {
+                  "url": "{{ URL::to('/js/dataTables-es.json') }}"
+                },
+              }
+      )
+    });
+    $(document).ready(function(){
+      $('#carreras').DataTable(
+              {
+                "language": {
+                  "url": "{{ URL::to('/js/dataTables-es.json') }}"
+                },
+              }
+      )
+    });
+    </script>
 </body>
 </html>

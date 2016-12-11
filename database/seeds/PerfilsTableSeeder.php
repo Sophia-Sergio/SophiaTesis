@@ -28,14 +28,14 @@ class PerfilsTableSeeder extends Seeder {
                 
                 //perfil usuario
                 \DB::table('perfils')->insert(array(
-                    'codigo_perfil'         => 'USR',
-                    'descripcion_perfil'    => 'Usuario',
+                    'codigo_perfil'         => 'EST',
+                    'descripcion_perfil'    => 'Estudiante',
                     'estado_perfil'         => 'ACTIVO'
                 ));
 
                 \DB::table('perfils')->insert(array(
-                    'codigo_perfil'         => 'SUPERUSR',
-                    'descripcion_perfil'    => 'SuperUsuario',
+                    'codigo_perfil'         => 'ADMEST',
+                    'descripcion_perfil'    => 'Adm. Estudiante',
                     'estado_perfil'         => 'ACTIVO'
                 ));
         }

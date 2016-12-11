@@ -40,7 +40,7 @@ function generateNotSeenFileHTML(response) {
 
     $.each( response, function( key, value ) {
 
-        console.log(value.id);
+        //console.log(value.id);
 
         // Agregar el elemento sólo si no existe
         if(!$( "#li-not-seen-"+value.id ).length) {

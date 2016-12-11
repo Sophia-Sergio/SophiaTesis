@@ -48,6 +48,8 @@ Route::group(['middleware' => ['web']], function(){
 
     Route::get('crearUsuarios', 'UserController@crearUsuarios');
 
+    Route::get('user/seguir_usuario/{user_id}', 'UserController@toggleLikeSeguirUsuario');
+
 
     Route::post('/agregarUsuarioAdmin', [
         'uses' => 'UserController@agregarUsuarioAdmin',
@@ -58,6 +60,7 @@ Route::group(['middleware' => ['web']], function(){
         'as' => 'editUser',
         'middleware' => 'auth'
     ]);
+
     Route::get('/updateUser/{id}', [
         'uses' => 'UserController@update',
         'as' => 'updateUser',
@@ -129,7 +132,12 @@ Route::group(['middleware' => ['web']], function(){
         'as' => 'edit'
     ]);
 
-
+    Route::get
+    ('crearPublicidad', [
+        'uses' => 'UserController@crearPublicidad',
+        'as' => 'crearPublicidad',
+        'middleware' => 'auth'
+    ]);
 
 
     Route::post('/updateProfile', [

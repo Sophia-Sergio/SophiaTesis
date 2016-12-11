@@ -3,12 +3,13 @@ body {
 }
 
 .skin-blue .main-sidebar, .skin-blue .left-side {
-    background-color: DarkOrange;
+	background-color: #cccccc;
 }
 .content-wrapper, .right-side {
-    min-height: 100%;
-    background-color: orange;
-    z-index: 800;
+	min-height: 100%;
+	background-color: #f0f0f5;
+
+	z-index: 800;
 }
 
 .skin-blue .main-header .navbar {

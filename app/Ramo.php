@@ -64,16 +64,18 @@ class Ramo extends Model
         $id_user = Session::get('user')->id;
 
         $posteosRamo = PostRamo::join('carreras', 'id_carrera', '=', 'carreras.id')
-            ->join('users', 'id_user', '=', 'users.id')
-            ->join('usuario_ramo_docentes', 'id_user', '=', 'usuario_ramo_docentes.id_usuario')
-            ->join('ramo_docentes', 'usuario_ramo_docentes.id_ramo_docente', '=', 'ramo_docentes.id')
             ->select('id_carrera', 'contenido', 'id_user',  'post_ramos.id', 'nombre_carrera', 'nombre', 'apellido', 'post_ramos.created_at')
+            ->join('users', 'id_user', '=', 'users.id')
+            ->join('usuario_ramo_docentes', 'id_usuario_ramo_docente', '=', 'usuario_ramo_docentes.id')
+            ->join('ramo_docentes', 'usuario_ramo_docentes.id_ramo_docente', '=', 'ramo_docentes.id')
             ->where('id_carrera', $id_carrera)
             ->where('ramo_docentes.id_ramo', $this->id)
             ->where('post_ramos.estado', '=', 1)
             ->distinct()
             ->orderBy('created_at', 'desc')
             ->get();
+
+//        dd($posteosRamo);
 
         foreach($posteosRamo as $post) {
             $post->n_like = $post->likes()->count();

@@ -25,10 +25,66 @@ if (Session::has('perfil'))
         <h2> Muro de {{ $carrera->nombre_carrera }} </h2>
         <hr/>
     </div>
+
+
+      <div class="panel" Style="padding-left:15px; padding-right:15px">
+          <h4> Usuarios seguidos </h4>
+          <div>
+              <di class="fb-status-container fb-border fb-gray-bg">
+                  <ul class="fb-comments">
+
+                      @foreach($elementosSeguidos as $elemento)
+                      <li>
+
+
+
+                          <a href="#" class="cmt-thumb">
+                              @if (Storage::disk('local')->has($elemento->user_id. '.jpg'))
+                                  <img src="{{ route('profile.image', ['filename' => $elemento->user_id. '.jpg']) }}" alt="" class="img-circle">
+                              @else
+                                  <img src="{{ URL::to('img/man_avatar.jpg')   }}" alt="" class="img-circle">
+                              @endif
+                          </a>
+                          <div class="cmt-details">
+
+
+                              <a href="#"> {{ $elemento->user_nombre }}  {{ $elemento->user_apellido }}</a> <span style="color: #c3c3c3;">
+                                  @if ($elemento->tipo_elemento == 'publicacion_ramo' || $elemento->tipo_elemento == 'publicacion_carrera')
+                                      publicó
+                                  @else
+                                      subió un archivo
+                                  @endif
+
+                                  en {{ $elemento->nom_lugar }} - {{ $elemento->created_at}}</span>
+                              <p>
+                              @if ($elemento->tipo_elemento == 'publicacion_ramo')
+                                      <a href="/ramo/muro/{{ $elemento->id_lugar }}#post_{{ $elemento->id }}" class="post-normal">{{ $elemento->contenido }}</a>
+                              @elseif ($elemento->tipo_elemento == 'publicacion_carrera')
+                                      <a href="#post_{{ $elemento->id }}" class="post-normal">{{ $elemento->contenido }}</a>
+                              @else
+                                      <a href="/download/{{ $elemento->id }}">{{ $elemento->contenido }}</a>
+                              @endif
+                              </p>
+
+                          </div>
+
+
+                      </li>
+                      @endforeach
+
+                  </ul>
+              </di>
+          </div>
+
+      </div>
+
+
+
+
       <div id="postContent">
           @include('ramo.forms.postCarrera')
           @foreach($posteosCarrera as $posteoCarrera)
-          <div class="panel">
+          <div class="panel" id="post_{{ $posteoCarrera->id }}">
 
             <div class="panel-body">
 

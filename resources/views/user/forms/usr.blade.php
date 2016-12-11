@@ -7,12 +7,10 @@ if (Session::has('perfil'))
 ?>
 <div class="col-sm-2">
 </div>
-<div class="col-sm-6">
-	<div class="">
-
-		<h3><i class="fa fa-shield"></i>Edición de Usuarios</h3>
+<div class="col-sm-8">
+	<div class="panel" style="padding-left:15px; padding-right:15px; text-align:center ">
+		<h3><i class="fa fa-shield"></i> Creación de Usuarios</h3>
 	  	<hr>
-
 		<div class="form-group">
 		  <label class="control-label" for="">Nombre</label>
 		  <input type="text" class="form-control" name="nombre" placeholder="Nombre" value="{{$usuarioEditar->nombre}}">
@@ -54,5 +52,8 @@ if (Session::has('perfil'))
 		</div>
 
 		{!!Form::submit('Actualizar',['class'=>'btn btn-primary', 'style'=>'width:100%'])!!}
+
+		<hr>
+
 	</div>
 </div>

@@ -31,7 +31,7 @@ if (Session::has('perfil'))
         <div id="postContent">
             @include('ramo.forms.postRamo')
             @foreach($posteosRamos as $posteoRamo)
-                <div class="panel" >
+                <div class="panel" id="post_{{ $posteoRamo->id }}" >
 
                     <div class="panel-body">
 
