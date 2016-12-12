@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Sophia\Comentario;
 use Sophia\Http\Requests;
 use Sophia\TipoInstitucion;
 use Sophia\Institucion;
@@ -320,7 +321,6 @@ class UserController extends Controller
     {
         $publicidad = new Publicidad();
         $storagePath = storage_path();
-
         $file = \Request::file('image');
         $publicidad->name = $file->getClientOriginalName();
         $publicidad->size = $file->getClientSize();
@@ -334,6 +334,39 @@ class UserController extends Controller
             $filename = 'id'.$publicidad->id.'_publicidad.jpg';
             Storage::disk()->put($filename, File::get($file));
         }
+        return redirect()->back();
+    }
+    public function comentarPosteoCarrera(Request $request, $id_posteo_carrera)
+    {
+        $id_usuario= Session::get('user')->id;
+        $comentario = new Comentario();
+        $comentario->id_usuario = $id_usuario;
+        $comentario->id_post_carrera = $id_posteo_carrera;
+        $comentario->contenido = $request['comentario'];
+        $comentario->id_post_ramo = 0;
+        $comentario->save();
+        return redirect()->route('dashboard');
+    }
+    public function comentarPosteoRamo(Request $request, $id_posteo_ramo)
+    {
+        $id_usuario= Session::get('user')->id;
+        $comentario = new Comentario();
+        $comentario->id_usuario = $id_usuario;
+        $comentario->id_post_carrera = 0;
+        $comentario->contenido = $request['comentario'];
+        $comentario->id_post_ramo = $id_posteo_ramo;
+        $comentario->save();
+
+
+        $id_ramo= DB::table('post_ramos')
+            ->join('usuario_ramo_docentes', 'post_ramos.id_usuario_ramo_docente', '=', 'usuario_ramo_docentes.id')
+            ->join('ramo_docentes', 'usuario_ramo_docentes.id_ramo_docente', '=', 'ramo_docentes.id')
+            ->join('ramos', 'ramo_docentes.id_ramo', '=', 'ramos.id')
+            ->select('ramos.id')
+            ->where('post_ramos.id', $id_posteo_ramo)
+            ->distinct()
+            ->first();
+        return redirect()->back();
     }
 
     public function updateProfile(Request $request)
@@ -477,7 +510,12 @@ class UserController extends Controller
         $id = Session::get('user')->id;
         $usuario = Session::get('user');
 
-
+        $comentarioCarreraPosts =  DB::table('comentarios')
+            ->join('post_carreras', 'comentarios.id_post_carrera', '=', 'post_carreras.id')
+            ->join('users', 'comentarios.id_usuario', '=', 'users.id')
+            ->select('users.nombre','users.apellido','comentarios.contenido', 'comentarios.created_at', 'comentarios.id_post_carrera', 'comentarios.id_post_ramo')
+            ->distinct()
+            ->get();
 
         $perfil = DB::table('users')
                 ->join('usuario_perfils', 'usuario_perfils.id_usuario', '=', 'users.id')
@@ -485,8 +523,8 @@ class UserController extends Controller
                 ->where('usuario_perfils.id_usuario', '=', $id)
                 ->distinct()
                 ->first();
-        $id_publicidad = DB::table('publicidads')
-            ->select('id')
+        $publicidad = DB::table('publicidads')
+            ->select('id', 'url')
             ->orderBy('id', 'desc')
             ->first();
 
@@ -563,7 +601,8 @@ class UserController extends Controller
             return view('user.index', [
                 'elementosSeguidos' => $elementosSeguidos
             ])->with(['perfil' => $perfil,
-            'id_publicidad' => $id_publicidad->id
+            'publicidad' => $publicidad,
+            'comentarioCarreraPosts' => $comentarioCarreraPosts,
             ]);
         }
     }

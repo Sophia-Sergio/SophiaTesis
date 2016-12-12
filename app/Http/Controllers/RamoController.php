@@ -24,6 +24,13 @@ class RamoController extends Controller
 
         $posteosRamo = $ramo->getPost($id_carrera, $id_ramo);
 
+        $comentarioRamoPosts =  DB::table('comentarios')
+            ->join('post_ramos', 'comentarios.id_post_ramo', '=', 'post_ramos.id')
+            ->join('users', 'comentarios.id_usuario', '=', 'users.id')
+            ->select('users.nombre','users.apellido','comentarios.contenido', 'comentarios.created_at', 'comentarios.id_post_carrera', 'comentarios.id_post_ramo')
+            ->distinct()
+            ->get();
+
         $id_usuario_ramo_docente = DB::table('usuario_ramo_docentes')
             ->join('ramo_docentes', 'id_ramo_docente', '=', 'ramo_docentes.id')
             ->select('usuario_ramo_docentes.id')
@@ -52,7 +59,8 @@ class RamoController extends Controller
 
         return view("ramo.muro", [
             'ramo' => $ramo,
-            'posteosRamos' => $posteosRamo
+            'posteosRamos' => $posteosRamo,
+            'comentarioRamoPosts' => $comentarioRamoPosts
         ]);
     }
 
