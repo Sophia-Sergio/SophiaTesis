@@ -1,6 +1,6 @@
-  <aside class="main-sidebar" >
+  <aside class="main-sidebar"  style="position:fixed !important; right:0px; top:0px; z-index:10 !important">
     <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
+    <section class="sidebar" >
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
@@ -48,21 +48,6 @@
             </ul>
         </li>
       @endforeach
-      </ul>
-      <ul class="sidebar-menu">
-        <a href="{{ route('dashboard')}}"><li class="header" style="color:white; background-color: black"><b>Orientación Educativa</b></li></a>
-          <li class="treeview">
-            <a href="">
-              <i class="fa fa-folder"></i><span>Información general</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right" ></i>
-            </span>
-            </a>
-            <ul class="treeview-menu">
-              <li><a href="/ramos_dificiles"><i class="fa fa-circle-o"></i> Ramos más difíciles</a></li>
-              <li><a href="/profesores_dificiles{{$ramo->id_ramo}}"><i class="fa fa-circle-o"></i> Profesores más exigentes</a></li>
-            </ul>
-          </li>
       </ul>
     </section>
     <!-- /.sidebar -->

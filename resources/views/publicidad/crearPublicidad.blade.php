@@ -11,17 +11,16 @@
             <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
             <div class="form-group">
                 <label class="control-label" for="" >Ingrese URL</label>
-                <input type="text" class="form-control" id="url" name="url" placeholder="url" value="" required >
+                <input type="url" class="form-control" id="url" name="url" placeholder="url" value="" required >
             </div>
             <div class="form-group">
                 <label for="image">Seleccione Imagen (solamente .jpg)</label>
                 <input type="file" name="image" class="form-control" id="image">
             </div>
             <div class="form-group">
-                <input type="submit" class="btn btn-primary btn-block" value="Enviar">
+                <input type="submit" class="btn btn-primary btn-block" id="enviar" value="Enviar">
             </div>
         </form>
 
     </div>
-
 @endsection

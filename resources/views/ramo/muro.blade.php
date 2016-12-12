@@ -61,9 +61,8 @@ if (Session::has('perfil'))
                                 @endif
 
                                 <span>-</span>
-                                <a href="#" title="Deja un comentario">Comentar</a>
+                                <a href="#" title="Deja un comentario"data-toggle="collapse" data-target="#ver-comentarios-{{$posteoRamo->id}}" aria-expanded="false" aria-controls="collapseExample">Comentar</a>
                                 <span>-</span>
-                                <a href="#" title="Comparte con tus compañeros">Compartir</a>
                                 @if($posteoRamo->id_user == $usuario->id  || $perfil=='3' )
                                     <span>-</span>
                                     <a href="#" class="edit" title="Edita tu comentario">Editar</a>
@@ -85,6 +84,28 @@ if (Session::has('perfil'))
 
                             <div class="clearfix"></div>
                         </di>
+                    </div>
+                    <div class="collapse" id="ver-comentarios-{{$posteoRamo->id}}">
+                        <ul class="fb-comments">
+                            @foreach($comentarioRamoPosts as $comentarioRamoPost)
+                                @if ($comentarioRamoPost->id_post_ramo==$posteoRamo->id)
+                                    <li>
+                                        <div class="cmt-details">
+                                            <a href="#">{{$comentarioRamoPost->nombre}}</a>
+                                            <span> {{$comentarioRamoPost->contenido}}  </span>
+                                            <p>{{$comentarioRamoPost->created_at}}</p>
+                                        </div>
+                                    </li>
+                                @endif
+                            @endforeach
+                        </ul>
+                        <div class="well">
+                            <form action="{{ route('comentarPosteoRamo', ['id_posteo_ramo' => $posteoRamo->id], ['id_ramo' => $ramo->id]) }}" method="post">
+                                <input type="text" class="form-control" style="width:70%" id="empresa" name="comentario" placeholder="Comenta" value="" required >
+                                <button type="submit" class="btn btn-info pull-right" style="width:20%; margin-top:-33px;">Comentar</button>
+                                <input type="hidden" value="{{ Session::token() }}" name="_token" id="_token">
+                            </form>
+                        </div>
                     </div>
                 </div>
             @endforeach

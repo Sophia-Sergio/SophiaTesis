@@ -18,12 +18,12 @@ if (Session::has('perfil'))
 ?>
 <!-- http://bootdey.com/snippets/view/social-network-wall // de aquí saqué el template-->
 <script type="text/javascript" src="{{ URL::asset('js/carrera/dashboard/controller.js') }}"></script>
-<link rel="stylesheet" href="{{asset('css/index_UsuarioMuro.css')}}">  
+<link rel="stylesheet" href="{{asset('css/index_UsuarioMuro.css')}}">
 <div class="container bootstrap snippet" Style="width:95%">
   <div class="row">
       <div class="col-sm-8">
 
-        <div class="panel" Style="padding-left:15px; padding-right:15px; text-align:center ">
+        <div class="panel" Style="padding-left:15px; padding-right:15px; text-align:center">
             <h2> Muro de {{ $carrera->nombre_carrera }} </h2>
             <hr/>
         </div>
@@ -60,9 +60,8 @@ if (Session::has('perfil'))
                                 @endif
 
                                 <span>-</span>
-                                <a href="#" title="Deja un comentario">Comentar</a>
+                                <a href="#" title="Deja un comentario" data-toggle="collapse" data-target="#ver-comentarios-{{$posteoCarrera->id}}" aria-expanded="false" aria-controls="collapseExample">Comentar</a>
                                 <span>-</span>
-                                <a href="#" title="Comparte con tus compañeros">Compartir</a>
                                 @if($posteoCarrera->id_user == $usuario->id || $perfil=='3' )
                                     <span>-</span>
                                     <a href="#" class="edit" title="Edita tu comentario">Editar</a>
@@ -73,15 +72,37 @@ if (Session::has('perfil'))
                         </div>
                     </div>
 
-                    <di class="fb-status-container fb-border fb-gray-bg">
+                    <div class="fb-status-container fb-border fb-gray-bg">
                         <div class="fb-time-action like-info">
                             <span>A</span>
                             <a href="#" id="{{$posteoCarrera->id}}_cont" >{{ $posteoCarrera->n_like_str }}</a>
                             <span>les gusta esto</span>
                         </div>
                         <div class="clearfix"></div>
-                    </di>
+                    </div>
                 </div>
+                  <div class="collapse" id="ver-comentarios-{{$posteoCarrera->id}}">
+                      <ul class="fb-comments">
+                      @foreach($comentarioCarreraPosts as $comentarioCarreraPost)
+                          @if ($comentarioCarreraPost->id_post_carrera==$posteoCarrera->id)
+                          <li>
+                              <div class="cmt-details">
+                                  <a href="#">{{$comentarioCarreraPost->nombre}}</a>
+                                  <span> {{$comentarioCarreraPost->contenido}}  </span>
+                                  <p>{{$comentarioCarreraPost->created_at}}</p>
+                              </div>
+                          </li>
+                          @endif
+                      @endforeach
+                      </ul>
+                      <div class="well">
+                            <form action="{{ route('comentarPosteoCarrera', ['id_posteo_carrera' => $posteoCarrera->id]) }}" method="post">
+                              <input type="text" class="form-control" style="width:70%" id="empresa" name="comentario" placeholder="Comenta" value="" required >
+                              <button type="submit" class="btn btn-info pull-right" style="width:20%; margin-top:-33px;">Comentar</button>
+                              <input type="hidden" value="{{ Session::token() }}" name="_token" id="_token">
+                            </form>
+                      </div>
+                  </div>
               </div>
               @endforeach
             </div>
@@ -91,7 +112,7 @@ if (Session::has('perfil'))
               <h2> Usuarios seguidos </h2>
               <hr>
               <div>
-                  <di class="fb-status-container fb-border fb-gray-bg">
+                  <div class="fb-status-container fb-border fb-gray-bg">
                       <ul class="fb-comments">
 
                           @foreach($elementosSeguidos as $elemento)
@@ -126,23 +147,22 @@ if (Session::has('perfil'))
                                               <a href="/download/{{ $elemento->id }}">{{ $elemento->contenido }}</a>
                                           @endif
                                       </p>
-
                                   </div>
-
-
                               </li>
                           @endforeach
                       </ul>
-                  </di>
+                  </div>
               </div>
           </div>
           <div class="panel" Style="padding-left:15px; padding-right:15px; text-align:center ">
               <h2> Publicidad</h2>
               <hr/>
-              @if (Storage::disk('local')->has($id_publicidad.'_publicidad.jpg'))
+              @if (Storage::disk('local')->has('id'.$publicidad->id.'_publicidad.jpg'))
                   <section class="row" style="text-align:center">
                       <div class="" style="text-align: center; padding-bottom: 20px ;padding-left:15px; padding-right:15px; margin:auto" >
-                          <img class="img-responsive"  src="{{ route('publicidad.image', ['filename' => $id_publicidad.'_publicidad.jpg']) }}" alt="" style="width:100%; height:250px">
+                          <a href="{{$publicidad->url}}">
+                          <img class="img-responsive"  src="{{ route('publicidad.image', ['filename' => 'id'.$publicidad->id.'_publicidad.jpg']) }}" alt="" style="width:100%; height:250px">
+                          </a>
                       </div>
                   </section>
               @endif
