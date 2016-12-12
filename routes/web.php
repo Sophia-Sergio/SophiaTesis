@@ -16,6 +16,19 @@ use Illuminate\Support\Facades\Input;
 
 Route::group(['middleware' => ['web']], function(){
 
+
+    Route::post('/comentarPosteoCarrera/{id_posteo_carrera}', [
+        'uses' => 'UserController@comentarPosteoCarrera',
+        'as' => 'comentarPosteoCarrera',
+        'middleware' => 'auth'
+    ]);
+
+    Route::post('/comentarPosteoRamo/{id_posteo_ramo}', [
+        'uses' => 'UserController@comentarPosteoRamo',
+        'as' => 'comentarPosteoRamo',
+        'middleware' => 'auth'
+    ]);
+
     Route::get('/login', [
         'uses' => 'UserController@signInUp',
         'as' => 'home'
