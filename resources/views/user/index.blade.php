@@ -157,7 +157,8 @@ if (Session::has('perfil'))
           <div class="panel" Style="padding-left:15px; padding-right:15px; text-align:center ">
               <h2> Publicidad</h2>
               <hr/>
-              @if (Storage::disk('local')->has('id'.$publicidad->id.'_publicidad.jpg'))
+              @if ($publicidad)
+                @if (Storage::disk('local')->has('id'.$publicidad->id.'_publicidad.jpg'))
                   <section class="row" style="text-align:center">
                       <div class="" style="text-align: center; padding-bottom: 20px ;padding-left:15px; padding-right:15px; margin:auto" >
                           <a href="{{$publicidad->url}}">
@@ -165,6 +166,7 @@ if (Session::has('perfil'))
                           </a>
                       </div>
                   </section>
+                @endif
               @endif
           </div>
       </div>

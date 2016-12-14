@@ -15,7 +15,7 @@ Sophia | La Red de Estudiantes
                 <hr/>
                 <p style="text-align: justify; font-family: 'Open Sans', sans-serif;">Bienvenido!. Esta es una plataforma donde
                     podr&aacute;s subir y organizar el material de estudio de tu carrera, para que te
-                    sea m&aacute;s f&aacute;cil acceder a todo tu material de estudio. Tambi&eacute;n encontrar&aacute;s informaci&oacute;n
+                    sea m&aacute;s f&aacute;cil acceder a todo tu material académico. Tambi&eacute;n encontrar&aacute;s informaci&oacute;n
                     y tips sobre la carrera que actualmente est&aacute;s estudiando o, si prefieres, sobre otras
                     que sean de tu interes. &Uacute;nete a nuestra comunidad y comienza a usar nuestros servicios
                     de forma absolutamente GRATUITA.</p>

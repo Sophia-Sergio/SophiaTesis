@@ -1,19 +1,19 @@
 <div class="col-sm-2">
 </div>
-<div class="col-sm-6">
+<div class="col-sm-8">
 <div id="notificacion_resul_fanu"></div>
-	<div class="panel" style="padding-left:15px; padding-right:15px; text-align:center "">
-		<h3><i class="fa fa-shield"></i> Edición de Usuarios</h3>
+	<div class="panel" style="padding-left:15px; padding-right:15px; text-align:center">
+		<h3><i class="fa fa-shield"></i> Creación de Usuarios</h3>
 	  	<hr>
 	  	<form id="f_nuevo_usuario" method="post" action="agregarUsuarioAdmin" class="form_entrada" >
 	  	<input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">    
 			<div class="form-group">
 			  <label class="control-label" for="" >Nombre</label>
-			  <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" value="" required >
+			  <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" value="{{ Request::old('nombre') }}" required >
 			</div>
 			<div class="form-group">
 			  <label class="control-label" for="">Apellido</label>
-			  <input type="text" class="form-control" name="apellido" id="nombre" placeholder="Apellido" value="" required >
+			  <input type="text" class="form-control" name="apellido" id="apellido" placeholder="Apellido" value="{{ Request::old('apellido') }}"required >
 			</div>
 			<div class="form-group">
 			  <label class="control-label" for="">Email</label>

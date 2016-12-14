@@ -134,7 +134,7 @@ birth_year
 			</div>
 
         <small>
-            Estimado usuario, al registrarse usted acepta los <a href="terminos"><b>t�rminos de uso</b></a>  de Sophia.
+            Estimado usuario, al registrarse usted acepta los <a href="terminos"><b>términos de uso</b></a>  de Sophia.
         </small>
         <div style="height:10px;"></div>
         <div class="form-group">

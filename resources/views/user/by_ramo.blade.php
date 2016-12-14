@@ -40,7 +40,7 @@ $perfil = Session::get('perfil')->id_perfil;
                                         <td>{{ $user->apellido }}</td>
                                         <td><a href="{{ route('messages.check_msg', ['user1' => $user->id, 'user2' => Auth::user()->id]) }}" class="btn btn-success">Enviar Mensaje</a></td>
                                         <td>
-                                            <a href="javascript:" id="{{ $user->id }}" class="btn btn-success btn-seguir">
+                                            <a href="javascript:" id="{{ $user->id }}" class="btn btn-success btn-seguir" style="width:130px">
                                             @if ($user->siguiendo == true)
                                                 Dejar de seguir
                                             @else
@@ -49,13 +49,24 @@ $perfil = Session::get('perfil')->id_perfil;
                                             </a>
                                         </td>
                                         @if ($perfil=='3')
-                                        <td>
-                                            <select class="form-control" name="perfil" id="perfil">
-                                                <option  value="0" selected="selected" disabled="disabled">Seleccione...</option>
-                                                <option  value="1"  <?php if ($user->estado== 1) echo "selected='selected'";?>>Activo</option>
-                                                <option  value="0" <?php if ($user->estado == 0) echo "selected='selected'";?>>Inactivo</option>
-                                            </select>
-                                        </td>
+                                            @if ($user->estado==1)
+                                                <form action="{{ route('AdmEstudianteBloquearUsuario', ['id_user'=>$user->id]) }}" method="post">
+                                                    <td>
+                                                        <input type="hidden" value="{{ Session::token() }}" name="_token" id="_token">
+                                                        <button class="btn btn-success btn-seguir" style="width:130px" type="submit">Bloquear</button>                                               </button>
+                                                    </td>
+
+                                                </form>
+                                            @endif
+                                                @if ($user->estado==0)
+                                                    <form action="{{ route('AdmEstudianteDesbloquearUsuario', ['id_user'=>$user->id]) }}" method="post">
+                                                        <td>
+                                                            <input type="hidden" value="{{ Session::token() }}" name="_token" id="_token">
+                                                            <button class="btn btn-success btn-seguir" style="width:130px" type="submit">Bloqueado</button>                                               </button>
+                                                        </td>
+
+                                                    </form>
+                                                @endif
                                         @endif
                                     </tr>
                                 @endif

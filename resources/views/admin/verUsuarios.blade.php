@@ -25,7 +25,8 @@
 				<td>{{$usuario->fecha_nacimiento}}</td>
 				<td>{{$usuario->email}}</td>
 				<td>{{$usuario->descripcion_perfil}}</td>
-				<td>{{$usuario->estado}}</td>
+				<td><?php if ($usuario->estado == 1) echo "Activo";
+					if ($usuario->estado == 0) echo "Inactivo";;?></td>
 				<td>
 					<a href="{{ route('editUser', $usuario->id ) }}" class="btn btn-primary">Editar
 					</a>

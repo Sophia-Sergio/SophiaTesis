@@ -16,6 +16,17 @@ use Illuminate\Support\Facades\Input;
 
 Route::group(['middleware' => ['web']], function(){
 
+    Route::post('/AdmEstudianteBloquearUsuario/{id_user}', [
+        'uses' => 'UserController@AdmEstudianteBloquearUsuario',
+        'as' => 'AdmEstudianteBloquearUsuario',
+    ]);
+    Route::post('/AdmEstudianteDesbloquearUsuario/{id_user}', [
+        'uses' => 'UserController@AdmEstudianteDesbloquearUsuario',
+        'as' => 'AdmEstudianteDesbloquearUsuario',
+    ]);
+
+
+
 
     Route::post('/comentarPosteoCarrera/{id_posteo_carrera}', [
         'uses' => 'UserController@comentarPosteoCarrera',

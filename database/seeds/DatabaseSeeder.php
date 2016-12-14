@@ -35,7 +35,5 @@ class DatabaseSeeder extends Seeder {
       $this->call('UsuarioRamoDocentesTableSeeder');
       $this->call('AdministradorTableSeeder');
       $this->call('ModulosTableSeeder');
-
-
 	}
 }

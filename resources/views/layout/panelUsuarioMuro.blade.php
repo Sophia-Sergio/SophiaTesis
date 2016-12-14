@@ -17,7 +17,9 @@
         </br>
         </br>
       </div>
+
       <!-- search form -->
+      <!--
       <form action="#" method="get" class="sidebar-form">
         <div class="input-group">
           <input type="text" name="q" class="form-control" placeholder="Search...">
@@ -27,6 +29,7 @@
               </span>
         </div>
       </form>
+      -->
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
@@ -44,7 +47,7 @@
                 <li><a href="/ramo/muro/{{$ramo->id_ramo}}"><i class="fa fa-circle-o"></i> Muro</a></li>
                 <li><a href="/ramo/contenido/{{$ramo->id_ramo}}"><i class="fa fa-circle-o"></i> Contenidos</a></li>
                 <li><a href="{{ route('messages.my_messages', ['ramo' => $ramo->id]) }}"><i class="fa fa-circle-o"></i> Mensajes</a></li>
-                <li><a href="{{ route('users.by_ramo', ['ramo' => $ramo->id]) }}"><i class="fa fa-circle-o"></i> Usuarios</a></li>
+                <li><a href="{{ route('users.by_ramo', ['ramo' => $ramo->id]) }}"><i class="fa fa-circle-o"></i> Compañeros</a></li>
             </ul>
         </li>
       @endforeach

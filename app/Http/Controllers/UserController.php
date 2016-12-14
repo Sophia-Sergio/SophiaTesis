@@ -41,6 +41,22 @@ class UserController extends Controller
      * Vista de sign in y sign up
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
+
+    public function AdmEstudianteBloquearUsuario($id_usuario)
+    {
+        $usuario=User::find($id_usuario);
+        $usuario->estado =0;
+        $usuario->save();
+        return redirect()->back();
+    }
+    public function AdmEstudianteDesbloquearUsuario($id_usuario)
+    {
+        $usuario=User::find($id_usuario);
+        $usuario->estado =1;
+        $usuario->save();
+        return redirect()->back();
+    }
+
     public function signInUp()
     {
         if (Auth::check()) {

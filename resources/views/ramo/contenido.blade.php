@@ -81,12 +81,10 @@
                 </table>
             </div>
         </div>
-
         <section class="row">
             <div class="panel" Style="padding-left:15px; padding-right:15px; padding-top:15px">
                 <h4>Archivos Públicos</h4>
                 <hr>
-
                 <table id="public-files-table" class="table table-striped table-hover table-condensed">
                     <thead>
                     <tr>
@@ -97,6 +95,7 @@
                         <th>Extensión</th>
                         <th>Tipo</th>
                         <th>Acción</th>
+
                     </tr>
                     </thead>
                 </table>

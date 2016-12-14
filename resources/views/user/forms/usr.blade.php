@@ -54,6 +54,5 @@ if (Session::has('perfil'))
 		{!!Form::submit('Actualizar',['class'=>'btn btn-primary', 'style'=>'width:100%'])!!}
 
 		<hr>
-
 	</div>
 </div>

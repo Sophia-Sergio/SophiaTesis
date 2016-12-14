@@ -27,6 +27,7 @@ class UsuarioRamoDocentesTableSeeder extends Seeder {
         \DB::table('usuario_ramo_docentes')->insertGetId(array('id_usuario' => 1, 'id_ramo_docente' => 8));
         \DB::table('usuario_ramo_docentes')->insertGetId(array('id_usuario' => 1, 'id_ramo_docente' => 9));
         \DB::table('usuario_ramo_docentes')->insertGetId(array('id_usuario' => 1, 'id_ramo_docente' => 10));
+
         }
 
 }
