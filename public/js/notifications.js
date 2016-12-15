@@ -20,7 +20,12 @@ window.setInterval(function(){
 function getNotSeenFiles() {
     $.get( endPointNotSeenFiles, function( response ) {
 
-        $('.total-notifications').text(response.length);
+        if (response.length >= 1) {
+            $('.total-notifications').show().text(response.length);
+        } else {
+            $('.total-notifications').hide().text(response.length);
+        }
+
         $('#title-new-notifications').text('Hay ' + response.length + ' archivos nuevos')
 
         if (!$("#open-read-notification").hasClass('open')) {
