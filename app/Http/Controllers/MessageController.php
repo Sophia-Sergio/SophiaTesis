@@ -101,7 +101,8 @@ class MessageController extends Controller
             'uuid' => $request['uuid'],
             'sender' => Auth::user()->id,
             'receiver' => Auth::user()->id != $message->receiver ? $message->receiver : $message->sender,
-            'message' => $request['message']
+            'message' => $request['message'],
+            'ramo_id' => $message->ramo_id
         ]);
 
         return response()->json(['status' => 1], 200);

@@ -62,7 +62,12 @@ function generateNotSeenFileHTML(response) {
 function getUnreadMsg() {
     $.get( endPointUnreadMessage, function( response ) {
 
-        $('#count-new-msg').text(response.length);
+        if (response.length >= 1) {
+            $('#count-new-msg').show().text(response.length);
+        } else {
+            $('#count-new-msg').hide().text(response.length);
+        }
+
         $('#title-new-msg').text('Tienes ' + response.length + ' mensajes nuevos')
 
         if (!$("#open-read-msg").hasClass('open')) {
