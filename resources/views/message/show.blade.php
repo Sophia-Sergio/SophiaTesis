@@ -1,7 +1,7 @@
 @extends('layout.masterUsuario')
 
 @section('title')
-    Sophia | Registro Académico
+    Sophia | Conversaciones
 @endsection
 
 
@@ -10,6 +10,14 @@
         <div class="col-sm-10">
             <div class="panel panel-default">
                 <div class="panel-body" style="padding-left:50px;  padding-top:25px; padding-right:50px; padding-bottom:30px" >
+
+                    <div>
+                        <img src="{{ $avatarWith }}" alt="", style="width:50px; height:50px;display:inline-block;">
+                        <h3 style="display:inline-block; margin-top:10px;">{{ $chatWith }}</h3>
+                    </div>
+                    <br>
+                    <h5>Ramo: {{ $ramo->nombre_ramo }}</h5>
+                    <br>
 
                     <div class="row current-chat-area">
                         <div id="msg-container" class="col-md-12" style="height: 200px; overflow-y: scroll;">

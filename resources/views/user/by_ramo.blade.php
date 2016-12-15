@@ -1,7 +1,7 @@
 @extends('layout.masterUsuario')
 
 @section('title')
-Sophia | Registro Académico
+Sophia | Compañeros
 @endsection
 <?php
 if (Session::has('perfil'))
@@ -38,7 +38,7 @@ $perfil = Session::get('perfil')->id_perfil;
                                     <tr>
                                         <td>{{ $user->nombre }}</td>
                                         <td>{{ $user->apellido }}</td>
-                                        <td><a href="{{ route('messages.check_msg', ['user1' => $user->id, 'user2' => Auth::user()->id]) }}" class="btn btn-success">Enviar Mensaje</a></td>
+                                        <td><a href="{{ route('messages.check_msg', ['user1' => $user->id, 'user2' => Auth::user()->id, 'ramo' => Request::segment(2)]) }}" class="btn btn-success">Enviar Mensaje</a></td>
                                         <td>
                                             <a href="javascript:" id="{{ $user->id }}" class="btn btn-success btn-seguir" style="width:130px">
                                             @if ($user->siguiendo == true)

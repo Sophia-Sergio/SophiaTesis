@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\URL;
 use Sophia\Http\Requests\StoreMessage;
 use Sophia\Message;
 use Sophia\OauthIdentity;
+use Sophia\Ramo;
 use Sophia\User;
 use Carbon\Carbon;
 
@@ -132,6 +133,17 @@ class MessageController extends Controller
             $receiverName = User::find($message->receiver);
             $message->receiver_name = $receiverName->getFullName();
 
+            if ($message->sender != Auth::id()) {
+                $chatWith = $message->sender_name;
+                $avatarWith = User::getAvatar($message->sender);
+            } else {
+                $chatWith = $message->receiver_name;
+                $avatarWith = User::getAvatar($message->receiver);
+            }
+
+            $ramo = Ramo::find($message->ramo_id);
+
+
             // Set created at format
             $date = Carbon::createFromFormat('Y-m-d H:i:s', $message->created_at)->format('E\l d-m-Y \a \l\a\s H:i');
             $message->formated_date = $date;
@@ -150,7 +162,7 @@ class MessageController extends Controller
             }
         }
 
-        return view('message.show', compact('messages'));
+        return view('message.show', compact('messages', 'chatWith', 'avatarWith','ramo'));
     }
 
     public function chats($uuid)
@@ -224,7 +236,7 @@ class MessageController extends Controller
         //
     }
 
-    public function checkmsg($user1, $user2)
+    public function checkmsg($user1, $user2, $ramo)
     {
         $messages = Message::where('sender', $user1)
             ->where('receiver', $user2)
@@ -248,7 +260,8 @@ class MessageController extends Controller
             'uuid' => $uuid,
             'sender' => $user1,
             'receiver' => $user2,
-            'message' => '-'
+            'message' => '-',
+            'ramo_id' => $ramo
         ]);
 
         return redirect()->route('messages.show', ['id' => $uuid]);

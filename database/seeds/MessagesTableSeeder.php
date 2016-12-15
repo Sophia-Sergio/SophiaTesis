@@ -13,7 +13,7 @@ class MessagesTableSeeder extends Seeder
     {
         $faker = Faker\Factory::create();
 
-        for ($i=0; $i<=50; $i++) {
+        /*for ($i=0; $i<=50; $i++) {
             DB::table('messages')->insert([
                 'uuid' => substr(md5(microtime()),rand(0,26),10),
                 'sender' => rand(1, 50),
@@ -21,6 +21,6 @@ class MessagesTableSeeder extends Seeder
                 'message' => $faker->text,
                 'created_at' => date('Y-m-d H:i:s')
             ]);
-        }
+        }*/
     }
 }
