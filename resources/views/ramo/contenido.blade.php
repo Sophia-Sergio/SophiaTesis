@@ -88,12 +88,12 @@
                 <table id="public-files-table" class="table table-striped table-hover table-condensed">
                     <thead>
                     <tr>
-                        <th>Subido Por</th>
                         <th>Nombre</th>
                         <th>Creado</th>
                         <th>Tamaño</th>
                         <th>Extensión</th>
                         <th>Tipo</th>
+                        <th>Subido Por</th>
                         <th>Acción</th>
 
                     </tr>
@@ -217,12 +217,12 @@
                 method: 'POST'
             },
             columns: [
-                { data: 'nombre', name: 'nombre' },
                 { data: 'name', name: 'name' },
                 { data: 'created_at', name: 'created_at' },
                 { data: 'size', name: 'size' },
                 { data: 'extension', name: 'extension' },
                 { data: 'type', name: 'type' },
+                { data: 'nombre', name: 'nombre' },
                 { data: 'action', name: 'action' }
             ],
             initComplete: function () {
