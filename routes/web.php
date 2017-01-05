@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Input;
 
 
 
-Route::group(['middleware' => ['web']], function(){
+Route::group(['middleware' => ['web']], function() {
+
+    require_once 'Routes/UsersRoute.php';
 
     Route::post('/AdmEstudianteBloquearUsuario/{id_user}', [
         'uses' => 'UserController@AdmEstudianteBloquearUsuario',
@@ -45,11 +47,6 @@ Route::group(['middleware' => ['web']], function(){
         'as' => 'home'
     ]);
 
-    Route::get('/', [
-        'uses' => 'UserController@signInUp',
-        'as' => 'home'
-    ]);
-
     /*Route::get('login', function () {
         return view('welcome');
     })->name('home');
@@ -61,11 +58,6 @@ Route::group(['middleware' => ['web']], function(){
     Route::post('/signup', [
         'uses' => 'UserController@postSignUp',
         'as' => 'signup'
-    ]);
-
-    Route::post('/signin', [
-        'uses' => 'UserController@postSignIn',
-        'as' => 'signin'
     ]);
 
     Route::get('verUsuarios', 'UserController@verUsuarios');

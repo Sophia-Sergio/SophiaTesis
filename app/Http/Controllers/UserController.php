@@ -57,15 +57,6 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-    public function signInUp()
-    {
-        if (Auth::check()) {
-            return redirect('/dashboard');
-        } else {
-            return view('welcome');
-        }
-    }
-
     //ADMINISTADROR
     public function create()
     {

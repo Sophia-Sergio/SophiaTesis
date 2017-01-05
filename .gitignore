@@ -12,3 +12,4 @@ storage/documentos
 storage/logs
 /storage/framework/sessions
 storage/framework/sessions
+/nbproject
