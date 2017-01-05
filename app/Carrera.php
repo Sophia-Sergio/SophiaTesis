@@ -3,6 +3,7 @@
 namespace Sophia;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Sophia\PostCarrera;
 use Session;
@@ -14,7 +15,7 @@ class Carrera extends Model
     ];
 
     public function getPost() {
-        $id_user = Session::get('user')->id;
+        $id_user = Auth::user()->id;
 
         $posteosCarrera = PostCarrera::join('carreras', 'id_carrera', '=', 'carreras.id')
             ->join('users', 'id_user', '=', 'users.id')

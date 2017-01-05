@@ -491,10 +491,8 @@ class UserController extends Controller
 
     public function getDashboard()
     {
-
-     // se retorna una vista, seg�n tipo de usuario
-        $id = Session::get('user')->id;
-        $usuario = Session::get('user');
+        $id = Auth::user()->id;
+        $usuario = Auth::user();
 
         $comentarioCarreraPosts =  DB::table('comentarios')
             ->join('post_carreras', 'comentarios.id_post_carrera', '=', 'post_carreras.id')
@@ -515,18 +513,17 @@ class UserController extends Controller
             ->first();
 
         Session::put('perfil', $perfil);
-        if ($perfil->id_perfil==1)
-        {
-            return view('admin.index', [
 
-                'user' => $usuario]);
+        if ($perfil->id_perfil == 1) {
+            return view('admin.index', [
+                'user' => $usuario
+            ]);
         }
 
-     // se retorna una vista, seg�n haya ingresado alg�n ramo o no
-
+        // se retorna una vista, seg�n haya ingresado alg�n ramo o no
 
         //consultamos si existe registro en tabla usuario ramo docente
-        if (UsuarioRamoDocente::where('id_usuario', $id )->count()==0) {
+        if (UsuarioRamoDocente::where('id_usuario', $id )->count() == 0) {
             // si no existe redireccionamos nuevamente a la pagina de registro academico
             //cargamos en variable los tipos de institucion
             $tipos_institucion = TipoInstitucion::all();
@@ -536,7 +533,7 @@ class UserController extends Controller
 
             //retornamos la vista de registro academico
             return view('user.registroAcademico');
-        }else {
+        } else {
             // en caso de que el alumno ya este registrado
             // comenzamos a cargar la información para el dashboard
             // cargamos los ramos seleccionados por el alumno
@@ -561,7 +558,6 @@ class UserController extends Controller
 
             //cargamos en variable session la carrera seleccionada por el alumno
             Session::put('carrera', $carrera);
-
 
             $id_carrera = $carrera->id_carrera;
 
@@ -589,6 +585,7 @@ class UserController extends Controller
             ])->with(['perfil' => $perfil,
             'publicidad' => $publicidad,
             'comentarioCarreraPosts' => $comentarioCarreraPosts,
+                'posteosCarrera' => $posteosCarrera
             ]);
         }
     }

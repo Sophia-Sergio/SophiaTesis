@@ -57,23 +57,23 @@
                   <!-- User Account: style can be found in dropdown.less -->
                   <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                      @if (Storage::disk('local')->has( $usuario->id . '.jpg'))
-                        <img src="{{ route('profile.image', ['filename' => $usuario->id . '.jpg']) }}" alt="" class="user-image">
+                      @if (Storage::disk('local')->has( Auth::user()->id . '.jpg'))
+                        <img src="{{ route('profile.image', ['filename' => Auth::user()->id . '.jpg']) }}" alt="" class="user-image">
                       @else
                         <img src="{{ URL::to('img/man_avatar.jpg')   }}" alt="" class="user-image">
                       @endif
-                      <span class="hidden-xs">{{$usuario->nombre}} {{$usuario->apellido}}</span>
+                      <span class="hidden-xs">{{Auth::user()->nombre}} {{Auth::user()->apellido}}</span>
                     </a>
                     <ul class="dropdown-menu">
                       <!-- User image -->
                       <li class="user-header">
-                        @if (Storage::disk('local')->has( $usuario->id . '.jpg'))
-                              <img src="{{ route('profile.image', ['filename' => $usuario->id . '.jpg']) }}" alt="" class="img-circle">
+                        @if (Storage::disk('local')->has( Auth::user()->id . '.jpg'))
+                              <img src="{{ route('profile.image', ['filename' => Auth::user()->id . '.jpg']) }}" alt="" class="img-circle">
                         @else
                           <img src="{{ URL::to('img/man_avatar.jpg')   }}" alt="" class="img-circle">
                         @endif
                         <p>
-                          {{$usuario->nombre}} {{$usuario->apellido}}
+                          {{Auth::user()->nombre}} {{Auth::user()->apellido}}
                           @if ($perfil=='2')
                             - Estudiante
                           @else
@@ -103,24 +103,20 @@
                         </div>
                         <!-- /.row -->
                       </li>
-                      <!-- Menu Footer-->
-                      <li class="user-footer">
-                        <div class="pull-left">
-                          <a href="{{ route('profile') }}" class="btn btn-default btn-flat">Perfil</a>
-                        </div>
-                        <div class="pull-right">
-                          <a href="{{ route('logout') }}" class="btn btn-default btn-flat">Cerrar Sesión</a>
-                        </div>
-                      </li>
-                    </ul>
-                  </li>
-                  <!-- Control Sidebar Toggle Button -->
-                  <li>
-                    <!--<a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>-->
-                  </li>
+                                    <li class="user-footer">
+                                        <div class="pull-left">
+                                            <a href="{{ route('profile') }}" class="btn btn-default btn-flat">Perfil</a>
+                                        </div>
+                                        <div class="pull-right">
+                                            <a href="{{ route('logout') }}" class="btn btn-default btn-flat">Cerrar Sesión</a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                        <li>
+                    </li>
                 </ul>
-              </div>
-    </nav>
+            </div>
+        </nav>
     </div>
-
-  </header>
+</header>
