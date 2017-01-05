@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Input;
 */
 
 
-
+Auth::routes();
 
 Route::group(['middleware' => ['web']], function() {
 

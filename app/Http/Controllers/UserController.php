@@ -488,31 +488,10 @@ class UserController extends Controller
         return redirect()->route('dashboard');
 
     }
-    public function postSignIn(Request $request)
-    {
-        $this->validate($request, [
-            'email_' => 'email|required',
-            'password_' => 'required'
-        ]);
-
-        if(Auth::attempt(['email'=> $request['email_'], 'password'=> $request['password_']])){
-            $email = $request['email_'];
-            $user = User::where('email', $email)->first();
-            Session::put('user', $user);
-            Auth::login($user);
-            return redirect()->route('dashboard');
-        }else{
-            $message = "Debe Registrarse antes de iniciar";
-            return redirect()->back()->with(['message' => $message]); //le entrego a la sesi�n un mensaje de error
-        }
-    }
-
-
-
 
     public function getDashboard()
     {
-   
+
      // se retorna una vista, seg�n tipo de usuario
         $id = Session::get('user')->id;
         $usuario = Session::get('user');

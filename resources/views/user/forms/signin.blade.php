@@ -1,12 +1,15 @@
-<form action="{{ route('signin') }}" method="post">
+<form action="{{ url('/login') }}" method="post">
+
+    {{ csrf_field() }}
+
     <div class="navbar-custom-menu" name="menu1">
         <ul class="nav navbar-nav" >
             <div style="float: left; margin:12px 20px 0px 0px;">
-            <input id="email_" name="email_" type="email" placeholder=" Usuario (email)" value="">
-            <input id="password_" name="password_" type="password" placeholder=" Password">
-            <input type="hidden" name="_token" value="{{ Session::token() }}">
+                <input id="email" name="email" type="email" placeholder="Email" value="{{ old('email') }}">
+                <input id="password" name="password" type="password" placeholder="Password">
             </div>
-            <input id="btn_inicio" class="btn-primary" name="btn_inicio" type="submit" value="Iniciar">
+
+            <input type="submit" id="btn_inicio" class="btn-primary" name="btn_inicio" value="Iniciar">
         </ul>
     </div>
 </form>
