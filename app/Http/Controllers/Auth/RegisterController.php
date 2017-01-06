@@ -3,9 +3,11 @@
 namespace Sophia\Http\Controllers\Auth;
 
 use Sophia\User;
+use Sophia\Usuario_Perfil;
 use Validator;
 use Sophia\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Carbon\Carbon;
 
 class RegisterController extends Controller
 {
@@ -27,7 +29,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/dashboard';
 
     /**
      * Create a new controller instance.
@@ -48,9 +50,16 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
+            //'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|min:6|confirmed',
+
+            // Custom Fields
+            'first_name' => 'required|min:3|max:100',
+            'last_name' => 'required|min:3|max:100',
+            'birth_day' => 'required|digits_between:1,31',
+            'birth_month' => 'required|digits_between:1,12',
+            'birth_year' => 'required|numeric',
         ]);
     }
 
@@ -62,10 +71,25 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
+        $user = User::create([
+            //'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+
+            // Custom Fields
+            'nombre' => $data['first_name'],
+            'apellido' => $data['last_name'],
+            'fecha_nacimiento' => "{$data['birth_year']}-{$data['birth_month']}-{$data['birth_day']}",
+            'edad' => Carbon::createFromDate($data['birth_year'],$data['birth_day'],$data['birth_month'])->age,
+            'estado' => 1,
+            'reintentos' => 0
         ]);
+
+        Usuario_Perfil::create([
+            'id_usuario'    =>  $user->id,
+            'id_perfil'     =>  2
+        ]);
+
+        return $user;
     }
 }

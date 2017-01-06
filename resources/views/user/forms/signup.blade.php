@@ -12,7 +12,7 @@ birth_year
 
 -->
 
-<form action="{{ route('signup') }}" method="post">
+<form action="{{ url('/register') }}" method="post">
     <div class="">
         <h3><i class="fa fa-shield"></i> Reg&iacute;strate</h3>
         <hr>
@@ -139,9 +139,9 @@ birth_year
         <div style="height:10px;"></div>
         <div class="form-group">
             <label class="control-label" for=""></label>
-            <a href="muro" class="btn btn-block btn-social" style="height:40px; font-size:9px; text-align:center" >
-                <input   class="btn btn-block btn-primary btn-social"  type="submit" style="text-align:center; background-color:black" value="Registrarse con Sophia">
-            </a>
+
+			<input class="btn btn-block btn-primary btn-social"  type="submit" style="text-align:center; background-color:black" value="Registrarse con Sophia">
+
             <a class="btn btn-block btn-social btn-facebook" href="{{ route('social_redirect', ['provider' => 'facebook']) }}" style="text-align:center">
                 <span class="fa fa-facebook"></span> Iniciar con Facebook
             </a>

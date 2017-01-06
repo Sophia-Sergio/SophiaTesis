@@ -4,14 +4,14 @@
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          @if (Storage::disk('local')->has($usuario->id . '.jpg'))
-            <img src="{{ route('profile.image', ['filename' => $usuario->id . '.jpg']) }}" alt="" class="img-circle" style="height:45px; width:45px">
+          @if (Storage::disk('local')->has(Auth::user()->id . '.jpg'))
+            <img src="{{ route('profile.image', ['filename' => Auth::user()->id . '.jpg']) }}" alt="" class="img-circle" style="height:45px; width:45px">
           @else
             <img src="{{ URL::to('img/man_avatar.jpg')   }}" alt="" class="img-circle">
           @endif
         </div>
         <div class="pull-left info">
-          <p>{{$usuario->nombre}} {{$usuario->apellido}}</p>
+          <p>{{ Auth::user()->nombre }} {{ Auth::user()->apellido }}</p>
  
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
