@@ -1,8 +1,3 @@
-<?php
-$tipos_institucion = Session::get('tipos_institucion');
-?>
-
-
 <form action="{{ route('tomaCarrera') }}" method="post" name="tomaCarrera" id="tomaCarrera">
     <div class="form-group">
     <label >Selecciona tipo de Institución</label>
@@ -19,7 +14,7 @@ $tipos_institucion = Session::get('tipos_institucion');
         <label>Selecciona Institución</label>
         <div>
             <Select class="form-control input-sm" name="institucion" id="institucion">
-                <option value="0" disabled selected>Elija Instituci&oacute;n</option>
+                <option value="0" disabled selected>Elija Institución</option>
             </Select>
 
         </div>
@@ -36,7 +31,7 @@ $tipos_institucion = Session::get('tipos_institucion');
         <label >Selecciona Modalidad o R&eacute;gimen</label>
         <div >
             <Select class="form-control input-sm" name="regimen" id="regimen">
-                <option value="0" disabled selected>Elija R&eacute;gimen</option>
+                <option value="0" disabled selected>Elija Régimen</option>
                 <option value="1">Diurno</option>
                 <option value="2">Vespertino</option>
                 <option value="3">Online</option>

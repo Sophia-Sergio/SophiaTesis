@@ -9,8 +9,10 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Sophia\CarreraRamo;
 use Sophia\Comentario;
 use Sophia\Http\Requests;
+use Sophia\RamoDocente;
 use Sophia\TipoInstitucion;
 use Sophia\Institucion;
 use Sophia\Carrera;
@@ -443,6 +445,7 @@ class UserController extends Controller
                 ->where('usuario_perfils.id_usuario', '=', $id)
                 ->distinct()
                 ->first();
+
         $publicidad = DB::table('publicidads')
             ->select('id', 'url')
             ->orderBy('id', 'desc')
@@ -531,58 +534,58 @@ class UserController extends Controller
         return redirect()->route('home');
     }
 
-    public function tomaCarrera(Request $request){
-        $institucion = $request['institucion'];
-        $id_carrera = $request['carrera'];
-        $anio = $request['anio'];
-        $regimen = $request['regimen'];
+    /**
+     * Registro Académico
+     *
+     * Segundo paso, luego de registrarse
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function tomaCarrera(Request $request)
+    {
+        $ramos      =   CarreraRamo::getByCareer($request['carrera']);
+        $semesters  =   CarreraRamo::getNumberOfSemesters($request['carrera'], $request['anio']);
 
-        $ramos = DB::table('carrera_ramos')
-            ->join('ramos', 'carrera_ramos.id_ramo', '=', 'ramos.id')
-            ->select('id_ramo', 'nombre_ramo', 'nombre_ramo_html', 'id_semestre')
-            ->where('carrera_ramos.id_carrera', '=', $id_carrera)
-            ->distinct()
-            ->orderBy('nombre_ramo')
-            ->get();
-
-        $cant_semestres = DB::table('carrera_ramos')
-            ->select('id_semestre')
-            ->where('id_carrera', $id_carrera)
-            ->where('anio', $anio)
-            ->max('id_semestre');
-        Session::put('cant_semestres', $cant_semestres);
-        Session::put('ramos', $ramos);
-        return view('user.registroAcademicoRamos');
+        return view('user.registroAcademicoRamos', compact('semesters', 'ramos'));
     }
-    public function tomaRamos(Request $request){
-        $ramosTomados = $request['ramo'];
-        foreach ($ramosTomados AS $index => $value)
-            $ramosTomados[$index] = (int)$value;
 
-        $ramo_docentes = DB::table('ramo_docentes')
-                ->join('ramos', 'ramo_docentes.id_ramo', '=', 'ramos.id')
-                ->join('docentes', 'ramo_docentes.id_docente', '=', 'docentes.id')
-                ->select('ramo_docentes.id','id_ramo','id_docente', 'id_regimen', 'nombre_ramo', 'nombre', 'apellido_paterno', 'apellido_materno')
-                ->whereIn('ramo_docentes.id_ramo', $ramosTomados)
-                ->get();
+    /**
+     * Seleccionar Ramo
+     *
+     * Seleccionar un ramo y un profesor asociado a dicho ramo
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function tomaRamos(Request $request)
+    {
+        $ramosTomados = $request['ramo'];
+
+        $ramoDocentes = RamoDocente::getByRamos($ramosTomados);
 
         $ramos = Ramo::find($ramosTomados);
-        Session::put('docentes', $ramo_docentes );
-        Session::put('ramos_nombre', $ramos);
-        return view ('user.registroAcademicoDocentes');
+
+        return view ('user.registroAcademicoDocentes', compact('ramoDocentes', 'ramos'));
     }
 
-    public function tomaDocentes(Request $request){
-        $ramo_docenteTomados = $request['ramo_docente'];
-        foreach ($ramo_docenteTomados AS $index => $value)
-            $ramo_docenteTomados[$index] = (int)$value;
-        for($x = 0; $x < sizeof($ramo_docenteTomados); $x++)
-        {
-            $usuarioRamoDocente = new UsuarioRamoDocente();
-            $usuarioRamoDocente->id_usuario = Session::get('user')->id;
-            $usuarioRamoDocente->id_ramo_docente = $ramo_docenteTomados[$x];
-            $usuarioRamoDocente->save();
+    /**
+     * Generar el vínculo de usuario, ramo y docentes
+     *
+     * @param Request $request
+     * @return mixed
+     */
+    public function tomaDocentes(Request $request)
+    {
+        $sizeDocentes   =   sizeof($request['ramo_docente']);
+
+        for ($x = 0; $x < $sizeDocentes; $x++) {
+            UsuarioRamoDocente::insert([
+                'id_usuario'        =>  Auth::user()->id,
+                'id_ramo_docente'   =>  $request['ramo_docente'][$x]
+            ]);
         }
+
         return redirect()->route('dashboard');
     }
 

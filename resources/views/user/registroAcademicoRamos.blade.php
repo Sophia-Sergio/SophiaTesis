@@ -1,7 +1,7 @@
 @extends('layout.masterUsuario')
 
 @section('title')
-    Sophia | Registro Acad�mico
+    Sophia | Registro Académico
 @endsection
 
 @section('content')

@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Input;
 
 Auth::routes();
 
-Route::group(['middleware' => ['web']], function() {
+require_once 'Routes/UsersRoute.php';
 
-    require_once 'Routes/UsersRoute.php';
+Route::group(['middleware' => ['web']], function() {
 
     Route::post('/AdmEstudianteBloquearUsuario/{id_user}', [
         'uses' => 'UserController@AdmEstudianteBloquearUsuario',
@@ -183,16 +183,6 @@ Route::group(['middleware' => ['web']], function() {
         'middleware' => 'auth'
     ]);
 
-    Route::post('/tomaCarrera', [
-        'uses' => 'UserController@tomaCarrera',
-        'as' => 'tomaCarrera',
-        'middleware' => 'auth'
-    ]);
-    Route::post('/tomaRamos', [
-        'uses' => 'UserController@tomaRamos',
-        'as' => 'tomaRamos',
-        'middleware' => 'auth'
-    ]);
     Route::post('/tomaDocentes', [
         'uses' => 'UserController@tomaDocentes',
         'as' => 'tomaDocentes',
@@ -263,7 +253,7 @@ Route::group(['middleware' => ['web']], function() {
     });
     Route::get('/tomaCarreras', function(){
         $institucion = Input::get('institucion');
-        $carrera = \Sophia\Institucion_carrera::
+        $carrera = \Sophia\institucion_carrera::
         where('id_institucion', $institucion)
             ->join('carreras', 'institucion_carreras.id_carrera', '=', 'carreras.id')->get();
         Return Response::json($carrera);

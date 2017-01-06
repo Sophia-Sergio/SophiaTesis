@@ -1,7 +1,3 @@
-<?php
-$ramo_docentes = Session::get('docentes');
-$ramos_nombre = Session::get('ramos_nombre');
-?>
 <style>
     .form-group input[type="checkbox"] {
         display: none;
@@ -24,19 +20,19 @@ $ramos_nombre = Session::get('ramos_nombre');
 </style>
 <form action="{{ route('tomaDocentes') }}" method="post" name="tomaCarrera" id="tomaCarrera">
     <hr/>
-    @foreach($ramos_nombre as $ramo)
+    @foreach($ramos as $ramo)
     <label> Ramo {{$ramo->nombre_ramo}}</label>
-        @foreach($ramo_docentes as $ramo_docente)
-            @if($ramo->id==$ramo_docente->id_ramo)
+        @foreach($ramoDocentes as $rDocente)
+            @if($ramo->id==$rDocente->id_ramo)
                 <div class="form-group">
-                    <input type="checkbox" name="ramo_docente[]" value="{{$ramo_docente->id}}" id="ramo_docente{{$ramo_docente->id}}" autocomplete="off" style="display: none;">
+                    <input type="checkbox" name="ramo_docente[]" value="{{$rDocente->id}}" id="ramo_docente{{$rDocente->id}}" autocomplete="off" style="display: none;">
                     <div class="btn-group" style="width:100%">
-                        <label for="ramo_docente{{$ramo_docente->id}}" class="btn btn-warning">
+                        <label for="ramo_docente{{$rDocente->id}}" class="btn btn-warning">
                             <span class="[ glyphicon glyphicon-ok ]"></span>
                             <span>&nbsp;</span>
                         </label>
-                        <label for="ramo_docente{{$ramo_docente->id}}" class="[ btn btn-default active ]">
-                            {{ $ramo_docente->nombre }} {{$ramo_docente->apellido_paterno}} {{$ramo_docente->apellido_materno}}
+                        <label for="ramo_docente{{$rDocente->id}}" class="[ btn btn-default active ]">
+                            {{ $rDocente->nombre }} {{$rDocente->apellido_paterno}} {{$rDocente->apellido_materno}}
                         </label>
                     </div>
                 </div>
