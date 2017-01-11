@@ -33,21 +33,21 @@
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
-        <a href="{{ route('dashboard')}}"><li class="header" style="color:white; background-color: black"><b>{{ $carrera->nombre_carrera }}</b></li></a>
-      @foreach($ramos as $ramo)
+        <a href="{{ route('dashboard')}}"><li class="header" style="color:white; background-color: black"><b>{{ Auth::user()->getCareers()->name }}</b></li></a>
+      @foreach(Auth::user()->getRamos() as $ramo)
 
         <li class="treeview">
           <a href="">
-            <i class="fa fa-folder"></i><span>{{$ramo->nombre_ramo}}</span>
+            <i class="fa fa-folder"></i><span>{{$ramo->r_name}}</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right" ></i>
             </span>
           </a>
             <ul class="treeview-menu">
-                <li><a href="/ramo/muro/{{$ramo->id_ramo}}"><i class="fa fa-circle-o"></i> Muro</a></li>
-                <li><a href="/ramo/contenido/{{$ramo->id_ramo}}"><i class="fa fa-circle-o"></i> Contenidos</a></li>
-                <li><a href="{{ route('messages.my_messages', ['ramo' => $ramo->id]) }}"><i class="fa fa-circle-o"></i> Mensajes</a></li>
-                <li><a href="{{ route('users.by_ramo', ['ramo' => $ramo->id]) }}"><i class="fa fa-circle-o"></i> Compañeros</a></li>
+                <li><a href="/ramo/muro/{{$ramo->r_id}}"><i class="fa fa-circle-o"></i> Muro</a></li>
+                <li><a href="/ramo/contenido/{{$ramo->r_id}}"><i class="fa fa-circle-o"></i> Contenidos</a></li>
+                <li><a href="{{ route('messages.my_messages', ['ramo' => $ramo->r_id]) }}"><i class="fa fa-circle-o"></i> Mensajes</a></li>
+                <li><a href="{{ route('users.by_ramo', ['ramo' => $ramo->r_id]) }}"><i class="fa fa-circle-o"></i> Compañeros</a></li>
             </ul>
         </li>
       @endforeach

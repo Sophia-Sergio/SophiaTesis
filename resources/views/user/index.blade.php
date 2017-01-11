@@ -5,16 +5,6 @@
 @endsection
 
 @section('content')
-<?php
-$carrera = Session::get('carrera');
-$ramos = Session::get('ramos');
-$usuario = Auth::user();
-
-if (Session::has('perfil'))
-{
-    $perfil = Session::get('perfil')->id_perfil;
-}
-?>
 
 <script type="text/javascript" src="{{ URL::asset('js/carrera/dashboard/controller.js') }}"></script>
 <link rel="stylesheet" href="{{asset('css/index_UsuarioMuro.css')}}">
@@ -22,13 +12,13 @@ if (Session::has('perfil'))
   <div class="row">
       <div class="col-sm-8">
             <div class="panel" Style="padding-left:15px; padding-right:15px; text-align:center">
-                <h2> Muro de {{ $carrera->nombre_carrera }} </h2>
+                <h2> Muro de {{ Auth::user()->getCareers()->name }} </h2>
                 <hr/>
             </div>
             <div id="postContent">
                 @include('ramo.forms.postCarrera')
 
-                @foreach($posteosCarrera as $posteoCarrera)
+                @foreach($posts as $posteoCarrera)
                     <div class="panel" id="post_{{ $posteoCarrera->id }}">
                         <div class="panel-body">
 
@@ -61,7 +51,7 @@ if (Session::has('perfil'))
                                         <span>-</span>
                                         <a href="#" title="Deja un comentario" data-toggle="collapse" data-target="#ver-comentarios-{{$posteoCarrera->id}}" aria-expanded="false" aria-controls="collapseExample">Comentar</a>
                                         <span>-</span>
-                                        @if($posteoCarrera->id_user == $usuario->id || $perfil=='3' )
+                                        @if($posteoCarrera->id_user == Auth::user()->id || Auth::user()->getProfile()->id =='3' )
                                             <span>-</span>
                                             <a href="#" class="edit" title="Edita tu comentario">Editar</a>
                                             <span>-</span>
@@ -84,13 +74,13 @@ if (Session::has('perfil'))
 
                         <div class="collapse" id="ver-comentarios-{{$posteoCarrera->id}}">
                             <ul class="fb-comments">
-                                @foreach($comentarioCarreraPosts as $comentarioCarreraPost)
-                                    @if ($comentarioCarreraPost->id_post_carrera==$posteoCarrera->id)
+                                @foreach($comments as $comment)
+                                    @if ($comment->id_post_carrera==$comment->id)
                                         <li>
                                             <div class="cmt-details">
-                                                <a href="#">{{$comentarioCarreraPost->nombre}}</a>
-                                                <span> {{$comentarioCarreraPost->contenido}}  </span>
-                                                <p>{{$comentarioCarreraPost->created_at}}</p>
+                                                <a href="#">{{$comment->nombre}}</a>
+                                                <span> {{$comment->contenido}}  </span>
+                                                <p>{{$comment->created_at}}</p>
                                             </div>
                                         </li>
                                     @endif

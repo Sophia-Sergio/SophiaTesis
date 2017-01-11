@@ -1,14 +1,6 @@
 @extends('layout.masterUsuario')
 
 @section('content')
-    <?php
-    $carrera = Session::get('carrera');
-    $ramos = Session::get('ramos');
-    $ramo = Session::get('ramo');
-    $usuario = Session::get('user');
-    $posteosRamos= Session::get('posteosRamo');
-    ?>
-
     <link rel="stylesheet" href="{{asset('css/index_UsuarioMuro.css')}}">
     @include('alerts.request')
     <div class="container bootstrap snippet" Style="width:90%">
@@ -48,7 +40,7 @@
                             <span class="btn btn-primary fileinput-button">
                                 <i class="glyphicon glyphicon-plus"></i>
                                 <span>Seleccionar Archivos</span>
-                                <input id="fileupload" type="file" name="document" data-token="{{ Session::token() }}" data-user-id="{{$usuario->id  }}"> <!-- Para seleccionar m?ltiples archivos !! <input id="fileupload" type="file" name="files[]" multiple> -->
+                                <input id="fileupload" type="file" name="document" data-token="{{ Session::token() }}" data-user-id="{{Auth::user()->id  }}"> <!-- Para seleccionar m?ltiples archivos !! <input id="fileupload" type="file" name="files[]" multiple> -->
                             </span>
                     </div>
 
@@ -107,160 +99,17 @@
 @endsection
 @push('scripts')
 <script>
-    // Validar datos necesarios al subir archivo
-    $('#fileupload').click(function(){
-        if ($("#selSeguridad").val() == "0") {
-            alert("Debes seleccionar la seguridad");
-            return false;
-        }
-
-        if ($("#selTipo").val() == "0") {
-            alert("Debes seleccionar el tipo de archivo");
-            return false;
-        }
-    });
-
-    /**
-     * Eliminar un archivo
-     *
-     * @param id
-     */
-    function deleteFile(id) {
-        $.ajax({
-            method: "POST",
-            url: siteUrl+"files/"+id,
-            data: { _method: 'delete', _token :"{{ Session::token() }}", idFile: id }
-        })
-                .done(function( response ) {
-                    if (response.status == 1) {
-                        genPrivateTable()
-                        genPublicTable();
-                    }
-                });
-    }
-
-    function toggleLikeFile(id) {
-        $.ajax({
-            method: "GET",
-            url: siteUrl+"/likeFile/"+id,
-            data: { _token :"{{ Session::token() }}", idFile: id }
-        })
-        .done(function( response ) {
-            $("."+id+"_cont").empty().text(response.totalLikes);
-
-            if ($(".like-"+id).hasClass('like_active')) {
-                $(".like-"+id).removeClass('like_active');
-            } else {
-                $(".like-"+id).addClass('like_active');
-            }
-        });
-    }
+    let idUsuarioRamoDocente    =   "{{ $data->id_usuario_ramo_docente }}",
+        idDocente               =   "{{ $data->id_docente }}",
+        idRamoDocente           =   "{{ $data->id_ramo_docente }}",
+        idRamo                  =   "{{ $ramo->id }}",
+        token                   =   "{{ Session::token() }}";
 
     $(function() {
         genPrivateTable();
         genPublicTable();
     });
-
-    function genPrivateTable() {
-
-        $('#private-files-table').DataTable({
-            processing: true,
-            serverSide: true,
-            "bDestroy": true,
-            "language": {
-                "url": "{{ URL::to('/js/dataTables-es.json') }}"
-            },
-            ajax: {
-                url: '{!! route('files.privateDataTable', ['idRamo' => $ramo->id]) !!}',
-                method: 'POST'
-            },
-            columns: [
-                { data: 'name', name: 'name' },
-                { data: 'created_at', name: 'created_at' },
-                { data: 'size', name: 'size' },
-                { data: 'extension', name: 'extension' },
-                { data: 'type', name: 'type' },
-                { data: 'action', name: 'action', orderable: false, searchable: false }
-            ],
-            initComplete: function () {
-                this.api().columns().every(function () {
-                    var column = this;
-                    var input = document.createElement("input");
-                    $(input).appendTo($(column.footer()).empty())
-                            .on('change', function () {
-                                column.search($(this).val()).draw();
-                            });
-                });
-
-                // Formatos
-                $('th input').addClass('form-control');
-                $("#private-foot-name input").css("max-width", "130px")
-                $("#private-foot-created input").css("max-width", "130px");
-                $("#private-foot-size input").css("max-width", "100px");
-                $("#private-foot-type input").css("max-width", "130px");
-                $("#private-foot-action input").hide();
-            }
-        });
-    }
-
-    function genPublicTable() {
-
-        $('#public-files-table').DataTable({
-            processing: true,
-            serverSide: true,
-            "bDestroy": true,
-            "language": {
-                "url": "{{ URL::to('/js/dataTables-es.json') }}"
-            },
-            ajax: {
-                url: '{!! route('files.publicDataTable', ['idRamo' => $ramo->id]) !!}',
-                method: 'POST'
-            },
-            columns: [
-                { data: 'name', name: 'name' },
-                { data: 'created_at', name: 'created_at' },
-                { data: 'size', name: 'size' },
-                { data: 'extension', name: 'extension' },
-                { data: 'type', name: 'type' },
-                { data: 'nombre', name: 'nombre' },
-                { data: 'action', name: 'action' }
-            ],
-            initComplete: function () {
-                this.api().columns().every(function () {
-                    var column = this;
-                    var input = document.createElement("input");
-                    $(input).appendTo($(column.footer()).empty())
-                            .on('change', function () {
-                                column.search($(this).val()).draw();
-                            });
-                });
-
-                // Formatos
-                $('th input').addClass('form-control');
-                $("#public-foot-name input").css("max-width", "130px")
-                $("#public-foot-created input").css("max-width", "130px");
-                $("#public-foot-size input").css("max-width", "100px");
-                $("#public-foot-type input").css("max-width", "130px");
-                $("#public-foot-action input").hide();
-            }
-        });
-    }
-
-    // Click en botón eliminar
-    $(document).on('click', ".btn-danger",function(){
-        event.preventDefault();
-        var split = this.id.split("-");
-        deleteFile(split[1]);
-    });
-
-    // Click en el botón like
-    $(document).on('click', ".like",function(){
-        event.preventDefault();
-        var split = this.id.split("-");
-        toggleLikeFile(split[1]);
-    });
 </script>
 
-<!-- Lógica Upload -->
 <script type="text/javascript" src="{{ URL::asset('js/ramo/contenido/controller.js') }}"></script>
 @endpush

@@ -4,6 +4,8 @@ namespace Sophia\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Sophia\Docente;
 use Sophia\File;
 use Sophia\Http\Requests;
 use Session;
@@ -15,66 +17,66 @@ use Yajra\Datatables\Facades\Datatables;
 
 class FileController extends Controller
 {
-    public function upload(){
-        $file = \Request::file('document');
-
-        $seguridad_id = \Request::all()['seguridad_id'];
-        $type = \Request::all()['type'];
-
-        $id_user = Session::get('user')->id;
-        $id_usuario_ramo_docente = Session::get('id_usuario_ramo_docente')->id;
-        $nombre_carrera = Session::get('carrera')->nombre_carrera_no_tilde;
-        $nombre_ramo = Session::get('ramo')->nombre_ramo_no_tilde;
-        $id_ramo = Session::get('ramo')->id;
-        $nombre_docente = Session::get('docente')->apellido_paterno_no_tilde.'_'.Session::get('docente')->apellido_materno_no_tilde.'_'.Session::get('docente')->nombre_no_tilde; //Session::get('docente')->nombre_docente;
-
-        $storagePath = storage_path().'/documentos/privados/'.$nombre_carrera.'/'.$nombre_ramo.'/'.$nombre_docente;
-
-        $fileName = $file->getClientOriginalName();
-        $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
-        $fileSize = $file->getClientSize();
-
-
-        $file_ = new File();
-        $file_->dir = $storagePath;
-        $file_->id_usuario_ramo_docente = $id_usuario_ramo_docente;
-        $file_->size = $fileSize;
-        $file_->name = $fileName;
-        $file_->extension = $fileType;
-        $file_->seguridad = $seguridad_id;
-        $file_->type = $type;
-
-        if ($file_->save())
-        {
-            $file->move($storagePath, $file_->id);
-            $message = "Archivo guardado";
+    /**
+     * Subir un archivo a la plataforma
+     *
+     * @param Requests\StoreContentFile $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function upload(Requests\StoreContentFile $request)
+    {
+        if (!$request->ajax()) {
+            abort(403, 'Unauthorized action.');
         }
-        /**
-         * Retornamos los archivos para poder mostrarlos
-         */
 
-        $_id_docente = Session::get('id_docente')->id_docente;
+        $file       =   $request->file('document');
+        $ramo       =   Ramo::find($request->ramo);
+        $career     =   Auth::user()->getCareers();
+        $teacher    =   Docente::find($request->teacher);
 
-        $ramo = Ramo::find($id_ramo);
-        $archivosPublicos = $ramo->getArchivosPublicos($_id_docente);
-        $archivosPrivados = $ramo->getArchivosPrivados($id_usuario_ramo_docente);
+        $teacherName = str_slug("{$teacher->apellido_paterno} {$teacher->apellido_materno} {$teacher->nombre}");
 
-        return response()->json([
-            'publicos' => $archivosPublicos,
-            'privados' => $archivosPrivados
-        ]);
+        try {
+            File::saveFile(
+                $file,
+                str_slug($career->name),
+                str_slug($ramo->nombre_ramo),
+                $teacherName,
+                $request->usuarioRamoDocente,
+                $request->security,
+                $request->type
+            );
+
+            return response()->json(['success'], 200);
+        } catch (\Exception $e) {
+            return response()->json([$e], 500);
+        }
     }
 
-    public function download($id_archivo) {
-        $file = File::find($id_archivo);
-        $url = trim($file->dir).'/'.$file->id;
-        return response()->download($url,$file->name);
+    /**
+     * Descargar un archivo
+     *
+     * @param $idArchivo
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @internal param $id_archivo
+     */
+    public function download($idArchivo)
+    {
+        $file   =   File::find($idArchivo);
+        $path   =   storage_path("app/{$file->dir}/{$file->file_name}");
+
+        return response()->download($path, $file->client_name);
     }
 
-
-    public function toggleLike($id_archivo) {
-
-        $id_user = Session::get('user')->id;
+    /**
+     * Dar like a un archivo
+     *
+     * @param $id_archivo
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function toggleLike($id_archivo)
+    {
+        $id_user = Auth::user()->id;
         $file = File::find($id_archivo);
 
         $actuales = LikeFiles::where('file_id', $id_archivo)
@@ -97,13 +99,23 @@ class FileController extends Controller
         ]);
     }
 
+    /**
+     * Eliminar archivo
+     *
+     * Se elimina archivo tanto de la base de datos como del servidor,
+     * Además, se deben eliminar los likes asociados a dicho archivo.
+     *
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy($id)
     {
-        // Eliminar likes del archivo
         LikeFiles::where('file_id', $id)->delete();
 
-        // Eliminar archivos
-        File::find($id)->delete();
+        $file   =   File::find($id);
+
+        Storage::delete("$file->dir/$file->file_name");
+        $file->delete();
 
         return response()->json(['status' => 1], 200);
     }
@@ -117,19 +129,18 @@ class FileController extends Controller
     public function privateTable(Request $request, $idRamo)
     {
         $getData = UsuarioRamoDocente::getByRamoAndUser($idRamo, Auth::user()->id);
-        $idUsuarioRamoDocente = $getData->id;
-        $idDocente = $getData->id_docente;
+        $idUsuarioRamoDocente = $getData->id_usuario_ramo_docente;
 
         $ramo = Ramo::find($idRamo);
 
-        $files = $ramo->getArchivosPrivados($idUsuarioRamoDocente);
+        $files = $ramo->byUrd($idUsuarioRamoDocente);
 
         return Datatables::of($files)
             ->filterColumn('files.id', function($query, $keyword) {
                 $query->whereRaw("files.id) like ?", ["%{$keyword}%"]);
             })
-            ->editColumn('name', function ($file) {
-                return "<a href='/download/{$file->id}'>{$file->name}</a>";
+            ->editColumn('client_name', function ($file) {
+                return "<a href='/download/{$file->id}'>{$file->client_name}</a>";
             })
             ->addColumn('action', function ($file) {
                 return '<a href="#" id="remove-'.$file->id.'" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove"></i> Eliminar</a>';
@@ -158,7 +169,7 @@ class FileController extends Controller
 
         return Datatables::of($files)
             ->editColumn('name', function ($file) {
-                return "<a href='/download/{$file->id}'>{$file->name}</a>";
+                return "<a href='/download/{$file->id}'>{$file->client_name}</a>";
             })
             ->editColumn('nombre', function ($file) {
                 return "{$file->nombre} {$file->apellido}";

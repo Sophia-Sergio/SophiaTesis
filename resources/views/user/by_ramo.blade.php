@@ -27,7 +27,7 @@ $perfil = Session::get('perfil')->id_perfil;
                                 <th>Apellido</th>
                                 <th>Mensaje</th>
                                 <th>Seguir</th>
-                                @if ($perfil=='3')
+                                @if (Auth::user()->getProfile()->id =='3')
                                     <th>Bloquear</th>
                                 @endif
                             </tr>
@@ -48,7 +48,7 @@ $perfil = Session::get('perfil')->id_perfil;
                                             @endif
                                             </a>
                                         </td>
-                                        @if ($perfil=='3')
+                                        @if (Auth::user()->getProfile()->id =='3')
                                             @if ($user->estado==1)
                                                 <form action="{{ route('AdmEstudianteBloquearUsuario', ['id_user'=>$user->id]) }}" method="post">
                                                     <td>

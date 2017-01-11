@@ -57,17 +57,18 @@ if (Session::has('perfil'))
                                 @if ($posteoRamo->is_like == true)
                                     <a href="javascript:" id="{{$posteoRamo->id}}" class="setLike" title="Ya no me gusta!!">Ya no me gusta</a>
                                 @else
-                                    <a href="javascript:" id="{{$posteoRamo->id}}" class="setLike" title="Me gusta!!">Me gusta</a>
+                                    <a href="javascript:" id="{{$posteoRamo->id}}" class="setLike" title="Me gusta">Me gusta</a>
                                 @endif
 
                                 <span>-</span>
                                 <a href="#" title="Deja un comentario"data-toggle="collapse" data-target="#ver-comentarios-{{$posteoRamo->id}}" aria-expanded="false" aria-controls="collapseExample">Comentar</a>
                                 <span>-</span>
-                                @if($posteoRamo->id_user == $usuario->id  || $perfil=='3' )
+                                @if ($posteoRamo->id_user == Auth::user()->id  || $perfil == '3' )
                                     <span>-</span>
                                     <a href="#" class="edit" title="Edita tu comentario">Editar</a>
                                     <span>-</span>
-                                    <a href="{{ route('postCarrera.delete', ['id_posteo' => $posteoRamo->id]) }}" title="Eliminar">Eliminar</a>
+
+                                    <a id="deletePost" href="#" data-id="{{ $posteoRamo->id }}" title="Eliminar">Eliminar</a>
                                 @endif
                             </article>
                         </div>
@@ -135,7 +136,21 @@ if (Session::has('perfil'))
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+@push('scripts')
 <script>
     var token = '{{ Session::token() }}';
     var urlEdit = '{{ route('edit') }}';
+
+    $(document).on('click', "#deletePost",function(){
+        event.preventDefault();
+
+        $.ajax({
+            url: "{{ route('api.post_ramo.destroy', ['id' => 1]) }}",
+            type: 'PUT',
+        }).done(function () {
+            alert("Éxito al eliminar el post");
+        });
+    });
 </script>
+@endpush

@@ -11,29 +11,30 @@ $(document).ready(function()
         var id = $(this).attr('id');
 
         $.ajax({
-                url: "/likePost/"+id
-            })
-            .done(function( data ) {
-                var idContador = '#'+id+'_cont'
+            method: "POST",
+            url: "/api/post_ramo/toggle_like",
+            data: { idPost: id }
+        }).done(function( data ) {
+            console.log(data);
+            var idContador = '#'+id+'_cont'
 
-                var cadena = data.totalLikes;
+            var cadena = data.totalLikes;
 
-                if(data.totalLikes == 1) {
-                    cadena += ' persona';
-                } else {
-                    cadena += ' personas';
-                }
+            if(data.totalLikes == 1) {
+                cadena += ' persona';
+            } else {
+                cadena += ' personas';
+            }
 
-                $(idContador).html(cadena);
+            $(idContador).html(cadena);
 
-                if(data.isLike == true) {
-                    $('#'+id).html('Ya no me gusta');
-                } else {
-                    $('#'+id).html('Me gusta');
-                }
+            if(data.isLike == true) {
+                $('#'+id).html('Ya no me gusta');
+            } else {
+                $('#'+id).html('Me gusta');
+            }
 
-
-            });
+        });
     });
 
 });

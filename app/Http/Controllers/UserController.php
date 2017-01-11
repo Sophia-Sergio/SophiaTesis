@@ -11,15 +11,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Sophia\CarreraRamo;
 use Sophia\Comentario;
-use Sophia\Http\Requests;
 use Sophia\RamoDocente;
 use Sophia\TipoInstitucion;
 use Sophia\Institucion;
 use Sophia\Carrera;
-use Sophia\Perfil;
-use Sophia\Usuario_Perfil;
 use Sophia\User;
-use Sophia\Post;
 use Sophia\Ramo;
 use Sophia\Docente;
 use Sophia\Publicidad;
@@ -27,8 +23,6 @@ use Sophia\UsuarioRamoDocente;
 use Sophia\UsersSeguidos;
 use Session;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Collection;
-use Sophia\Http\Requests\UsuarioCreateRequest;
 
 
 use Sophia\Http\Requests\UsuarioUpdateRequest;
@@ -347,7 +341,7 @@ class UserController extends Controller
     }
     public function comentarPosteoCarrera(Request $request, $id_posteo_carrera)
     {
-        $id_usuario= Session::get('user')->id;
+        $id_usuario= Auth::user()->id;
         $comentario = new Comentario();
         $comentario->id_usuario = $id_usuario;
         $comentario->id_post_carrera = $id_posteo_carrera;
@@ -356,9 +350,10 @@ class UserController extends Controller
         $comentario->save();
         return redirect()->route('dashboard');
     }
+
     public function comentarPosteoRamo(Request $request, $id_posteo_ramo)
     {
-        $id_usuario= Session::get('user')->id;
+        $id_usuario= Auth::user()->id;
         $comentario = new Comentario();
         $comentario->id_usuario = $id_usuario;
         $comentario->id_post_carrera = 0;
@@ -427,107 +422,43 @@ class UserController extends Controller
         return new Response($file, 200);
     }
 
+    /**
+     * Dashboard de la carrera
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function getDashboard()
     {
-        $id = Auth::user()->id;
-        $usuario = Auth::user();
+        $userId         =   Auth::user()->id;
+        $userProfile    =   Auth::user()->getProfile()->id;
 
-        $comentarioCarreraPosts =  DB::table('comentarios')
-            ->join('post_carreras', 'comentarios.id_post_carrera', '=', 'post_carreras.id')
-            ->join('users', 'comentarios.id_usuario', '=', 'users.id')
-            ->select('users.nombre','users.apellido','comentarios.contenido', 'comentarios.created_at', 'comentarios.id_post_carrera', 'comentarios.id_post_ramo')
-            ->distinct()
-            ->get();
-
-        $perfil = DB::table('users')
-                ->join('usuario_perfils', 'usuario_perfils.id_usuario', '=', 'users.id')
-                ->select('id_perfil')
-                ->where('usuario_perfils.id_usuario', '=', $id)
-                ->distinct()
-                ->first();
-
-        $publicidad = DB::table('publicidads')
-            ->select('id', 'url')
-            ->orderBy('id', 'desc')
-            ->first();
-
-        Session::put('perfil', $perfil);
-
-        if ($perfil->id_perfil == 1) {
-            return view('admin.index', [
-                'user' => $usuario
-            ]);
-        }
-
-        // se retorna una vista, seg�n haya ingresado alg�n ramo o no
-
-        //consultamos si existe registro en tabla usuario ramo docente
-        if (UsuarioRamoDocente::where('id_usuario', $id )->count() == 0) {
-            // si no existe redireccionamos nuevamente a la pagina de registro academico
-            //cargamos en variable los tipos de institucion
+        if (UsuarioRamoDocente::where('id_usuario', $userId)->count() == 0) {
             $tipos_institucion = TipoInstitucion::all();
-            
-            //cargamos en variable session la lista con los tipos de institucion
             Session::put('tipos_institucion', $tipos_institucion);
-
-            //retornamos la vista de registro academico
             return view('user.registroAcademico');
-        } else {
-            // en caso de que el alumno ya este registrado
-            // comenzamos a cargar la información para el dashboard
-            // cargamos los ramos seleccionados por el alumno
-            $ramos = DB::table('usuario_ramo_docentes')
-                ->join('ramo_docentes', 'usuario_ramo_docentes.id_ramo_docente', '=', 'ramo_docentes.id')
-                ->join('ramos', 'ramo_docentes.id_ramo', '=', 'ramos.id')
-                ->select('ramos.*', 'id_ramo', 'nombre_ramo', 'nombre_ramo_html')
-                ->where('usuario_ramo_docentes.id_usuario', '=', $id)
-                ->distinct()
-                ->orderBy('nombre_ramo')
-                ->get();
+        }
 
-            // cargamos la carrera seleccionada por el alumno
-            $carrera = DB::table('usuario_ramo_docentes')
-                ->join('ramo_docentes', 'usuario_ramo_docentes.id_ramo_docente', '=', 'ramo_docentes.id')
-                ->join('carrera_ramos', 'ramo_docentes.id_ramo', '=', 'carrera_ramos.id_ramo')
-                ->join('carreras', 'carrera_ramos.id_carrera', '=', 'carreras.id')
-                ->select('id_carrera', 'nombre_carrera', 'nombre_carrera_no_tilde')
-                ->where('usuario_ramo_docentes.id_usuario', '=', $id)
-                ->distinct()
-                ->first();
-
-            //cargamos en variable session la carrera seleccionada por el alumno
-            Session::put('carrera', $carrera);
-
-            $id_carrera = $carrera->id_carrera;
-
-            $carreraObj = Carrera::find($id_carrera);
-
-            //cargamos lista de posteos asociados a la carrera
-            $posteosCarrera = $carreraObj->getPost();
-
-            // cargamos en variable session la lista de ramos
-            Session::put('ramos', $ramos);
-            // cargamos en varaible session los posteos asociados a la cerra
-            Session::put('posteosCarrera', $posteosCarrera);
-            //Session::put('posteosRamo', $posteosRamo);
-
-
-            /**
-             * Obtenemos la informacion de las actividades de los usuarios seguidos
-             */
-
-            $elementosSeguidos = $carreraObj->getElementoSeguidores($id);
-
-            // retornamos la vista index
-            return view('user.index', [
-                'elementosSeguidos' => $elementosSeguidos
-            ])->with(['perfil' => $perfil,
-            'publicidad' => $publicidad,
-            'comentarioCarreraPosts' => $comentarioCarreraPosts,
-                'posteosCarrera' => $posteosCarrera
+        if ($userProfile == 1) {
+            return view('admin.index', [
+                'user' => Auth::user()
             ]);
         }
+
+        $userCareers    =   Auth::user()->getCareers()->id;
+
+        // TODO: Actualmente la lógica permite 1 carrera por usuario
+        $comments = Comentario::getByCareer($userCareers);
+
+        // TODO: No se está utilizando
+        $publicidad = DB::table('publicidads')->select('id', 'url')->orderBy('id', 'desc')->first();
+
+        $posts = Carrera::getPostsByCareer($userId, $userCareers);
+
+        $elementosSeguidos = Carrera::getElementoSeguidores($userId, $userCareers);
+
+        return view('user.index', compact('elementosSeguidos', 'profile', 'publicidad', 'comments', 'posts'));
     }
+
     public function getLogout(){
         Session::flush();
         //Auth::logout(); //decidi irme por flush, porque as� se borran los datos de sesi�n
@@ -594,7 +525,7 @@ class UserController extends Controller
      */
     public function byRamo($ramo)
     {
-        $id_user = Session::get('user')->id;
+        $id_user = Auth::user()->id;
         $usuario = User::find($id_user);
 
         $users = DB::table('usuario_ramo_docentes')

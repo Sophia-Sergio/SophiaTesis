@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Input;
 Auth::routes();
 
 require_once 'Routes/UsersRoute.php';
+require_once 'Routes/PostRamosRoute.php';
 
 Route::group(['middleware' => ['web']], function() {
 
@@ -230,7 +231,7 @@ Route::group(['middleware' => ['web']], function() {
         'middleware' => 'auth'
     ]);
 
-    Route::get('/likePost/{post}', 'PostController@toggleLike');
+    //Route::get('/likePost/{post}', 'PostController@toggleLike');
     Route::get('/likePostCarrera/{post}', 'PostController@toggleLikeCarrera');
 
     Route::get('ramo/muro/{ramo}', 'RamoController@index');

@@ -18,7 +18,7 @@
                 <span class="icon-bar"></span>
             </a>
             <?php
-                $perfil = Session::get('perfil')->id_perfil; // inicio de sesión perfil, arreglo sin ver la causa del problema
+                //$perfil = Session::get('perfil')->id_perfil; // inicio de sesión perfil, arreglo sin ver la causa del problema
             ?>
 
 
@@ -26,7 +26,7 @@
                 <ul class="nav navbar-nav">
                     <!-- Messages: style can be found in dropdown.less-->
 
-                    @if ($perfil!=1)
+                    @if (Auth::user()->getProfile()->id != 1)
                     <li id="open-read-msg" class="dropdown messages-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-envelope-o"></i>
@@ -74,13 +74,13 @@
                         @endif
                         <p>
                           {{Auth::user()->nombre}} {{Auth::user()->apellido}}
-                          @if ($perfil=='2')
+                          @if (Auth::user()->getProfile()->id == '2')
                             - Estudiante
                           @else
                             - Administrador
                           @endif
                           <small>
-                          @if($perfil!='1')
+                          @if (Auth::user()->getProfile()->id != '1')
                               @if(Session::has('carrera'))
                             {{ $carrera->nombre_carrera }}
                               @endif

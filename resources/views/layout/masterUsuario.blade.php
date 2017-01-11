@@ -55,9 +55,6 @@
     </script>
 </head>
 <?php
-if (Session::has('carrera')) {
-    $carrera = Session::get('carrera');
-}
 if (Session::has('perfil'))
 {
   $perfil = Session::get('perfil')->id_perfil;
@@ -77,11 +74,11 @@ $usuario = Session::get('user');
   <!-- =============================================== -->
 
   <!-- Left side column. contains the sidebar -->
-@if(Session::has('carrera') && ($perfil=='2' ||$perfil=='3') )
+@if (Auth::user()->getCareers() && (Auth::user()->getProfile()->id == '2' || Auth::user()->getProfile()->id == '3') )
   @include('layout.panelUsuarioMuro')
-@elseif ($perfil=='2')
+@elseif (Auth::user()->getProfile()->id =='2')
   @include('layout.panelUsuarioMuroFirst')
-@elseif ($perfil=='1')
+@elseif (Auth::user()->getProfile()->id =='1')
   @include('layout.panelAdmin')
 @endif
 

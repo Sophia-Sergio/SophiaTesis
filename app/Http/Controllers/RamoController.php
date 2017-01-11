@@ -4,6 +4,7 @@ namespace Sophia\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Auth;
 use Session;
 use Sophia\Http\Requests;
 use Sophia\Ramo;
@@ -19,10 +20,11 @@ class RamoController extends Controller
     {
         $ramo = Ramo::find($id_ramo);
         Session::put('ramo', $ramo);
-        $id_carrera = Session::get('carrera')->id_carrera;
-        $id_usuario = Session::get('user')->id;
+        Session::forget('ramo');
 
-        $posteosRamo = $ramo->getPost($id_carrera, $id_ramo);
+        $id_usuario = Auth::user()->id;
+
+        $posteosRamo = $ramo->getPost(Auth::user()->getCareers()->id, $id_ramo);
 
         $comentarioRamoPosts =  DB::table('comentarios')
             ->join('post_ramos', 'comentarios.id_post_ramo', '=', 'post_ramos.id')
@@ -55,64 +57,34 @@ class RamoController extends Controller
         Session::put('docente', $docente);
 
 
-
-
         return view("ramo.muro", [
             'ramo' => $ramo,
             'posteosRamos' => $posteosRamo,
-            'comentarioRamoPosts' => $comentarioRamoPosts
+            'comentarioRamoPosts' => $comentarioRamoPosts,
+            'urd'   =>  $id_usuario_ramo_docente->id
         ]);
     }
 
-    public function contenido($id_ramo)
+    /**
+     * Vista de los archivos de un ramo
+     *
+     * @param $idRamo
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function contenido($idRamo)
     {
-        $id_usuario = Session::get('user')->id;
-        $id_usuario_ramo_docente = DB::table('usuario_ramo_docentes')
-            ->join('ramo_docentes', 'id_ramo_docente', '=', 'ramo_docentes.id')
-            ->select('usuario_ramo_docentes.id')
-            ->where('id_ramo', $id_ramo)
-            ->where('id_usuario', $id_usuario)
-            ->distinct()
-            ->first();
+        $data = UsuarioRamoDocente::getByRamoAndUser($idRamo, Auth::user()->id);
+        $ramo = Ramo::find($idRamo);
 
-        $id_docente = DB::table('usuario_ramo_docentes')
-            ->join('ramo_docentes', 'id_ramo_docente', '=', 'ramo_docentes.id')
-            ->select('ramo_docentes.id_docente', 'usuario_ramo_docentes.id_ramo_docente')
-            ->where('id_ramo', $id_ramo)
-            ->where('id_usuario', $id_usuario)
-            ->distinct()
-            ->first();
-
-        Session::put('id_docente', $id_docente);
-        $_id_docente = Session::get('id_docente')->id_docente;
-
-
-        /**
-         * Publicos
-         */
-
-        Session::put('id_usuario_ramo_docente', $id_usuario_ramo_docente);
-        $docente = Docente::find($_id_docente);
-        Session::put('docente', $docente);
-
-        $ramo = Ramo::find($id_ramo);
-        Session::put('ramo', $ramo);
-        $id_usuario_ramo_docente = Session::get('id_usuario_ramo_docente')->id;
-
-
-        $archivosPublicos = $ramo->getArchivosPublicos($_id_docente);
-
-        // No es sólo archivos privados, son públicos y privados del usuario conectado
-        $archivosPrivados = $ramo->getArchivosPrivados($id_usuario_ramo_docente);
+        $archivosPublicos = $ramo->getArchivosPublicos($data->id_docente);
+        $archivosPrivados = $ramo->byUrd($data->id_usuario_ramo_docente);
 
         return view("ramo.contenido", [
-            'archivos_publicos' => $archivosPublicos,
-            'archivos_privados' => $archivosPrivados,
-            'ramo' => $ramo
+            'archivos_publicos' =>  $archivosPublicos,
+            'archivos_privados' =>  $archivosPrivados,
+            'ramo'              =>  $ramo,
+            'data'              =>  $data
         ]);
 
     }
-
-
-
 }

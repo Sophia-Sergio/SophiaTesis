@@ -16,7 +16,10 @@ class UsuarioRamoDocente extends Model
     public static function getByRamoAndUser($ramo, $user)
     {
         return UsuarioRamoDocente::join('ramo_docentes', 'id_ramo_docente', '=', 'ramo_docentes.id')
-            ->select('usuario_ramo_docentes.id','ramo_docentes.id_docente', 'usuario_ramo_docentes.id_ramo_docente')
+            ->select(
+                'usuario_ramo_docentes.id as id_usuario_ramo_docente',
+                'ramo_docentes.id_docente',
+                'usuario_ramo_docentes.id_ramo_docente')
             ->where('id_ramo', $ramo)
             ->where('id_usuario', $user)
             ->distinct()

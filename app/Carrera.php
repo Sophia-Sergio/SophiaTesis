@@ -14,13 +14,21 @@ class Carrera extends Model
         'nombre_carrera'
     ];
 
-    public function getPost() {
-        $id_user = Auth::user()->id;
-
+    /**
+     * Obtener post
+     *
+     * Obtener los post que se han escrito en una carrera específica
+     *
+     * @param $user
+     * @param $career
+     * @return mixed
+     */
+    public static function getPostsByCareer($user, $career)
+    {
         $posteosCarrera = PostCarrera::join('carreras', 'id_carrera', '=', 'carreras.id')
             ->join('users', 'id_user', '=', 'users.id')
             ->select('id_carrera', 'contenido', 'id_user',  'post_carreras.id', 'nombre_carrera', 'nombre', 'apellido', 'post_carreras.created_at')
-            ->where('id_carrera', $this->id)
+            ->where('id_carrera', $career)
             ->where('post_carreras.estado', '=', 1)
             ->distinct()
             ->orderBy('created_at', 'desc')
@@ -36,22 +44,17 @@ class Carrera extends Model
                 $post->n_like_str .= ' personas';
             }
 
-            $post->is_like = $post->isLikeUer($id_user);
+            $post->is_like = $post->isLikeUer($user);
         }
-
 
         return $posteosCarrera;
     }
 
 
-    public function getElementoSeguidores( $user_id ) {
-
-        $carrera_id = $this->id;
-
+    public static function getElementoSeguidores($userId, $careerId)
+    {
         $data = DB::select("
             (
-
-
                 select
                     post_ramos.id as 'id',
                     post_ramos.created_at as 'created_at',
@@ -79,11 +82,11 @@ class Carrera extends Model
                 on ramo_docentes.id = usuario_ramo_docentes.id_ramo_docente
                 inner join ramos
                 on ramos.id = ramo_docentes.id_ramo
-                where users_seguidos.user_id = ".$user_id."
+                where users_seguidos.user_id = ".$userId."
                 and post_ramos.estado = 1
                 and usuario_ramo_docentes.id_ramo_docente in (
                     select usuario_ramo_docentes.id_ramo_docente from usuario_ramo_docentes
-                    where usuario_ramo_docentes.id_usuario = ".$user_id."
+                    where usuario_ramo_docentes.id_usuario = ".$userId."
                 )
 
                 ) union (
@@ -111,9 +114,9 @@ class Carrera extends Model
                 on users.id = users_seguidos.user_seguido_id
                 inner join carreras
                 on carreras.id = post_carreras.id_carrera
-                where users_seguidos.user_id = ".$user_id."
+                where users_seguidos.user_id = ".$userId."
                 and post_carreras.estado = 1
-                and post_carreras.id_carrera = ".$carrera_id."
+                and post_carreras.id_carrera = ".$careerId."
 
                 ) union (
 
@@ -121,7 +124,7 @@ class Carrera extends Model
                 select
                     files.id as 'id',
                     files.created_at as 'created_at',
-                    files.updated_at, files.name as 'contenido',
+                    files.updated_at, files.client_name as 'contenido',
                     usuario_ramo_docentes.id_usuario as 'user_id',
                     users.nombre as 'user_nombre',
                     users.apellido as 'user_apellido',
@@ -147,9 +150,9 @@ class Carrera extends Model
                 where files.seguridad = 1
                 and usuario_ramo_docentes.id_ramo_docente in (
                     select usuario_ramo_docentes.id_ramo_docente from usuario_ramo_docentes
-                    where usuario_ramo_docentes.id_usuario = ".$user_id."
+                    where usuario_ramo_docentes.id_usuario = ".$userId."
                 )
-                and usuario_ramo_docentes.id_usuario != ".$user_id."
+                and usuario_ramo_docentes.id_usuario != ".$userId."
 
             )
             order by created_at desc
