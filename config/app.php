@@ -169,7 +169,8 @@ return [
         Laravel\Socialite\SocialiteServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Yajra\Datatables\DatatablesServiceProvider::class,
-        //Sophia\Providers\ComposerServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
+        Sophia\Providers\ComposerServiceProvider::class,
         //'Sophia\Providers\ComposerServiceProvider',
 
 
@@ -235,6 +236,7 @@ return [
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+        'Image' => Intervention\Image\Facades\Image::class
     ],
 
 ];

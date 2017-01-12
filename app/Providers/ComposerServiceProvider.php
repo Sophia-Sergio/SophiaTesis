@@ -2,7 +2,6 @@
 
 namespace Sophia\Providers;
 
-use App\Http\ViewComposers\ProfileComposer;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -15,11 +14,8 @@ class ComposerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        View::composer(
-            ['message.show'],
-            //'App\Http\ViewComposers\ProfileComposer'
-            ProfileComposer::class
-        );
+
+        View::composer(['layout.user', 'carrera.index'], 'Sophia\Http\ViewComposers\ProfileComposer');
     }
 
     /**

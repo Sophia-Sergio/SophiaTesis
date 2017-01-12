@@ -26,10 +26,12 @@
     22 => 'Laravel\\Socialite\\SocialiteServiceProvider',
     23 => 'Collective\\Html\\HtmlServiceProvider',
     24 => 'Yajra\\Datatables\\DatatablesServiceProvider',
-    25 => 'Sophia\\Providers\\AppServiceProvider',
-    26 => 'Sophia\\Providers\\AuthServiceProvider',
-    27 => 'Sophia\\Providers\\EventServiceProvider',
-    28 => 'Sophia\\Providers\\RouteServiceProvider',
+    25 => 'Intervention\\Image\\ImageServiceProvider',
+    26 => 'Sophia\\Providers\\ComposerServiceProvider',
+    27 => 'Sophia\\Providers\\AppServiceProvider',
+    28 => 'Sophia\\Providers\\AuthServiceProvider',
+    29 => 'Sophia\\Providers\\EventServiceProvider',
+    30 => 'Sophia\\Providers\\RouteServiceProvider',
   ),
   'eager' => 
   array (
@@ -44,10 +46,12 @@
     8 => 'Illuminate\\Session\\SessionServiceProvider',
     9 => 'Illuminate\\View\\ViewServiceProvider',
     10 => 'Yajra\\Datatables\\DatatablesServiceProvider',
-    11 => 'Sophia\\Providers\\AppServiceProvider',
-    12 => 'Sophia\\Providers\\AuthServiceProvider',
-    13 => 'Sophia\\Providers\\EventServiceProvider',
-    14 => 'Sophia\\Providers\\RouteServiceProvider',
+    11 => 'Intervention\\Image\\ImageServiceProvider',
+    12 => 'Sophia\\Providers\\ComposerServiceProvider',
+    13 => 'Sophia\\Providers\\AppServiceProvider',
+    14 => 'Sophia\\Providers\\AuthServiceProvider',
+    15 => 'Sophia\\Providers\\EventServiceProvider',
+    16 => 'Sophia\\Providers\\RouteServiceProvider',
   ),
   'deferred' => 
   array (

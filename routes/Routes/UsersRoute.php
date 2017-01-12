@@ -22,16 +22,24 @@ Route::post('/signin', [
 
 Route::group(['middleware' => ['web', 'auth']], function() {
 
-    // Registro académico de nuevo usuario
-    Route::post('/tomaCarrera', [
+    Route::post('tomaCarrera', [
         'uses' => 'UserController@tomaCarrera',
         'as' => 'tomaCarrera'
     ]);
 
-    Route::post('/tomaRamos', [
+    Route::post('tomaRamos', [
         'uses' => 'UserController@tomaRamos',
         'as' => 'tomaRamos',
-        'middleware' => 'auth'
+    ]);
+
+    Route::get('profile', [
+        'uses' => 'UserController@showProfile',
+        'as' => 'user.profile',
+    ]);
+
+    Route::post('profile', [
+        'uses' => 'UserController@updateProfile',
+        'as' => 'user.update_profile'
     ]);
 
 });

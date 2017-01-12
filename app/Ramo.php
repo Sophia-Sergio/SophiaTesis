@@ -35,7 +35,7 @@ class Ramo extends Model
 
         foreach($archivos_publicos as $file) {
             $file->n_like = $file->likes()->count();
-            $file->is_like = $file->isLikeUer($id_user);
+            $file->is_like = $file->isLikeUser($id_user);
         }
 
         return $archivos_publicos;
@@ -89,7 +89,7 @@ class Ramo extends Model
                 $post->n_like_str .= ' personas';
             }
 
-            $post->is_like = $post->isLikeUer($id_user);
+            $post->is_like = $post->isLikeUser($id_user);
         }
 
         return $posteosRamo;

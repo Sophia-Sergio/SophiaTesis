@@ -2,20 +2,89 @@
 
 namespace Sophia;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Sophia\UsersSeguidos;
+use Illuminate\Support\Facades\Input;
+use Intervention\Image\Facades\Image;
 
 class User extends Model implements Authenticatable
 {
     use \Illuminate\Auth\Authenticatable;
 
     protected $fillable = [
-        'nombre', 'apellido', 'email', 'password', 'fecha_nacimiento', 'edad', 'estado', 'reintentos'
+        'nombre', 'apellido', 'email', 'password', 'fecha_nacimiento', 'edad', 'estado', 'reintentos', 'avatar'
     ];
+
+    public function postRamos()
+    {
+        return $this->hasMany('Sophia\PostRamo');
+    }
+
+    /**
+     * Se calcula edad en base a fecha de nacimiento
+     *
+     * @param $value
+     */
+    public function setEdadAttribute($value)
+    {
+        list($year, $month, $day) = explode('-', Input::get('fecha_nacimiento'));
+        $age    =   Carbon::createFromDate($year, $month, $day)->age;
+        $this->attributes['edad'] =   $age;
+    }
+
+    /**
+     * Subir una imagen
+     *
+     * @param $value
+     */
+    public function setAvatarAttribute($value)
+    {
+        if (!empty($value) && !filter_var($value, FILTER_VALIDATE_URL)) {
+
+            $destination    =   storage_path('app/public/users');
+            $imageName      =   "{$this->id}.jpg";
+            $fullPath       =   "$destination/$imageName";
+
+            if(!is_dir($destination))
+                mkdir($destination, 0775);
+
+            Image::make(Input::file('avatar'))
+                ->resize(300, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                })
+                ->save($fullPath);
+
+            $this->attributes['avatar'] = "storage/users/$imageName";
+        }
+    }
+
+    /**
+     * Obtener imagen de avatar
+     *
+     * @return string
+     */
+    public function getAvatarAttribute($value)
+    {
+        $id         =   Auth::user()->id;
+        $noAvatar   =   URL::to('img/man_avatar.jpg');
+
+        $fromProvider = OauthIdentity::where('user_id', $id)->first();
+
+        if (!empty($value)) {
+            $avatar = asset($value);
+        }elseif (isset($fromProvider->avatar) && !empty($fromProvider->avatar)){
+            $avatar = $fromProvider->avatar;
+        } else {
+            $avatar = $noAvatar;
+        }
+
+        return $avatar;
+    }
 
     /**
      * Obtener ramos del usuario
@@ -88,24 +157,6 @@ class User extends Model implements Authenticatable
     public function getFullName()
     {
         return ucfirst($this->nombre) . ' ' . ucfirst($this->apellido);
-    }
-
-    public static function getAvatar($id)
-    {
-        $noAvatar = URL::to('img/man_avatar.jpg');
-
-        // Set Avatar
-        $fromProvider = OauthIdentity::where('user_id', $id)->first();
-
-        if (Storage::disk('local')->has( $id . '.jpg')) {
-            $avatar = route('profile.image', ['filename' => $id . '.jpg']);
-        }elseif (isset($fromProvider->avatar) && !empty($fromProvider->avatar)){
-            $avatar = $fromProvider->avatar;
-        } else {
-            $avatar = $noAvatar;
-        }
-
-        return $avatar;
     }
 
     public function addSeguirUser($user_seguido_id) {

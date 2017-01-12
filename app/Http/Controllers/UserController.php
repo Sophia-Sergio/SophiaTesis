@@ -310,9 +310,30 @@ class UserController extends Controller
         return view('admin.crearDocentes', ['user'=>$usuario]);
     }
 
-    public function getProfile()
+    /**
+     * Vista de perfil
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showProfile()
     {
-        return view ('user.profile');
+        $user   =   Auth::user();
+        return view ('user.profile', compact('user'));
+    }
+
+    /**
+     * Modificar perfil
+     *
+     * @param Request $request
+     * @return mixed
+     */
+    public function updateProfile(Request $request)
+    {
+        $product = User::find(Auth::user()->id);
+        $product->fill($request->all());
+        $product->save();
+
+        return redirect()->route('user.profile');
     }
 
     public function crearPublicidad()
@@ -373,43 +394,6 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-    public function updateProfile(Request $request)
-    {
-
-
-        $this->validate($request, [
-            'first_name' => 'required|min:3',
-            'last_name' => 'required|min:3',
-            'email' => 'required|min:3',
-        ]);
-
-        $data = $request;
-
-        $usuario = Session::get('user');
-
-
-
-        DB::table('users')
-            ->where('id', $usuario->id)
-            ->update([
-                'nombre' => $request['first_name'],
-                'apellido' => $request['last_name'],
-                'email' => $request['email'],
-                'fecha_nacimiento' => $request['fecha_nacimiento'],
-            ]);
-        $usuario=User::find($usuario->id);
-        Session::set('user',$usuario );
-        $usuario = Session::get('user');
-
-        $file = $request->file('image');
-        $filename = $usuario->id.'.jpg';
-        if ($file){
-            Storage::disk()->put($filename, File::get($file));
-        }
-        return redirect()->route('profile');
-    }
-
-
     public function getUserImage($filename)
     {
         $file = Storage::disk('local')->get($filename);
@@ -429,34 +413,7 @@ class UserController extends Controller
      */
     public function getDashboard()
     {
-        $userId         =   Auth::user()->id;
-        $userProfile    =   Auth::user()->getProfile()->id;
 
-        if (UsuarioRamoDocente::where('id_usuario', $userId)->count() == 0) {
-            $tipos_institucion = TipoInstitucion::all();
-            Session::put('tipos_institucion', $tipos_institucion);
-            return view('user.registroAcademico');
-        }
-
-        if ($userProfile == 1) {
-            return view('admin.index', [
-                'user' => Auth::user()
-            ]);
-        }
-
-        $userCareers    =   Auth::user()->getCareers()->id;
-
-        // TODO: Actualmente la lógica permite 1 carrera por usuario
-        $comments = Comentario::getByCareer($userCareers);
-
-        // TODO: No se está utilizando
-        $publicidad = DB::table('publicidads')->select('id', 'url')->orderBy('id', 'desc')->first();
-
-        $posts = Carrera::getPostsByCareer($userId, $userCareers);
-
-        $elementosSeguidos = Carrera::getElementoSeguidores($userId, $userCareers);
-
-        return view('user.index', compact('elementosSeguidos', 'profile', 'publicidad', 'comments', 'posts'));
     }
 
     public function getLogout(){

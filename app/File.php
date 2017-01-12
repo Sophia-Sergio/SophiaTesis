@@ -56,7 +56,7 @@ class File extends Model
         return $this->hasMany('Sophia\LikeFiles');
     }
 
-    public function isLikeUer ($idUser) {
+    public function isLikeUser ($idUser) {
 
         $actuales = LikeFiles::where('file_id', $this->id)
             ->where('user_id', $idUser)

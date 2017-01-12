@@ -11,7 +11,7 @@ class PostCarrera extends Model
     }
 
 
-    public function isLikeUer ($idUser) {
+    public function isLikeUser ($idUser) {
 
         $actuales = LikePostCarrera::where('post_carrera_id', $this->id)
             ->where('user_id', $idUser)

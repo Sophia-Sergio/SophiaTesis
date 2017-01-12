@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\ViewComposers;
+namespace Sophia\Http\ViewComposers;
 
-use Illuminate\Contracts\View\View;
-use App\User as User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
+use Sophia\User as User;
 
 class ProfileComposer
 {
@@ -15,8 +16,7 @@ class ProfileComposer
      */
     public function compose(View $view)
     {
-        $count = User::all();
-        $view->with('count', 123);
+        $view->with('currentUser', Auth::user());
     }
 
 }

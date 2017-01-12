@@ -102,7 +102,7 @@ class PostController extends Controller
         }
 
         $totalLikes = $post->likes()->count();
-        $is_like = $post->isLikeUer($id_user);
+        $is_like = $post->isLikeUser($id_user);
 
         return response()->json([
             'totalLikes' => $totalLikes,

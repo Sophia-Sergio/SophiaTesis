@@ -10,26 +10,37 @@ class PostRamo extends Model
 {
     protected $fillable = ['contenido', 'id_user', 'id_carrera', 'id_usuario_ramo_docente', 'estado'];
 
-    /*public function setIdUserAttribute($value)
+    public function users()
     {
-        $this->attributes['id_user'] =   1;
+        return $this->hasOne('Sophia\User', 'id', 'id_user');
     }
 
-    public function setIdCarreraAttribute($value)
+    public function carreras()
     {
-        $this->attributes['id_carrera'] =   Auth::user()->getCareers();
-    }*/
+        return $this->hasOne('Sophia\Carrera', 'id', 'id_carrera');
+    }
 
-    public function likes() {
+    public function usuarioRamoDocentes()
+    {
+        return $this->hasOne('Sophia\UsuarioRamoDocente', 'id', 'id_usuario_ramo_docente');
+    }
+
+    public function likes()
+    {
         return $this->hasMany('Sophia\LikePost');
     }
 
-    public function isLikeUer ($idUser) {
-
+    /**
+     * Verificar si el usuario ha hecho like en post
+     *
+     * @param $idUser
+     * @return bool
+     */
+    public function isLikeUser ($idUser)
+    {
         $actuales = LikePost::where('post_ramo_id', $this->id)
             ->where('user_id', $idUser)
-            ->get()
-        ;
+            ->get();
 
         if(count($actuales) > 0) {
             return true;

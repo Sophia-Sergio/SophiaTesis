@@ -8,6 +8,8 @@ class LikePost extends Model
 {
     protected $table = 'like_post';
 
+    protected $fillable = ['post_ramo_id', 'user_id'];
+
     public function addLike($userId, $postId) {
 
         $like = new LikePost();

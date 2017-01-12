@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Session;
 use Sophia\Http\Requests;
+use Sophia\PostRamo;
 use Sophia\Ramo;
 use Sophia\File;
 use Sophia\Docente;
@@ -16,11 +17,15 @@ use Illuminate\Support\Facades\DB;
 
 class RamoController extends Controller
 {
+    /**
+     * Dashboard del ramo
+     *
+     * @param $id_ramo
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index($id_ramo)
     {
         $ramo = Ramo::find($id_ramo);
-        Session::put('ramo', $ramo);
-        Session::forget('ramo');
 
         $id_usuario = Auth::user()->id;
 
@@ -41,7 +46,6 @@ class RamoController extends Controller
             ->distinct()
             ->first();
 
-
         $id_docente = DB::table('usuario_ramo_docentes')
             ->join('ramo_docentes', 'id_ramo_docente', '=', 'ramo_docentes.id')
             ->select('ramo_docentes.id_docente')
@@ -50,12 +54,11 @@ class RamoController extends Controller
             ->distinct()
             ->first();
 
-        Session::put('id_docente', $id_docente);
+        Session::put('id_docente', $id_docente); Session::forget('id_docente');
         $_id_docente = Session::get('id_docente')->id_docente;
         $docente = Docente::find($_id_docente);
         Session::put('id_usuario_ramo_docente', $id_usuario_ramo_docente);
         Session::put('docente', $docente);
-
 
         return view("ramo.muro", [
             'ramo' => $ramo,

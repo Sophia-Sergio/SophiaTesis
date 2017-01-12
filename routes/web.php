@@ -161,27 +161,9 @@ Route::group(['middleware' => ['web']], function() {
         'middleware' => 'auth'
     ]);
 
-
-    Route::post('/updateProfile', [
-        'uses' => 'UserController@updateProfile',
-        'as' => 'updateProfile'
-    ]);
-
-    Route::get('/userimage/{filename}', [
-        'uses' => 'UserController@getUserImage',
-        'as' => 'profile.image'
-    ]);
-
     Route::get('/publicidadimage/{filename}', [
         'uses' => 'UserController@getPublicidadImage',
         'as' => 'publicidad.image'
-    ]);
-
-
-    Route::get('/profile', [
-        'uses' => 'UserController@getProfile',
-        'as' => 'profile',
-        'middleware' => 'auth'
     ]);
 
     Route::post('/tomaDocentes', [
@@ -189,8 +171,9 @@ Route::group(['middleware' => ['web']], function() {
         'as' => 'tomaDocentes',
         'middleware' => 'auth'
     ]);
+
     Route::get('/dashboard', [
-        'uses' => 'UserController@getDashboard',
+        'uses' => 'CarreraController@index',
         'as' => 'dashboard',
         'middleware' => 'auth'
     ]);
@@ -231,7 +214,6 @@ Route::group(['middleware' => ['web']], function() {
         'middleware' => 'auth'
     ]);
 
-    //Route::get('/likePost/{post}', 'PostController@toggleLike');
     Route::get('/likePostCarrera/{post}', 'PostController@toggleLikeCarrera');
 
     Route::get('ramo/muro/{ramo}', 'RamoController@index');

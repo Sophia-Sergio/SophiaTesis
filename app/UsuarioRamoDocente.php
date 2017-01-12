@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class UsuarioRamoDocente extends Model
 {
 
+    public function postRamos()
+    {
+        return $this->hasMany('Sophia\PostRamo');
+    }
 
     public function files()
     {

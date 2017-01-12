@@ -1,20 +1,17 @@
 <?php
 
-namespace Sophia\Http\Controllers\Api;
+namespace Sophia\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use Sophia\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Sophia\LikePost;
-use Sophia\PostRamo;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Sophia\Carrera;
+use Sophia\Comentario;
+use Sophia\TipoInstitucion;
+use Sophia\UsuarioRamoDocente;
 
-class PostRamoController extends Controller
+class CarreraController extends Controller
 {
-    public function __construct()
-    {
-
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -22,7 +19,34 @@ class PostRamoController extends Controller
      */
     public function index()
     {
-        //
+        $userId         =   Auth::user()->id;
+        $userProfile    =   Auth::user()->getProfile()->id;
+
+        if (UsuarioRamoDocente::where('id_usuario', $userId)->count() == 0) {
+            $tipos_institucion = TipoInstitucion::all();
+            Session::put('tipos_institucion', $tipos_institucion);
+            return view('user.registroAcademico');
+        }
+
+        if ($userProfile == 1) {
+            return view('admin.index', [
+                'user' => Auth::user()
+            ]);
+        }
+
+        $userCareers    =   Auth::user()->getCareers()->id;
+
+        // TODO: Actualmente la lógica permite 1 carrera por usuario
+        $comments = Comentario::getByCareer($userCareers);
+
+        // TODO: No se está utilizando
+        $publicidad = DB::table('publicidads')->select('id', 'url')->orderBy('id', 'desc')->first();
+
+        $posts = Carrera::getPostsByCareer($userId, $userCareers);
+
+        $elementosSeguidos = Carrera::getElementoSeguidores($userId, $userCareers);
+
+        return view('carrera.index', compact('elementosSeguidos', 'profile', 'publicidad', 'comments', 'posts'));
     }
 
     /**
@@ -88,46 +112,6 @@ class PostRamoController extends Controller
      */
     public function destroy($id)
     {
-        $post   = PostRamo::where('id', $id)->first();
-
-        $post->estado = 0;
-        $post->save();
-
-        return back();
-    }
-
-    /**
-     * Agregar o quitar like a post
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     * @internal param $id_post
-     */
-    public function toggleLike(Request $request)
-    {
-        $postId =   $request->idPost;
-        $userId =   Auth::user()->id;
-        $post   =   PostRamo::find($postId);
-
-        $like   =   LikePost::where('post_ramo_id', $postId)
-            ->where('user_id', $userId)
-            ->first();
-
-        if (count($like) > 0) {
-            $like->delete();
-        } else {
-            LikePost::create([
-                'post_ramo_id'  =>  $postId,
-                'user_id'       =>  $userId
-            ]);
-        }
-
-        $totalLikes =   $post->likes()->count();
-        $isLike     =   $post->isLikeUser($userId);
-
-        return response()->json([
-            'totalLikes'    =>  $totalLikes,
-            'isLike'        =>  $isLike
-        ]);
+        //
     }
 }

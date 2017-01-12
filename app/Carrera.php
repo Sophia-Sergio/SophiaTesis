@@ -44,7 +44,7 @@ class Carrera extends Model
                 $post->n_like_str .= ' personas';
             }
 
-            $post->is_like = $post->isLikeUer($user);
+            $post->is_like = $post->isLikeUser($user);
         }
 
         return $posteosCarrera;
