@@ -54,12 +54,6 @@ class RamoController extends Controller
             ->distinct()
             ->first();
 
-        Session::put('id_docente', $id_docente); Session::forget('id_docente');
-        $_id_docente = Session::get('id_docente')->id_docente;
-        $docente = Docente::find($_id_docente);
-        Session::put('id_usuario_ramo_docente', $id_usuario_ramo_docente);
-        Session::put('docente', $docente);
-
         return view("ramo.muro", [
             'ramo' => $ramo,
             'posteosRamos' => $posteosRamo,
