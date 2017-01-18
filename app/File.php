@@ -15,6 +15,31 @@ class File extends Model
     ];
 
     /**
+     * Relación con tabla usuario_ramo_docente
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function usuarioRamoDocente()
+    {
+        return $this->belongsTo('Sophia\UsuarioRamoDocente', 'id_usuario_ramo_docente');
+    }
+
+    /**
+     * Relación con table like_files
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function likes()
+    {
+        return $this->hasMany('Sophia\LikeFiles');
+    }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return Carbon::createFromFormat('Y-m-d H:i:s', $value)->format('d-m-Y \\a h:i');
+    }
+
+    /**
      * Proceso para guardar un nuevo contenido de ramo
      *
      * @param $file
@@ -45,15 +70,6 @@ class File extends Model
             'type'                      =>  $type,
             'file_name'                 =>  $fileName
         ]);
-    }
-
-    public function usuarioRamoDocente()
-    {
-        return $this->belongsTo('Sophia\UsuarioRamoDocente', 'id_usuario_ramo_docente');
-    }
-
-    public function likes() {
-        return $this->hasMany('Sophia\LikeFiles');
     }
 
     public function isLikeUser ($idUser) {

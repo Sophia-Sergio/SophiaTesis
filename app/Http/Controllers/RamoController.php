@@ -17,13 +17,18 @@ use Illuminate\Support\Facades\DB;
 
 class RamoController extends Controller
 {
+    public function index()
+    {
+        return view('ramo.index');
+    }
+
     /**
      * Dashboard del ramo
      *
      * @param $id_ramo
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($id_ramo)
+    public function dashboard($id_ramo)
     {
         $ramo = Ramo::find($id_ramo);
 

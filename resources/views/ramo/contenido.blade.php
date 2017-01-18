@@ -1,4 +1,4 @@
-@extends('layout.masterUsuario')
+@extends('layout.user')
 
 @section('content')
     <link rel="stylesheet" href="{{asset('css/index_UsuarioMuro.css')}}">

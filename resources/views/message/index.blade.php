@@ -1,9 +1,8 @@
-@extends('layout.masterUsuario')
+@extends('layout.user')
 
 @section('title')
 Sophia | Registro Académico
 @endsection
-
 
 @section('content')
 <div class="row" style="padding-top: 50px;">

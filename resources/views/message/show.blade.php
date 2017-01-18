@@ -1,4 +1,4 @@
-@extends('layout.masterUsuario')
+@extends('layout.user')
 
 @section('title')
     Sophia | Conversaciones
@@ -7,16 +7,22 @@
 
 @section('content')
     <div class="row" style="padding-top: 50px;">
-        <div class="col-sm-10">
+
+        <div class="col-sm-5">
+            @foreach($users as $user)
+                {{ $user->nombre }}
+            @endforeach
+        </div>
+
+        <div class="col-sm-5">
             <div class="panel panel-default">
                 <div class="panel-body" style="padding-left:50px;  padding-top:25px; padding-right:50px; padding-bottom:30px" >
 
                     <div>
                         <img src="{{ $avatarWith }}" alt="", style="width:50px; height:50px;display:inline-block;">
-                        <h3 style="display:inline-block; margin-top:10px;">{{ $chatWith }}</h3>
+                        <h3 style="display:inline-block; margin-top:10px;">Conversación con {{ $chatWith }}</h3>
                     </div>
-                    <br>
-                    <h5>Ramo: {{ $ramo->nombre_ramo }}</h5>
+
                     <br>
 
                     <div class="row current-chat-area">

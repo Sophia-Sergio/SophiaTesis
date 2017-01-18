@@ -14,7 +14,7 @@ class UsuarioRamoDocente extends Model
 
     public function files()
     {
-        return $this->hasMany('Sophia\File');
+        return $this->hasMany('Sophia\File', 'id_usuario_ramo_docente');
     }
 
     public static function getByRamoAndUser($ramo, $user)

@@ -29,6 +29,7 @@ class MessageController extends Controller
      */
     public function index()
     {
+
     }
 
     public function myMessages($ramo)
@@ -106,8 +107,6 @@ class MessageController extends Controller
         ]);
 
         return response()->json(['status' => 1], 200);
-
-        //return redirect()->route('messages.show', ['id' => $uuid]);
     }
 
     /**
@@ -118,6 +117,24 @@ class MessageController extends Controller
      */
     public function show($id)
     {
+        // Obtener ramos del alumno actual
+        $getRamos   =   Auth::user()->getRamos();
+        $ramos      =   [];
+
+        foreach($getRamos as $getRamo) {
+            array_push($ramos, $getRamo->r_id);
+        }
+
+        // Obtener compañeros
+        $users = DB::table('usuario_ramo_docentes')
+            ->join('ramo_docentes', 'usuario_ramo_docentes.id_ramo_docente', '=', 'ramo_docentes.id')
+            ->join('ramos', 'ramo_docentes.id_ramo', '=', 'ramos.id')
+            ->join('users', 'usuario_ramo_docentes.id_usuario', '=', 'users.id')
+            ->whereIn('ramos.id', $ramos)
+            ->distinct()
+            ->orderBy('nombre_ramo')
+            ->get();
+
         // Actualizar los mensajes a leídos
         Message::where('uuid', $id)
             ->where('receiver', Auth::user()->id)
@@ -136,10 +153,10 @@ class MessageController extends Controller
 
             if ($message->sender != Auth::id()) {
                 $chatWith = $message->sender_name;
-                $avatarWith = User::getAvatar($message->sender);
+                $avatarWith = User::find($message->sender)->avatar;
             } else {
                 $chatWith = $message->receiver_name;
-                $avatarWith = User::getAvatar($message->receiver);
+                $avatarWith = User::find($message->receiver)->avatar;
             }
 
             $ramo = Ramo::find($message->ramo_id);
@@ -152,18 +169,10 @@ class MessageController extends Controller
             $noAvatar = URL::to('img/man_avatar.jpg');
 
             // Set Avatar
-            $fromProvider = OauthIdentity::where('user_id', $message->sender)->first();
-
-            if (isset($fromProvider->avatar) && !empty($fromProvider->avatar)) {
-                $message->sender_avatar = $fromProvider->avatar;
-            } elseif (Storage::disk('local')->has( $message->sender . '.jpg')) {
-                $message->sender_avatar = route('profile.image', ['filename' => $message->sender . '.jpg']);
-            } else {
-                $message->sender_avatar = $noAvatar;
-            }
+            $message->sender_avatar = User::find($message->sender)->avatar;
         }
 
-        return view('message.show', compact('messages', 'chatWith', 'avatarWith','ramo'));
+        return view('message.show', compact('users', 'messages', 'chatWith', 'avatarWith','ramo'));
     }
 
     public function chats($uuid)
@@ -188,16 +197,7 @@ class MessageController extends Controller
 
             $noAvatar = URL::to('img/man_avatar.jpg');
 
-            // Set Avatar
-            $fromProvider = OauthIdentity::where('user_id', $message->sender)->first();
-
-            if (isset($fromProvider->avatar) && !empty($fromProvider->avatar)) {
-                $message->sender_avatar = $fromProvider->avatar;
-            } elseif (Storage::disk('local')->has( $message->sender . '.jpg')) {
-                $message->sender_avatar = route('profile.image', ['filename' => $message->sender . '.jpg']);
-            } else {
-                $message->sender_avatar = $noAvatar;
-            }
+            $message->sender_avatar = User::find($message->sender)->avatar;
         }
 
         return $messages;

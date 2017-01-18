@@ -16,6 +16,7 @@ Auth::routes();
 
 require_once 'Routes/UsersRoute.php';
 require_once 'Routes/PostRamosRoute.php';
+require_once 'Routes/UsuarioRamoDocenteRoutes.php';
 
 Route::group(['middleware' => ['web']], function() {
 
@@ -216,7 +217,8 @@ Route::group(['middleware' => ['web']], function() {
 
     Route::get('/likePostCarrera/{post}', 'PostController@toggleLikeCarrera');
 
-    Route::get('ramo/muro/{ramo}', 'RamoController@index');
+    Route::get('ramo/muro/{ramo}', 'RamoController@dashboard');
+    Route::get('ramo/{ramo}', 'RamoController@index');
 
     Route::get('ramo/contenido/{ramo}', [
         'uses' => 'RamoController@contenido',

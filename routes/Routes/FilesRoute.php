@@ -2,6 +2,12 @@
 
 use Sophia\UsuarioRamoDocente;
 
+Route::resource('api/file', 'Api\FileController', ['as' => 'api']);
+
+Route::group(['namespace' => 'Api', 'prefix' => 'api/file'], function () {
+
+});
+
 Route::get('/files/not_seen/', [
     'uses' => 'FileController@notSeen',
     'as' => 'files.notSeen',
