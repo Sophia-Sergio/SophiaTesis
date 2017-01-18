@@ -1,3 +1,3 @@
 <?php
 
-Route::resource('urd', 'UsuarioRamoDocenteController', ['as' => 'api']);
+Route::resource('urd', 'UsuarioRamoDocenteController');

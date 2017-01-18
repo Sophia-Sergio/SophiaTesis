@@ -33,6 +33,12 @@ use Sophia\Http\Requests\InstitucionUpdateRequest;
 
 class UserController extends Controller
 {
+
+    public function show($id)
+    {
+
+    }
+
     /**
      * Vista de sign in y sign up
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
