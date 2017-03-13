@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Sophia\CarreraRamo;
 use Sophia\Comentario;
+use Sophia\PostCarrera;
+use Sophia\PostRamo;
 use Sophia\RamoDocente;
 use Sophia\TipoInstitucion;
 use Sophia\Institucion;
@@ -36,7 +38,14 @@ class UserController extends Controller
 
     public function show($id)
     {
+        $user       =   User::find(1);
 
+        $postCareer =   PostCarrera::where(['id_user' => $user->id])->get();
+        $postRamo   =   PostRamo::where(['id_user' => $user->id])->get();
+
+        $posts = $postCareer->merge($postRamo)->sortByDesc('created_at');
+
+        return view('user.show', compact('user', 'posts'));
     }
 
     /**
@@ -454,6 +463,7 @@ class UserController extends Controller
      */
     public function tomaRamos(Request $request)
     {
+        dd($request->all());
         $ramosTomados = $request['ramo'];
 
         $ramoDocentes = RamoDocente::getByRamos($ramosTomados);

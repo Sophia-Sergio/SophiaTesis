@@ -15,12 +15,14 @@ class CreateInstitucionsTable extends Migration
     {
         Schema::connection('mysql')->create('institucions', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
-            $table->string('nombre_institucion', 255);
-            $table->string('nombre_institucion_html', 255);
-            $table->string('nombre_institucion_no_tilde', 255);
+            $table->string('name')->unique();
+            $table->string('slug')->unique();
             $table->integer('id_tipo_institucion')->unsigned();
-            $table->foreign('id_tipo_institucion')->references('id')->on('tipo_institucions');
+            $table->timestamps();
+
+            $table->foreign('id_tipo_institucion')
+                ->references('id')->on('tipo_institucions')
+                ->onDelete('cascade');
         });
     }
 

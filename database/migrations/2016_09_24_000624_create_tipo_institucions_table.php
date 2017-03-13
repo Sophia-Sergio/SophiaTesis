@@ -15,9 +15,9 @@ class CreateTipoInstitucionsTable extends Migration
     {
         Schema::connection('mysql')->create('tipo_institucions', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name', 100)->unique();
+            $table->string('slug', 100)->unique();
             $table->timestamps();
-            $table->string('descripcion', 100);
-            $table->string('descripcion_html', 100);
         });
     }
 

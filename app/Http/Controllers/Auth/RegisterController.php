@@ -2,6 +2,7 @@
 
 namespace Sophia\Http\Controllers\Auth;
 
+use Sophia\Perfil;
 use Sophia\User;
 use Sophia\Usuario_Perfil;
 use Validator;
@@ -85,10 +86,16 @@ class RegisterController extends Controller
             'reintentos' => 0
         ]);
 
-        Usuario_Perfil::create([
-            'id_usuario'    =>  $user->id,
-            'id_perfil'     =>  2
-        ]);
+        $studentProfile = Perfil::where('codigo_perfil', 'EST')->get();
+
+        //dd($user->id);
+
+        if (count($studentProfile)) {
+            Usuario_Perfil::create([
+                'id_usuario'    =>  $user->id,
+                'id_perfil'     =>  $studentProfile[0]->id
+            ]);
+        }
 
         return $user;
     }

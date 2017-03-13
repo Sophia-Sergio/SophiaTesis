@@ -11,7 +11,10 @@
         "laravelcollective/html": "~5.3.0",
         "nesbot/carbon": "^1.21",
         "yajra/laravel-datatables-oracle": "^6.0",
-        "intervention/image": "^2.3"
+        "intervention/image": "^2.3",
+        "vinkla/pusher": "^2.5",
+        "pusher/pusher-php-server": "^2.6",
+        "tymon/jwt-auth": "0.5.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

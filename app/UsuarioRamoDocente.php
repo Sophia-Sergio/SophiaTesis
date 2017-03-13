@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class UsuarioRamoDocente extends Model
 {
+    protected $fillable = ['id_usuario', 'id_ramo_docente'];
 
     public function postRamos()
     {

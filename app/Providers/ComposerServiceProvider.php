@@ -15,7 +15,11 @@ class ComposerServiceProvider extends ServiceProvider
     public function boot()
     {
 
-        View::composer(['layout.user', 'carrera.index'], 'Sophia\Http\ViewComposers\ProfileComposer');
+        //View::composer(['layout.user', 'carrera.index'], 'Sophia\Http\ViewComposers\ProfileComposer');
+        View::composers([
+            'Sophia\Http\ViewComposers\ProfileComposer' => ['*'],
+            'Sophia\Http\ViewComposers\ActionComposer' => ['*']
+        ]);
     }
 
     /**

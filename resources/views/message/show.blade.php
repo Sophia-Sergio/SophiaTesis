@@ -9,129 +9,119 @@
     <div class="row" style="padding-top: 50px;">
 
         <div class="col-sm-5">
-            @foreach($users as $user)
-                {{ $user->nombre }}
-            @endforeach
-        </div>
 
-        <div class="col-sm-5">
-            <div class="panel panel-default">
-                <div class="panel-body" style="padding-left:50px;  padding-top:25px; padding-right:50px; padding-bottom:30px" >
+            <section class="blue-gradient-background">
+                <div class="container">
+                    <div class="row light-grey-blue-background chat-app">
 
-                    <div>
-                        <img src="{{ $avatarWith }}" alt="", style="width:50px; height:50px;display:inline-block;">
-                        <h3 style="display:inline-block; margin-top:10px;">Conversación con {{ $chatWith }}</h3>
-                    </div>
+                        <div class="action-bar">
+                            {!! Form::open(['route' => 'messages.store', 'id' => 'form-message2']) !!}
 
-                    <br>
+                            <div style="display:none;">
+                                <input type="text" id="uuid" name="uuid" value="{{ Request::segment(2) }}" readonly class="form-control">
+                            </div>
 
-                    <div class="row current-chat-area">
-                        <div id="msg-container" class="col-md-12" style="height: 200px; overflow-y: scroll;">
-                            <ul class="media-list"></ul>
-                        </div>
-                    </div>
+                            <textarea class="input-message col-xs-10" placeholder="Your message" id="message" name="message"></textarea>
 
-                    {!! Form::open(['route' => 'messages.store', 'id' => 'new-message']) !!}
-                        <div style="display:none;">
-                            <input type="text" id="uuid" name="uuid" value="{{ Request::segment(2) }}" readonly class="form-control">
+                            <div class="option col-xs-1 white-background">
+                                <span class="fa fa-smile-o light-grey"></span>
+                            </div>
+                            <div class="option col-xs-1 green-background send-message">
+                                <span class="white light fa fa-paper-plane-o"></span>
+                            </div>
+                            {!! Form::close() !!}
                         </div>
 
-                        <textarea name="message" id="message" cols="30" rows="10" class="form-control" required></textarea>
-
-
-                        <br>
-                        {{ Form::submit('Nuevo mensaje', ['class' => 'btn btn-success', 'style' => 'width: 100%']) }}
-                    {!! Form::close() !!}
-
+                    </div>
                 </div>
-            </div>
+            </section>
+
+            <input type="button" id="charge-msg" value="Cargar Anterior">
+
+            <div id="messages"></div>
+
+            <!-- Template para generar Post -->
+            <script id="chat_message_template" type="text/template">
+                <div class="message">
+                    <div class="avatar" style="display:inline-block;">
+                        <img src="" style="width:100px;">
+                    </div>
+                    <div class="text-display" style="display:inline-block;">
+                        <div class="message-data">
+                            <span class="author"></span>
+                            <span class="timestamp"></span>
+                            <span class="seen"></span>
+                        </div>
+                        <p class="message-body"></p>
+                    </div>
+                </div>
+            </script>
         </div>
     </div>
 @endsection
 
 @push('scripts')
+
 <script>
-    const endPointCreateMessage = siteUrl + "messages";
-    const endPointGetMessages = siteUrl + "messages/{{ Request::segment(2) }}/chat";
+    const endPointCreateMessage =   siteUrl + "messages";
+    const endPointGetMessages   =   siteUrl + "messages/{{ Request::segment(2) }}/chat";
+    const userToken             =   "{{ Auth::user()->token() }}";
 
-    $("#msg-container").animate({ scrollTop: 9999 }, 2000);
+    let chatChannel = "{{ $chatChannel }}";
+</script>
 
-    $( "#new-message" ).submit(function( event ) {
-        event.preventDefault();
+<script src="{{ asset('js/chat.js') }}"></script>
 
-        $.ajaxSetup({
-            header:$('meta[name="_token"]').attr('content')
-        });
+<script>
+    var page = 1,
+        lastPage = null;
 
-        $.ajax({
+    console.log(page);
 
-            type:"POST",
-            url: endPointCreateMessage,
-            data: $(this).serialize(),
-            dataType: 'json',
-            success: function(data){
-                $("#message").val("");
-                getNewMessage();
-                $("#msg-container").animate({ scrollTop: 9999 }, 2000);
-            },
-            error: function(data){
-
-            }
-        });
-
+    $(document).on("click", "#charge-msg", function() {
+        loadMsg();
     });
 
-    // La primera vez se llama inmediatamente
-    getNewMessage();
-
-    // Buscar mensajes cada 3 segundos
-    window.setInterval(function(){
-        getNewMessage();
-    }, 3000);
-
-
-    function getNewMessage() {
-        $.get( endPointGetMessages, function( response ) {
-
-            $.each( response, function( key, value ) {
-                if ($("#li-" + value.id).length == 0) {
-                    createElement(value);
-                }
-
-            });
-
-        });
+    function setLastPage(val) {
+        lastPage = val;
     }
 
-    function createElement(value) {
+    function setPage() {
+        page++;
+    }
 
-        var html = '';
+    function loadMsg() {
 
-        html += '<li id="li-'+value.id+'" class="media">';
-        html +=     '<div class="media-body">';
-        html +=         '<div class="media">';
-        html +=             '<a class="pull-left" href="#">';
-        html +=                 '<img class="media-object img-circle" src="'+value.sender_avatar+'">';
-        html +=             '</a>';
-        html +=             '<div class="media-body">';
-        html +=                 value.message;
-        html +=                 '<br>';
-        html +=                 '<small class="text-muted">'+value.sender_name+' | '+value.formated_date+'</small>';
-        html +=                 '<hr>';
-        html +=             '</div>';
-        html +=         '</div>';
-        html +=     '</div>';
-        html += '</li>';
+        $.get( "/api/message/{{ Request::segment(2) }}", {token: userToken, page: page} )
+            .done(function( data ) {
+                console.log(data);
 
-        $(".media-list").append(html);
+                let messages = data.data;
 
-        $("#msg-container").animate({ scrollTop: 9999 }, 2000);
+                if (messages.length < 1) {
+                    return false;
+                }
 
-        if(value.read == 0 || value.read == "0") {
-            $.get( "{{ route('messages.markAsRead', ['id' => Request::segment(2)]) }}", function( data ) {
-                console.log('aca' + value.id);
+                messages = messages.reverse();
+
+                $.each(messages, function(key, message) {
+                    if (page == 1) {
+                        addMessage(message, 'append');
+                    } else {
+                        addMessage(message, 'prepend');
+                    }
+                });
+
+                setPage();
+                setLastPage(data.last_page);
+
+                console.log('current page: ' + page);
+                console.log('last page: ' + lastPage);
+
+                if (page == lastPage) {
+                    $("#charge-msg").hide();
+                }
             });
-        }
     }
 </script>
 @endpush

@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Sophia\OauthIdentity;
+use Sophia\User;
 
 Route::get('/messages/unread', function () {
     $messages = \Sophia\Message::where('read', 0)
@@ -31,13 +32,7 @@ Route::get('/messages/unread', function () {
         // Set Avatar
         $fromProvider = OauthIdentity::where('user_id', $message->sender)->first();
 
-        if (isset($fromProvider->avatar) && !empty($fromProvider->avatar)) {
-            $message->sender_avatar = $fromProvider->avatar;
-        } elseif (Storage::disk('local')->has( $message->sender . '.jpg')) {
-            $message->sender_avatar = route('profile.image', ['filename' => $message->sender . '.jpg']);
-        } else {
-            $message->sender_avatar = $noAvatar;
-        }
+        $message->sender_avatar = User::find($message->sender)->avatar;
     }
 
     return $messages;

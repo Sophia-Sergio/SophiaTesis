@@ -1,4 +1,4 @@
-@extends('layout.masterUsuario')
+@extends('layout.user')
 
 @section('title')
     Sophia | Registro Académico

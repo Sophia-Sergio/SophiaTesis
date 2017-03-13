@@ -1,6 +1,10 @@
 @extends('layout.user')
 
 @section('content')
+
+
+    <br><br><br>
+
     <h1>Archivos</h1>
 
     <div>

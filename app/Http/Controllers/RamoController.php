@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 use Session;
+use Sophia\Carrera;
+use Sophia\CarreraRamo;
 use Sophia\Http\Requests;
 use Sophia\PostRamo;
 use Sophia\Ramo;
@@ -13,13 +15,41 @@ use Sophia\File;
 use Sophia\Docente;
 use Sophia\UsuarioRamoDocente;
 use Illuminate\Support\Facades\DB;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 
 class RamoController extends Controller
 {
     public function index()
     {
-        return view('ramo.index');
+        $file = File::first();
+
+        return view('file.delete', compact('file'));
+        //return view('file.edit', compact('file'));
+        //return view('file.show', compact('file'));
+
+        //return view('layout.partials.upload_file');
+
+        //return view('ramo.index');
+    }
+
+    public function assign()
+    {
+        // TODO cuando existan más carrera, se debe modificar
+        $idCarrera = 1;
+        $idInstitution = 1;
+
+        $ramos = Carrera::ramos($idCarrera);
+
+        // Cantidad de ramos de la carrera
+        $qRamos = CarreraRamo::select(\DB::raw('DISTINCT(id_semestre)'))
+            ->where([
+                ['id_carrera', '=', $idCarrera],
+                ['id_institucion', '=', $idInstitution]
+            ])->orderBy('id_semestre')
+            ->get();
+
+        return view('ramo.assign', compact('ramos', 'qRamos'));
     }
 
     /**

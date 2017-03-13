@@ -4,8 +4,8 @@
         <div>
             <Select class="form-control input-sm" name="tipo_institucion" id="tipo_institucion">
                 <option value="0" disabled selected>Elija Tipo Instituci&oacute;n</option>
-                @foreach($tipos_institucion as $tipo_inst)
-                    <option value=" {{ @$tipo_inst->id }}">{{ @$tipo_inst->descripcion }}</option>
+                @foreach($tipos_institucion as $tipo)
+                    <option value=" {{ $tipo->id }}">{{ $tipo->name }}</option>
                 @endforeach
             </Select>
         </div>
@@ -13,10 +13,10 @@
     <div class="form-group">
         <label>Selecciona Institución</label>
         <div>
+
             <Select class="form-control input-sm" name="institucion" id="institucion">
                 <option value="0" disabled selected>Elija Institución</option>
             </Select>
-
         </div>
     </div>
     <div class="form-group">
@@ -60,9 +60,10 @@
         var tipo_institucion_id= e.target.value;
 
         $.get('/tomaInstitucion?tipo_institucion='+ tipo_institucion_id, function(data){
-            console.log(data);
             $.each(data, function(index, institucionesObj){
-                $('#institucion').append('<option value="'+institucionesObj.id+'">'+institucionesObj.nombre_institucion+'</option>');
+                $('#institucion').append(
+                    '<option value="'+institucionesObj.id+'">'+institucionesObj.name+'</option>'
+                );
             });
         });
         //ajax
@@ -72,9 +73,10 @@
         var institucion_id= e.target.value;
 
         $.get('/tomaCarreras?institucion='+ institucion_id, function(data){
+            console.log('institucion');
             console.log(data);
             $.each(data, function(index, carreraObj){
-                $('#carrera').append('<option value="'+carreraObj.id+'">'+carreraObj.nombre_carrera+'</option>');
+                $('#carrera').append('<option value="'+carreraObj.id+'">'+carreraObj.name+'</option>');
             });
         });
         //ajax

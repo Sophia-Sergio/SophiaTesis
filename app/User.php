@@ -20,9 +20,55 @@ class User extends Model implements Authenticatable
         'nombre', 'apellido', 'email', 'password', 'fecha_nacimiento', 'edad', 'estado', 'reintentos', 'avatar'
     ];
 
+    /**
+     * Many to Many
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function files()
+    {
+        return $this->belongsToMany(File::class);
+    }
+
+    /**
+     * Relación con tabla PostRamo
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function postRamos()
     {
         return $this->hasMany('Sophia\PostRamo');
+    }
+
+    /**
+     * Relación con tabla messages
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function messages()
+    {
+        return $this->hasMany('Sophia\Message');
+    }
+
+    /**
+     * Carrera del alumno
+     *
+     * @return mixed
+     */
+    public function getCareerAttribute()
+    {
+        $ramos  =   $this->getRamos();
+        $ids    =   [];
+
+        foreach ($ramos as $ramo) {
+            array_push($ids, $ramo['r_id']);
+        }
+
+        return CarreraRamo::join('carreras as c', 'carrera_ramos.id_carrera', '=', 'c.id')
+            ->whereIn('id_ramo', $ids)
+            ->select('c.id', 'c.name', 'c.slug')
+            ->distinct()
+            ->first();
     }
 
     /**
@@ -32,9 +78,11 @@ class User extends Model implements Authenticatable
      */
     public function setEdadAttribute($value)
     {
-        list($year, $month, $day) = explode('-', Input::get('fecha_nacimiento'));
-        $age    =   Carbon::createFromDate($year, $month, $day)->age;
-        $this->attributes['edad'] =   $age;
+        if ($this->fecha_nacimiento) {
+            list($year, $month, $day) = explode('-', $this->fecha_nacimiento);
+            $age    =   Carbon::createFromDate($year, $month, $day)->age;
+            $this->attributes['edad'] =   $age;
+        }
     }
 
     /**
@@ -87,17 +135,53 @@ class User extends Model implements Authenticatable
     }
 
     /**
-     * Obtener ramos del usuario
+     * Token de autorización
      *
      * @return mixed
      */
-    public function getRamos()
+    public function token()
     {
-        return RamoDocente::join('usuario_ramo_docentes as urd', 'ramo_docentes.id', '=', 'urd.id_ramo_docente')
+        $token = \JWTAuth::fromUser(Auth::user());
+
+        return $token;
+    }
+
+    /**
+     * Obtener ramos del usuario
+     *
+     * @param null $userId
+     * @return mixed
+     */
+    public function getRamos($userId = null)
+    {
+        $userId = (!is_null($userId)) ? $userId : Auth::user()->id;
+
+        $ramoDocente = RamoDocente::join('usuario_ramo_docentes as urd', 'ramo_docentes.id', '=', 'urd.id_ramo_docente')
             ->join('ramos as r', 'r.id', '=', 'ramo_docentes.id_ramo')
-            ->select('urd.id as urd_id', 'ramo_docentes.id as rd_id', 'r.id as r_id', 'r.nombre_ramo as r_name')
-            ->where('urd.id_usuario', Auth::user()->id)
+            ->select('urd.id as urd_id', 'ramo_docentes.id as rd_id', 'r.id as r_id', 'r.nombre_ramo as r_name', 'ramo_docentes.id_docente')
+            ->where('urd.id_usuario', $userId)
+            ->orderBy('r.nombre_ramo')
             ->get();
+
+        foreach ($ramoDocente as $k => $v) {
+            $docente = Docente::find($v->id_docente);
+            $ramoDocente[$k]->docente_id = $docente->id;
+            $ramoDocente[$k]->docente_nombre = "{$docente->nombre} {$docente->apellido_paterno} {$docente->apellido_materno}";
+        }
+
+        foreach ($ramoDocente as $k => $v) {
+            $semestre = CarreraRamo::select('desc', 'id_semestre', 'anio')
+                ->join('semestres', 'carrera_ramos.id_semestre', '=', 'semestres.id')
+                ->where('id_ramo', $v->r_id)
+                ->get();
+
+            $ramoDocente[$k]->semestre = $semestre;
+            $ramoDocente[$k]->semestre_name = $semestre[0]->desc;
+            $ramoDocente[$k]->semestre_id   = $semestre[0]->id_semestre;
+            $ramoDocente[$k]->semestre_year = $semestre[0]->anio;
+        }
+
+        return $ramoDocente;
     }
 
     /**
@@ -116,7 +200,7 @@ class User extends Model implements Authenticatable
 
         return CarreraRamo::join('carreras as c', 'carrera_ramos.id_carrera', '=', 'c.id')
             ->whereIn('id_ramo', $ids)
-            ->select('c.id', 'c.nombre_carrera as name', 'c.nombre_carrera_html as html_name', 'c.nombre_carrera_no_tilde as accent_name')
+            ->select('c.id', 'c.name', 'c.slug')
             ->distinct()
             ->first();
     }

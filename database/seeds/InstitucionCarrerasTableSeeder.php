@@ -19,7 +19,16 @@ class InstitucionCarrerasTableSeeder extends Seeder {
 	 */
         public function run()
         {
-            \DB::table('institucion_carreras')->insertGetId(array('id_institucion' => 11, 'id_carrera' => 160, 'id_regimen' => 1));
+            $institution    =   \Sophia\Institucion::first();
+            $carrera        =   \Sophia\Carrera::first();
+            $regimen        =   \Sophia\Regimen::where('descripcion', 'Vespertino')->first();
+
+            \Sophia\InstitucionCarrera::firstOrCreate([
+                'id_institucion' => $institution->id,
+                'id_carrera' => $carrera->id,
+                'id_regimen' => $regimen->id
+            ]);
+            /*\DB::table('institucion_carreras')->insertGetId(array('id_institucion' => 11, 'id_carrera' => 160, 'id_regimen' => 1));
             \DB::table('institucion_carreras')->insertGetId(array('id_institucion' => 12, 'id_carrera' => 130, 'id_regimen' => 1));
             \DB::table('institucion_carreras')->insertGetId(array('id_institucion' => 12, 'id_carrera' => 143, 'id_regimen' => 1));
             \DB::table('institucion_carreras')->insertGetId(array('id_institucion' => 12, 'id_carrera' => 145, 'id_regimen' => 1));
@@ -1597,7 +1606,7 @@ class InstitucionCarrerasTableSeeder extends Seeder {
             \DB::table('institucion_carreras')->insertGetId(array('id_institucion' => 78, 'id_carrera' => 138, 'id_regimen' => 1));
             \DB::table('institucion_carreras')->insertGetId(array('id_institucion' => 78, 'id_carrera' => 149, 'id_regimen' => 1));
             \DB::table('institucion_carreras')->insertGetId(array('id_institucion' => 78, 'id_carrera' => 201, 'id_regimen' => 1));
-            \DB::table('institucion_carreras')->insertGetId(array('id_institucion' => 78, 'id_carrera' => 202, 'id_regimen' => 1));
+            \DB::table('institucion_carreras')->insertGetId(array('id_institucion' => 78, 'id_carrera' => 202, 'id_regimen' => 1));*/
         }
 
 }

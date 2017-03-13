@@ -1,17 +1,3 @@
-<!--
-Lista Inputs
-first_name
-lastname
-email
-password
-password_repeticion
-birth_day
-birth_month
-birth_year
-
-
--->
-
 <form action="{{ url('/register') }}" method="post">
     <div class="">
         <h3><i class="fa fa-shield"></i> Reg&iacute;strate</h3>

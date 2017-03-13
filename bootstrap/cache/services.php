@@ -28,10 +28,12 @@
     24 => 'Yajra\\Datatables\\DatatablesServiceProvider',
     25 => 'Intervention\\Image\\ImageServiceProvider',
     26 => 'Sophia\\Providers\\ComposerServiceProvider',
-    27 => 'Sophia\\Providers\\AppServiceProvider',
-    28 => 'Sophia\\Providers\\AuthServiceProvider',
-    29 => 'Sophia\\Providers\\EventServiceProvider',
-    30 => 'Sophia\\Providers\\RouteServiceProvider',
+    27 => 'Vinkla\\Pusher\\PusherServiceProvider',
+    28 => 'Tymon\\JWTAuth\\Providers\\JWTAuthServiceProvider',
+    29 => 'Sophia\\Providers\\AppServiceProvider',
+    30 => 'Sophia\\Providers\\AuthServiceProvider',
+    31 => 'Sophia\\Providers\\EventServiceProvider',
+    32 => 'Sophia\\Providers\\RouteServiceProvider',
   ),
   'eager' => 
   array (
@@ -48,10 +50,12 @@
     10 => 'Yajra\\Datatables\\DatatablesServiceProvider',
     11 => 'Intervention\\Image\\ImageServiceProvider',
     12 => 'Sophia\\Providers\\ComposerServiceProvider',
-    13 => 'Sophia\\Providers\\AppServiceProvider',
-    14 => 'Sophia\\Providers\\AuthServiceProvider',
-    15 => 'Sophia\\Providers\\EventServiceProvider',
-    16 => 'Sophia\\Providers\\RouteServiceProvider',
+    13 => 'Vinkla\\Pusher\\PusherServiceProvider',
+    14 => 'Tymon\\JWTAuth\\Providers\\JWTAuthServiceProvider',
+    15 => 'Sophia\\Providers\\AppServiceProvider',
+    16 => 'Sophia\\Providers\\AuthServiceProvider',
+    17 => 'Sophia\\Providers\\EventServiceProvider',
+    18 => 'Sophia\\Providers\\RouteServiceProvider',
   ),
   'deferred' => 
   array (

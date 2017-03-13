@@ -3,9 +3,12 @@
 namespace Sophia\Http\Controllers\Api;
 
 use Illuminate\Support\Facades\Auth;
+use Sophia\Docente;
 use Sophia\File;
 use Sophia\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Sophia\Http\Requests\Api\StoreFile;
+use Sophia\Ramo;
 use Sophia\UsuarioRamoDocente;
 
 class FileController extends Controller
@@ -48,13 +51,39 @@ class FileController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Subir un archivo
      *
+     * @param StoreFile $request
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(StoreFile $request)
     {
-        //
+        if (!$request->ajax()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $file       =   $request->file('document');
+        $ramo       =   Ramo::find($request->ramo);
+        $career     =   Auth::user()->getCareers();
+        $teacher    =   Docente::find($request->teacher);
+
+        $teacherName = str_slug("{$teacher->apellido_paterno} {$teacher->apellido_materno} {$teacher->nombre}");
+
+        try {
+            File::saveFile(
+                $file,
+                str_slug($career->name),
+                str_slug($ramo->nombre_ramo),
+                $teacherName,
+                $request->usuarioRamoDocente,
+                $request->security,
+                $request->type
+            );
+
+            return response()->json(['success'], 200);
+        } catch (\Exception $e) {
+            return response()->json([$e], 500);
+        }
     }
 
     /**
@@ -76,7 +105,10 @@ class FileController extends Controller
      */
     public function show($id)
     {
-        //
+        $file   =   File::find($id);
+        $path   =   storage_path("app/{$file->dir}/{$file->file_name}");
+
+        return response()->download($path, $file->client_name);
     }
 
     /**
@@ -99,17 +131,37 @@ class FileController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $file = File::where('id', $id)
+            ->update([
+                'name' => $request->name,
+                'seguridad' => $request->security,
+                'id_usuario_ramo_docente' => $request->usuarioRamoDocente,
+                'type' => $request->type,
+                'description' => $request->description
+            ]);
+
+        if($file) {
+            return response()->json(['status' => 1]);
+        } else {
+            return response()->json(['status' => 0]);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        File::where('id', $id)
+            ->update([
+                'deleted_reason' => $request->reason,
+                'deleted_desc' => $request->desc
+            ]);
+
+        File::destroy($id);
     }
 }

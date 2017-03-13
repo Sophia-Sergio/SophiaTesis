@@ -15,11 +15,12 @@ class CreateUsuarioPerfilsTable extends Migration {
 		Schema::connection('mysql')->create('usuario_perfils', function(Blueprint $table)
 		{
 			$table->increments('id');
+            $table->integer('id_usuario')->unsigned();
+            $table->integer('id_perfil')->unsigned();
 			$table->timestamps();
-                        $table->integer('id_usuario')->unsigned();
-                        $table->integer('id_perfil')->unsigned();
-                        $table->foreign('id_usuario')->references('id')->on('users');
-                        $table->foreign('id_perfil')->references('id')->on('perfils');
+
+            $table->foreign('id_usuario')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('id_perfil')->references('id')->on('perfils')->onDelete('cascade');
 		});
 	}
 

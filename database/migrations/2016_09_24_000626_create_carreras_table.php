@@ -15,10 +15,9 @@ class CreateCarrerasTable extends Migration
     {
         Schema::connection('mysql')->create('carreras', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name')->unique();
+            $table->string('slug')->unique();
             $table->timestamps();
-            $table->string('nombre_carrera',255);
-            $table->string('nombre_carrera_html', 255);
-            $table->string('nombre_carrera_no_tilde', 255);
         });
     }
 

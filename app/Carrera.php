@@ -15,6 +15,49 @@ class Carrera extends Model
     ];
 
     /**
+     * Obtener los ramos de una carrera en particular
+     *
+     * @param $idCarrera
+     * @return mixed
+     */
+    public static function ramos($idCarrera, $year = null)
+    {
+        // Obtener ramos de carrera
+        if ($year) {
+            $ramos = CarreraRamo::select('ramos.id as r_id', 'ramos.nombre_ramo as r_name','semestres.id as s_id','semestres.desc as s_name', 'carrera_ramos.anio as cr_year')
+                ->join('ramos', 'carrera_ramos.id_ramo', '=', 'ramos.id')
+                ->join('semestres', 'carrera_ramos.id_semestre', '=', 'semestres.id')
+                ->where('carrera_ramos.id_carrera', $idCarrera)
+                ->where('carrera_ramos.anio', $year)
+                ->orderBy('semestres.id')
+                ->get();
+        } else {
+            $ramos = CarreraRamo::select('ramos.id as r_id', 'ramos.nombre_ramo as r_name', 'semestres.desc as s_name', 'carrera_ramos.anio as cr_year')
+                ->join('ramos', 'carrera_ramos.id_ramo', '=', 'ramos.id')
+                ->join('semestres', 'carrera_ramos.id_semestre', '=', 'semestres.id')
+                ->where('carrera_ramos.id_carrera', $idCarrera)
+                ->orderBy('semestres.id')
+                ->get();
+        }
+
+        foreach ($ramos as $k => $v) {
+            $docentes = RamoDocente::select('ramo_docentes.id as rd_id', 'docentes.id as d_id', \DB::raw('CONCAT(TRIM(nombre), " ", TRIM(apellido_paterno)) AS d_full_name'))
+                ->join('docentes', 'ramo_docentes.id_docente', '=', 'docentes.id')
+                ->where('id_ramo', $v->r_id)
+                ->get();
+
+            if (count($docentes)) {
+                $ramos[$k]->docentes = !isset($ramos[$k]->docente) ? [] : $ramos[$k]->docente;
+                $ramos[$k]->docentes = $docentes;
+            } else {
+                unset($ramos[$k]);
+            }
+        }
+
+        return $ramos;
+    }
+
+    /**
      * Obtener post
      *
      * Obtener los post que se han escrito en una carrera específica
@@ -27,7 +70,7 @@ class Carrera extends Model
     {
         $posteosCarrera = PostCarrera::join('carreras', 'id_carrera', '=', 'carreras.id')
             ->join('users', 'id_user', '=', 'users.id')
-            ->select('id_carrera', 'contenido', 'id_user',  'post_carreras.id', 'nombre_carrera', 'nombre', 'apellido', 'post_carreras.created_at')
+            ->select('id_carrera', 'contenido', 'id_user',  'post_carreras.id', 'carreras.name', 'nombre', 'apellido', 'post_carreras.created_at')
             ->where('id_carrera', $career)
             ->where('post_carreras.estado', '=', 1)
             ->distinct()
@@ -105,7 +148,7 @@ class Carrera extends Model
                     null as 'extension',
                     null as 'type',
                     carreras.id as 'id_lugar',
-                    carreras.nombre_carrera as 'nom_lugar',
+                    carreras.name as 'nom_lugar',
                     'publicacion_carrera' as 'tipo_elemento'
                 from post_carreras
                 inner join users_seguidos

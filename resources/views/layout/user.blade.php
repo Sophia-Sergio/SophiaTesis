@@ -5,16 +5,19 @@
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
-
     <div class="wrapper" >
         @include('partials.header')
 
         @if ($currentUser->getProfile()->id == 1)
             @include('partials.aside_admin')
-        @elseif ($currentUser->getCareers())
-            @include('partials.aside_user')
         @else
-            @include('partials.aside_register')
+            @if ($actionData[0] == 'MessageController' && $actionData[1] == 'show')
+                @include('layout.partials.aside_message')
+            @elseif ($currentUser->getCareers())
+                @include('partials.aside_user')
+            @else
+                @include('partials.aside_register')
+            @endif
         @endif
 
         <div class="content-wrapper">

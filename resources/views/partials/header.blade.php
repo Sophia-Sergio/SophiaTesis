@@ -45,6 +45,7 @@
                         </li>
                     @endif
 
+                    @if (empty($currentUser->getRamos()))
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="{{ $currentUser->avatar }}" alt="{{ $currentUser->getFullName() }}" class="user-image">
@@ -96,6 +97,7 @@
                             </li>
                         </ul>
                     </li>
+                        @endif
                     <li>
                     </li>
                 </ul>

@@ -66,7 +66,7 @@ class Ramo extends Model
         $id_user = Auth::user()->id;
 //\DB::connection()->enableQueryLog();
         $posteosRamo = PostRamo::join('carreras', 'id_carrera', '=', 'carreras.id')
-            ->select('id_carrera', 'contenido', 'id_user',  'post_ramos.id', 'nombre_carrera', 'nombre', 'apellido', 'post_ramos.created_at')
+            ->select('id_carrera', 'contenido', 'id_user',  'post_ramos.id', 'carreras.name', 'nombre', 'apellido', 'post_ramos.created_at')
             ->join('users', 'id_user', '=', 'users.id')
             ->join('usuario_ramo_docentes', 'id_usuario_ramo_docente', '=', 'usuario_ramo_docentes.id')
             ->join('ramo_docentes', 'usuario_ramo_docentes.id_ramo_docente', '=', 'ramo_docentes.id')

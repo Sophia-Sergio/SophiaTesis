@@ -17,10 +17,22 @@ class RamoDocentesTableSeeder extends Seeder {
 	 *
 	 * @return void
 	 */
-        public function run()
-        {
-        \DB::table('ramo_docentes')->insertGetId(array('id_ramo' => 7, 'id_docente' => 1, 'id_regimen' => 2));
-        \DB::table('ramo_docentes')->insertGetId(array('id_ramo' => 1, 'id_docente' => 1, 'id_regimen' => 2));
+	public function run()
+    {
+        $ramos      =   \Sophia\Ramo::all();
+        $docentes   =   \Sophia\Docente::all();
+
+        foreach ($ramos as $ramo) {
+            foreach ($docentes as $docente) {
+                \Sophia\RamoDocente::firstOrCreate([
+                    'id_ramo' => $ramo->id,
+                    'id_docente' => $docente->id,
+                    'id_regimen' => 2
+                ]);
+            }
+        }
+
+        /*\DB::table('ramo_docentes')->insertGetId(array('id_ramo' => 1, 'id_docente' => 1, 'id_regimen' => 2));
         \DB::table('ramo_docentes')->insertGetId(array('id_ramo' => 37, 'id_docente' => 1, 'id_regimen' => 2));
         \DB::table('ramo_docentes')->insertGetId(array('id_ramo' => 31, 'id_docente' => 1, 'id_regimen' => 2));
         \DB::table('ramo_docentes')->insertGetId(array('id_ramo' => 35, 'id_docente' => 2, 'id_regimen' => 2));
@@ -29,7 +41,6 @@ class RamoDocentesTableSeeder extends Seeder {
         \DB::table('ramo_docentes')->insertGetId(array('id_ramo' => 18, 'id_docente' => 3, 'id_regimen' => 2));
         \DB::table('ramo_docentes')->insertGetId(array('id_ramo' => 24, 'id_docente' => 3, 'id_regimen' => 2));
         \DB::table('ramo_docentes')->insertGetId(array('id_ramo' => 30, 'id_docente' => 3, 'id_regimen' => 2));
-        \DB::table('ramo_docentes')->insertGetId(array('id_ramo' => 7, 'id_docente' => 41, 'id_regimen' => 2));
-
-        }
+        \DB::table('ramo_docentes')->insertGetId(array('id_ramo' => 7, 'id_docente' => 41, 'id_regimen' => 2));*/
+    }
 }

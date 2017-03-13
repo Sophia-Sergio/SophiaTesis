@@ -19,9 +19,9 @@ class RegimenTableSeeder extends Seeder {
 	 */
         public function run()
         {
-        \DB::table('regimens')->insertGetId(array( 'descripcion' => 'Diurno'));
-        \DB::table('regimens')->insertGetId(array( 'descripcion' => 'Vespertino'));
-        \DB::table('regimens')->insertGetId(array( 'descripcion' => 'Online'));
+            \Sophia\Regimen::firstOrCreate(array( 'descripcion' => 'Diurno'));
+            \Sophia\Regimen::firstOrCreate(array( 'descripcion' => 'Vespertino'));
+            \Sophia\Regimen::firstOrCreate(array( 'descripcion' => 'Online'));
         }
 
 }

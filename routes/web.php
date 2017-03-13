@@ -11,12 +11,26 @@ use Illuminate\Support\Facades\Input;
 |
 */
 
-
 Auth::routes();
 
-require_once 'Routes/UsersRoute.php';
+require_once 'Routes/UserRoutes.php';
 require_once 'Routes/PostRamosRoute.php';
 require_once 'Routes/UsuarioRamoDocenteRoutes.php';
+
+// No requieren autenticación
+require 'Routes/Social.php';
+
+// Requieren autenticación
+Route::group(['middleware' => ['web', 'auth']], function () {
+    require_once 'Routes/Front/RamoRoute.php';
+    require_once 'Routes/Front/UsuarioCarreraRoute.php';
+
+    require 'Routes/Messages.php';
+    require 'Routes/Users.php';
+    require 'Routes/News.php';
+    require 'Routes/FilesRoute.php';
+});
+
 
 Route::group(['middleware' => ['web']], function() {
 
@@ -28,8 +42,6 @@ Route::group(['middleware' => ['web']], function() {
         'uses' => 'UserController@AdmEstudianteDesbloquearUsuario',
         'as' => 'AdmEstudianteDesbloquearUsuario',
     ]);
-
-
 
 
     Route::post('/comentarPosteoCarrera/{id_posteo_carrera}', [
@@ -44,10 +56,10 @@ Route::group(['middleware' => ['web']], function() {
         'middleware' => 'auth'
     ]);
 
-    Route::get('/login', [
+    /*Route::get('/login', [
         'uses' => 'UserController@signInUp',
         'as' => 'home'
-    ]);
+    ]);*/
 
     /*Route::get('login', function () {
         return view('welcome');
@@ -243,15 +255,4 @@ Route::group(['middleware' => ['web']], function() {
             ->join('carreras', 'institucion_carreras.id_carrera', '=', 'carreras.id')->get();
         Return Response::json($carrera);
     });
-});
-
-// No requieren autenticación
-require 'Routes/Social.php';
-
-// Requieren autenticación
-Route::group(['middleware' => ['web', 'auth']], function () {
-    require 'Routes/Messages.php';
-    require 'Routes/Users.php';
-    require 'Routes/News.php';
-    require 'Routes/FilesRoute.php';
 });

@@ -17,41 +17,48 @@ class UsuariosTableSeeder extends Seeder {
 	 *
 	 * @return void
 	 */
-        public function run()
-        {
-            
-            $faker = Faker::create();    
-        
-            //seteamos cantidad de usuarios random a crear
-            for($i= 0;$i < 50;$i ++)
-            {
-                $id = \DB::table('users')->insertGetId(array(
-                    'nombre'            => $faker->firstName,
-                    'apellido'          => $faker->lastName,
-                    'email'             => $faker->unique()->email,
-                    'password'          => \Hash::make('123456'),
-                    'fecha_nacimiento'  => $faker->date($format = 'Y-m-d', $max = 'now') ,
-                    'edad'              => $faker->numberBetween($min = 1, $max = 120),
-                    'estado'            => 1,
-                    //'fecha_expiracion'  => date ( 'Y-m-j' ,strtotime( '+365 day' , strtotime ( date('Y-m-j') ) )),
-                    'reintentos'        => 0,
-                    //'pregunta_secreta' => 'Hola como estas',
-                    //'respuesta_secreta' => 'bien y tu',
-                    //'pais'              => $faker->country
-                ));
-            
-                //perfil usuario
-                \DB::table('usuario_perfils')->insert(array(
-                    'id_usuario'        => $id,
-                    'id_perfil'         => 2
-                    ));
-                /*
-                //crea usuarios en BD sistemas
-                \DB::connection('mysql')->table('usuario_sistemas')->insert(array(
-                    'id'                => $id
-                    ));
-                */
+	public function run()
+    {
+        $faker = Faker::create();
+
+        $profile = \Sophia\Perfil::where('codigo_perfil', 'EST')->first();
+
+        for ($i=0; $i<=2; $i++) {
+
+            if ($i==0) {
+                $firstName  =   'Nicolás';
+                $lastName   =   'Ormeño';
+                $email      =   'nicolas@sophia.cl';
+            } elseif ($i==1) {
+                $firstName  =   'Sergio';
+                $lastName   =   'Ramos';
+                $email      =   'sergio@sophia.cl';
+            } else {
+                $firstName  =   'Andrés';
+                $lastName   =   'Román';
+                $email      =   'andres@sophia.cl';
+            }
+
+            $checkUsr = \Sophia\User::where('slug', str_slug("$firstName $lastName"))->get();
+
+            if (!count($checkUsr)) {
+                $user = \Sophia\User::firstOrCreate([
+                    'nombre'            =>  $firstName,
+                    'apellido'          =>  $lastName,
+                    'username'          =>  str_slug("$firstName $lastName"),
+                    'slug'              =>  str_slug("$firstName $lastName"),
+                    'email'             =>  $email,
+                    'password'          =>  \Hash::make('123456'),
+                    'fecha_nacimiento'  =>  $faker->date($format = 'Y-m-d', $max = 'now') ,
+                    'edad'              =>  $faker->numberBetween($min = 1, $max = 120),
+                ]);
+
+                // Perfil de Usuario
+                \Sophia\Usuario_Perfil::firstOrCreate([
+                    'id_usuario'    =>  $user->id,
+                    'id_perfil'     =>  $profile->id,
+                ]);
             }
         }
-
+    }
 }

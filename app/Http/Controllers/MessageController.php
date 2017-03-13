@@ -3,6 +3,7 @@
 namespace Sophia\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -16,8 +17,12 @@ use Carbon\Carbon;
 
 class MessageController extends Controller
 {
+    var $pusher;
+
     public function __construct()
     {
+        $this->pusher       =   App::make('pusher');
+
         if(!Auth::user())
             redirect('/');
     }
@@ -91,19 +96,30 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
-        if (isset($request['uuid']) && !empty($request['uuid']))
+        if (isset($request['uuid']) && !empty($request['uuid'])) {
             $uuid = $request['uuid'];
-        else
+        }
+        else {
             $uuid = substr(md5(microtime()),rand(0,26),10);
+        }
 
         $message = Message::where('uuid', $uuid)->first();
 
+
         Message::create([
-            'uuid' => $request['uuid'],
+            'uuid' => $uuid,
             'sender' => Auth::user()->id,
             'receiver' => Auth::user()->id != $message->receiver ? $message->receiver : $message->sender,
-            'message' => $request['message'],
+            'message' => $request->message,
             'ramo_id' => $message->ramo_id
+        ]);
+
+        $this->pusher->trigger("chat-$uuid", 'new-message', [
+            'message'   =>  $request->message,
+            'nombre'    =>  Auth::user()->nombre,
+            'apellido'  =>  Auth::user()->apellido,
+            'avatar'    =>  Auth::user()->avatar,
+            'timestamp' =>  (time()*1000)
         ]);
 
         return response()->json(['status' => 1], 200);
@@ -125,54 +141,23 @@ class MessageController extends Controller
             array_push($ramos, $getRamo->r_id);
         }
 
-        // Obtener compañeros
-        $users = DB::table('usuario_ramo_docentes')
-            ->join('ramo_docentes', 'usuario_ramo_docentes.id_ramo_docente', '=', 'ramo_docentes.id')
-            ->join('ramos', 'ramo_docentes.id_ramo', '=', 'ramos.id')
-            ->join('users', 'usuario_ramo_docentes.id_usuario', '=', 'users.id')
-            ->whereIn('ramos.id', $ramos)
-            ->distinct()
-            ->orderBy('nombre_ramo')
-            ->get();
+        $users = Message::getChatsByUser($ramos, Auth::user()->id);
 
         // Actualizar los mensajes a leídos
         Message::where('uuid', $id)
             ->where('receiver', Auth::user()->id)
             ->update(['read' => 1]);
 
-        $messages = Message::where('uuid', $id)->orderBy('created_at', 'desc')->get();
+        $messages = Message::where('uuid', $id)
+            ->orderBy('created_at', 'desc')
+            ->paginate(5);
 
-        foreach ($messages as $message) {
-            // Set sender name
-            $senderName = User::find($message->sender);
-            $message->sender_name = $senderName->getFullName();
+        $chatChannel = "chat-{$messages[0]->uuid}";
 
-            // Set receiver name
-            $receiverName = User::find($message->receiver);
-            $message->receiver_name = $receiverName->getFullName();
-
-            if ($message->sender != Auth::id()) {
-                $chatWith = $message->sender_name;
-                $avatarWith = User::find($message->sender)->avatar;
-            } else {
-                $chatWith = $message->receiver_name;
-                $avatarWith = User::find($message->receiver)->avatar;
-            }
-
-            $ramo = Ramo::find($message->ramo_id);
-
-
-            // Set created at format
-            $date = Carbon::createFromFormat('Y-m-d H:i:s', $message->created_at)->format('E\l d-m-Y \a \l\a\s H:i');
-            $message->formated_date = $date;
-
-            $noAvatar = URL::to('img/man_avatar.jpg');
-
-            // Set Avatar
-            $message->sender_avatar = User::find($message->sender)->avatar;
-        }
-
-        return view('message.show', compact('users', 'messages', 'chatWith', 'avatarWith','ramo'));
+        return view(
+            'message.show',
+            compact('users', 'messages', 'chatWith', 'avatarWith','ramo', 'chat', 'chatChannel')
+        );
     }
 
     public function chats($uuid)
@@ -241,6 +226,7 @@ class MessageController extends Controller
     {
         $messages = Message::where('sender', $user1)
             ->where('receiver', $user2)
+            ->where('ramo_id', $ramo)
             ->first();
 
         if (!empty($messages)) {
@@ -249,6 +235,7 @@ class MessageController extends Controller
 
         $messages = Message::where('sender', $user2)
             ->where('receiver', $user1)
+            ->where('ramo_id', $ramo)
             ->first();
 
         if (!empty($messages)) {

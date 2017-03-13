@@ -9,6 +9,7 @@ use Sophia\Carrera;
 use Sophia\Comentario;
 use Sophia\TipoInstitucion;
 use Sophia\UsuarioRamoDocente;
+use Session;
 
 class CarreraController extends Controller
 {
@@ -20,13 +21,14 @@ class CarreraController extends Controller
     public function index()
     {
         $userId         =   Auth::user()->id;
-        $userProfile    =   Auth::user()->getProfile()->id;
 
         if (UsuarioRamoDocente::where('id_usuario', $userId)->count() == 0) {
-            $tipos_institucion = TipoInstitucion::all();
-            Session::put('tipos_institucion', $tipos_institucion);
-            return view('user.registroAcademico');
+            return redirect()->route('uc.create');
+            //$tipos_institucion = TipoInstitucion::all(); print_r($tipos_institucion);
+            //return view('user.registroAcademico', compact('tipos_institucion'));
         }
+
+        $userProfile    =   Auth::user()->getProfile()->id;
 
         if ($userProfile == 1) {
             return view('admin.index', [

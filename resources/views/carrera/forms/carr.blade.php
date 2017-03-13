@@ -8,7 +8,7 @@
 
 		<div class="form-group">
 		  <label class="control-label" for="">Nombre</label>
-		  <input type="text" class="form-control" name="nombre_carrera" placeholder="nombre_carrera" value="{{$carreraEditar->nombre_carrera}}">
+		  <input type="text" class="form-control" name="nombre_carrera" placeholder="nombre_carrera" value="{{$carreraEditar->name}}">
 		</div>
 		{!!Form::submit('Actualizar',['class'=>'btn btn-primary', 'style'=>'width:100%'])!!}
 		<hr>

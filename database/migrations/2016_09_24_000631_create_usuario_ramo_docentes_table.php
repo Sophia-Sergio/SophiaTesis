@@ -15,11 +15,17 @@ class CreateUsuarioRamoDocentesTable extends Migration
     {
         Schema::connection('mysql')->create('usuario_ramo_docentes', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
             $table->integer('id_usuario')->unsigned();
             $table->integer('id_ramo_docente')->unsigned();
-            $table->foreign('id_usuario')->references('id')->on('users');
-            $table->foreign('id_ramo_docente')->references('id')->on('ramo_docentes');
+            $table->timestamps();
+
+            $table->foreign('id_usuario')
+                ->references('id')->on('users')
+                ->onDelete('cascade');
+
+            $table->foreign('id_ramo_docente')
+                ->references('id')->on('ramo_docentes')
+                ->onDelete('cascade');
         });
     }
 

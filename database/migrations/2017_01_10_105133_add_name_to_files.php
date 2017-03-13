@@ -14,8 +14,8 @@ class AddNameToFiles extends Migration
     public function up()
     {
         Schema::table('files', function (Blueprint $table) {
-            $table->renameColumn('name', 'client_name');
-            $table->string('file_name')->nullable();
+            $table->string('file_name')->comment('Nombre físico de archivo');
+            $table->string('client_name')->comment('Nombre Original');
         });
     }
 
@@ -27,8 +27,8 @@ class AddNameToFiles extends Migration
     public function down()
     {
         Schema::table('files', function (Blueprint $table) {
-            $table->renameColumn('client_name', 'name');
             $table->dropColumn('file_name');
+            $table->dropColumn('client_name');
         });
     }
 }
